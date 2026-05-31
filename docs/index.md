@@ -23,6 +23,9 @@ This folder now documents FRAME from the reset direction, not from the old imple
 5. `framelabplan.md`
    - how research, fixtures, tests, and implementation work should mature from here
 
+6. `versioning.md`
+   - how FRAME milestone tags and pre-1.0 versions should work
+
 ## Supporting docs
 
 - `frame-blocks.md` — single supporting note for candidate FRAME parts and block vocabulary during the reset

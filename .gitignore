@@ -7,4 +7,12 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv
+.venv/
+
+# Local agent/session state
+.hermes/
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/
