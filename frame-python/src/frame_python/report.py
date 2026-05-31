@@ -1,7 +1,13 @@
-"""Reporting surface for FRAME validation findings.
+from __future__ import annotations
 
-This module should eventually expose human-usable errors, warnings,
-and contract-gap findings.
+from dataclasses import dataclass, field
 
-Implementation intentionally deferred.
-"""
+
+@dataclass(slots=True)
+class ValidationReport:
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+    @property
+    def is_valid(self) -> bool:
+        return not self.errors
