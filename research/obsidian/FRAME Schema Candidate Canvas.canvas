@@ -1,0 +1,35 @@
+{
+	"nodes":[
+		{"id":"g_brain","type":"group","x":-820,"y":-520,"width":840,"height":620,"label":"Brain view: five static context files"},
+		{"id":"g_links","type":"group","x":120,"y":-340,"width":800,"height":520,"label":"Safe links: meaning, not magic"},
+		{"id":"g_map","type":"group","x":160,"y":240,"width":760,"height":460,"label":"Map discipline: simple, accurate, refreshable"},
+		{"id":"g_tool","type":"group","x":-880,"y":510,"width":900,"height":380,"label":"Tool usage: Haxaml is one possible driver"},
+		{"id":"title","type":"text","text":"# FRAME Schema Candidate Canvas\nClean 0.8.0 opening view: FRAME is static context structure. Haxaml or another tool does the active work.","x":-520,"y":-720,"width":820,"height":120},
+		{"id":"frame_center","type":"text","text":"# FRAME\n\nStandard context architecture\n\nThe shared structure a repo can expose to agents.","x":-520,"y":-300,"width":260,"height":150},
+		{"id":"rules","type":"text","text":"## rules.yaml\n\nStable constraints:\n- always obey\n- conditional rules\n- forbidden actions\n- escalation rules\n\nRules should not change just because one run happened.","x":-220,"y":-480,"width":230,"height":220},
+		{"id":"boundary","type":"text","text":"## Static vs Dynamic\n\nFRAME files are schemas and written context.\n\nThey describe:\n- what the project is\n- what rules apply\n- what happened\n- where files live\n- what is expected\n\nTools do the dynamic work:\n- read\n- validate\n- choose context\n- build\n- verify\n- record\n- optionally update checklist progress","x":340,"y":-720,"width":430,"height":330},
+		{"id":"slice","type":"text","text":"## 0.8.0 Sweet Spot\n\nFreeze only:\n- shared frame block\n- clear role per file\n- minimal body per file\n- simple IDs where lists exist\n- explicit unknowns\n- map as short repo summaries\n\nDo not freeze yet:\n- heavy reference grammar\n- automatic sync behavior\n- full evidence model\n- complex runtime gates","x":980,"y":-720,"width":420,"height":420},
+		{"id":"safe_links","type":"text","text":"## Safe Connection Rules\n\n| Link | Plain meaning |\n| --- | --- |\n| Facts -> Rules | stable facts make rules relevant |\n| Facts -> Map | broad shape helps start map work |\n| Rules -> Acts | records are checked against rules |\n| Map -> Tool | map tells tool where to inspect first |\n| Expect -> Tool | plan gives direction, not a forced script |\n| Acts -> Expect | tool may mark checklist progress from proof |","x":160,"y":-300,"width":720,"height":310},
+		{"id":"avoid_links","type":"text","text":"## Links To Avoid Early\n\n- Acts should not rewrite Rules.\n- Map risk should not automatically become policy.\n- Expect estimated runs should not block real work.\n- Facts should not be guessed from stale Acts.\n- Map summaries must be checked against real files.","x":160,"y":20,"width":720,"height":140},
+		{"id":"map_good","type":"text","text":"## Good Map Entry\n\n```yaml\n- id: cart\n  paths:\n    - src/cart/\n  kind: module\n  summary: Cart pricing and item updates.\n  touch_when: changing cart behavior\n  check_when_changed:\n    - tests/cart/\n```\n\nShort enough to scan. Specific enough to guide inspection.","x":200,"y":300,"width":330,"height":330},
+		{"id":"map_bad","type":"text","text":"## Bad Map Entry\n\n```yaml\nsrc/cart/: very large essay about all shopping logic...\n```\n\nToo much text becomes noise.\n\nWorse problem: if the summary is wrong, the agent starts from bad context.","x":560,"y":300,"width":320,"height":260},
+		{"id":"facts","type":"text","text":"## facts.yaml\n\nStable base truth:\n- identity\n- project type\n- lifecycle stage\n- stack\n- unknowns\n\nLike the repo passport.","x":-800,"y":-500,"width":230,"height":190},
+		{"id":"map","type":"text","text":"## map.yaml\n\nRepo at a glance:\n- path or paths\n- short summary\n- kind\n- touch_when\n- check_when_changed\n\nWrong map = polluted context.","x":-820,"y":-120,"width":240,"height":220},
+		{"id":"expect","type":"text","text":"## expect.yaml\n\nPlanned direction:\n- goal\n- expected runs\n- acceptance checks\n- rough progress\n\nRoadmap, not prophecy.","x":-140,"y":-120,"width":230,"height":190},
+		{"id":"acts","type":"text","text":"## acts.yaml\n\nChecked activity record:\n- work\n- verify\n- blocker\n- decision\n- handoff\n\nHistory should follow rules, not create rules silently.","x":-525,"y":90,"width":250,"height":210},
+		{"id":"tool_flow","type":"text","text":"## Tool Flow\n\n```mermaid\nflowchart LR\n    A[User asks] --> B[Tool reads FRAME]\n    B --> C[Tool inspects real files]\n    C --> D[Tool builds]\n    D --> E[Tool verifies]\n    E --> F[Tool records Acts]\n    F -. optional .-> G[Tool marks Expect progress]\n```\n\nFRAME gives the shelves. The tool decides how to use them.","x":-850,"y":550,"width":820,"height":280}
+	],
+	"edges":[
+		{"id":"e_facts_center","fromNode":"facts","fromSide":"right","toNode":"frame_center","toSide":"left"},
+		{"id":"e_rules_center","fromNode":"rules","fromSide":"left","toNode":"frame_center","toSide":"right"},
+		{"id":"e_map_center","fromNode":"map","fromSide":"right","toNode":"frame_center","toSide":"left"},
+		{"id":"e_expect_center","fromNode":"expect","fromSide":"left","toNode":"frame_center","toSide":"right"},
+		{"id":"e_acts_center","fromNode":"acts","fromSide":"top","toNode":"frame_center","toSide":"bottom"},
+		{"id":"e_facts_rules","fromNode":"facts","fromSide":"right","toNode":"rules","toSide":"left","label":"makes relevant"},
+		{"id":"e_rules_acts","fromNode":"rules","fromSide":"bottom","toNode":"acts","toSide":"top","label":"checks"},
+		{"id":"e_map_tool","fromNode":"map","fromSide":"bottom","toNode":"tool_flow","toSide":"top","label":"where to inspect"},
+		{"id":"e_expect_tool","fromNode":"expect","fromSide":"bottom","toNode":"tool_flow","toSide":"top","label":"planned direction"},
+		{"id":"e_acts_expect","fromNode":"acts","fromSide":"right","toNode":"expect","toSide":"left","label":"tool may mark progress"},
+		{"id":"e_map_good_bad","fromNode":"map_good","fromSide":"right","toNode":"map_bad","toSide":"left","label":"keep it sharp"}
+	]
+}

@@ -1,0 +1,105 @@
+{
+	"nodes":[
+		{"id":"frame-root","type":"text","text":"# FRAME","x":1120,"y":0,"width":260,"height":80},
+		{"id":"family-context","type":"text","text":"## Context","x":0,"y":200,"width":240,"height":80},
+		{"id":"family-governance","type":"text","text":"## Governance","x":320,"y":200,"width":240,"height":80},
+		{"id":"family-continuity","type":"text","text":"## Continuity","x":640,"y":200,"width":240,"height":80},
+		{"id":"family-navigation","type":"text","text":"## Navigation","x":960,"y":200,"width":240,"height":80},
+		{"id":"family-correctness","type":"text","text":"## Correctness","x":1280,"y":200,"width":240,"height":80},
+		{"id":"family-relationships","type":"text","text":"## Relationships","x":1600,"y":200,"width":240,"height":80},
+		{"id":"family-evidence","type":"text","text":"## Evidence","x":1920,"y":200,"width":240,"height":80},
+		{"id":"family-gaps","type":"text","text":"## Gaps","x":2240,"y":200,"width":240,"height":80},
+
+		{"id":"context-identity","type":"text","text":"`facts.identity`","x":0,"y":340,"width":240,"height":60},
+		{"id":"context-classification","type":"text","text":"`facts.classification`","x":0,"y":420,"width":240,"height":60},
+		{"id":"context-technology","type":"text","text":"`facts.technology`","x":0,"y":500,"width":240,"height":60},
+		{"id":"context-architecture","type":"text","text":"`facts.architecture`","x":0,"y":580,"width":240,"height":60},
+		{"id":"context-interaction-surfaces","type":"text","text":"`facts.interaction_surfaces`","x":0,"y":660,"width":240,"height":60},
+		{"id":"context-data-and-state","type":"text","text":"`facts.data_and_state`","x":0,"y":740,"width":240,"height":60},
+
+		{"id":"governance-rules","type":"text","text":"`rules.rules`","x":320,"y":340,"width":240,"height":60},
+		{"id":"governance-constraints","type":"text","text":"`rules.constraints`","x":320,"y":420,"width":240,"height":60},
+		{"id":"governance-boundaries","type":"text","text":"`rules.boundaries`","x":320,"y":500,"width":240,"height":60},
+		{"id":"governance-forbidden","type":"text","text":"`rules.forbidden`","x":320,"y":580,"width":240,"height":60},
+		{"id":"governance-stop-and-ask","type":"text","text":"`rules.stop_and_ask`","x":320,"y":660,"width":240,"height":60},
+		{"id":"governance-rule-order","type":"text","text":"`rules.rule_order`","x":320,"y":740,"width":240,"height":60},
+
+		{"id":"continuity-action-overview","type":"text","text":"`acts.action_overview`","x":640,"y":340,"width":240,"height":60},
+		{"id":"continuity-actions","type":"text","text":"`acts.actions`","x":640,"y":420,"width":240,"height":60},
+		{"id":"continuity-blockers","type":"text","text":"`acts.blockers`","x":640,"y":500,"width":240,"height":60},
+		{"id":"continuity-archive","type":"text","text":"`acts.archive`","x":640,"y":580,"width":240,"height":60},
+
+		{"id":"navigation-roots","type":"text","text":"`map.roots`","x":960,"y":340,"width":240,"height":60},
+		{"id":"navigation-paths","type":"text","text":"`map.paths`","x":960,"y":420,"width":240,"height":60},
+		{"id":"navigation-classifications","type":"text","text":"`map.classifications`","x":960,"y":500,"width":240,"height":60},
+		{"id":"navigation-access-points","type":"text","text":"`map.access_points`","x":960,"y":580,"width":240,"height":60},
+		{"id":"navigation-managed-paths","type":"text","text":"`map.managed_paths`","x":960,"y":660,"width":240,"height":60},
+
+		{"id":"correctness-expectations","type":"text","text":"`expect.expectations`","x":1280,"y":340,"width":240,"height":60},
+		{"id":"correctness-invariants","type":"text","text":"`expect.invariants`","x":1280,"y":420,"width":240,"height":60},
+		{"id":"correctness-completion-criteria","type":"text","text":"`expect.completion_criteria`","x":1280,"y":500,"width":240,"height":60},
+		{"id":"correctness-validation-path","type":"text","text":"`expect.validation_path`","x":1280,"y":580,"width":240,"height":60},
+		{"id":"correctness-required-evidence","type":"text","text":"`expect.required_evidence`","x":1280,"y":660,"width":240,"height":60},
+		{"id":"correctness-delivery","type":"text","text":"`expect.delivery`","x":1280,"y":740,"width":240,"height":60},
+
+		{"id":"relationships-links","type":"text","text":"`facts.links`","x":1600,"y":340,"width":240,"height":60},
+
+		{"id":"evidence-facts","type":"text","text":"`facts.evidence`","x":1920,"y":340,"width":240,"height":60},
+		{"id":"evidence-rules","type":"text","text":"`rules.evidence`","x":1920,"y":420,"width":240,"height":60},
+		{"id":"evidence-map","type":"text","text":"`map.evidence`","x":1920,"y":500,"width":240,"height":60},
+
+		{"id":"gaps-ambiguities","type":"text","text":"`facts.ambiguities`","x":2240,"y":340,"width":240,"height":60},
+		{"id":"gaps-unmapped-paths","type":"text","text":"`map.unmapped_paths`","x":2240,"y":420,"width":240,"height":60}
+	],
+	"edges":[
+		{"id":"e-root-context","fromNode":"frame-root","fromSide":"bottom","toNode":"family-context","toSide":"top"},
+		{"id":"e-root-governance","fromNode":"frame-root","fromSide":"bottom","toNode":"family-governance","toSide":"top"},
+		{"id":"e-root-continuity","fromNode":"frame-root","fromSide":"bottom","toNode":"family-continuity","toSide":"top"},
+		{"id":"e-root-navigation","fromNode":"frame-root","fromSide":"bottom","toNode":"family-navigation","toSide":"top"},
+		{"id":"e-root-correctness","fromNode":"frame-root","fromSide":"bottom","toNode":"family-correctness","toSide":"top"},
+		{"id":"e-root-relationships","fromNode":"frame-root","fromSide":"bottom","toNode":"family-relationships","toSide":"top"},
+		{"id":"e-root-evidence","fromNode":"frame-root","fromSide":"bottom","toNode":"family-evidence","toSide":"top"},
+		{"id":"e-root-gaps","fromNode":"frame-root","fromSide":"bottom","toNode":"family-gaps","toSide":"top"},
+
+		{"id":"e-context-1","fromNode":"family-context","fromSide":"bottom","toNode":"context-identity","toSide":"top"},
+		{"id":"e-context-2","fromNode":"family-context","fromSide":"bottom","toNode":"context-classification","toSide":"top"},
+		{"id":"e-context-3","fromNode":"family-context","fromSide":"bottom","toNode":"context-technology","toSide":"top"},
+		{"id":"e-context-4","fromNode":"family-context","fromSide":"bottom","toNode":"context-architecture","toSide":"top"},
+		{"id":"e-context-5","fromNode":"family-context","fromSide":"bottom","toNode":"context-interaction-surfaces","toSide":"top"},
+		{"id":"e-context-6","fromNode":"family-context","fromSide":"bottom","toNode":"context-data-and-state","toSide":"top"},
+
+		{"id":"e-governance-1","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-rules","toSide":"top"},
+		{"id":"e-governance-2","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-constraints","toSide":"top"},
+		{"id":"e-governance-3","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-boundaries","toSide":"top"},
+		{"id":"e-governance-4","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-forbidden","toSide":"top"},
+		{"id":"e-governance-5","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-stop-and-ask","toSide":"top"},
+		{"id":"e-governance-6","fromNode":"family-governance","fromSide":"bottom","toNode":"governance-rule-order","toSide":"top"},
+
+		{"id":"e-continuity-1","fromNode":"family-continuity","fromSide":"bottom","toNode":"continuity-action-overview","toSide":"top"},
+		{"id":"e-continuity-2","fromNode":"family-continuity","fromSide":"bottom","toNode":"continuity-actions","toSide":"top"},
+		{"id":"e-continuity-3","fromNode":"family-continuity","fromSide":"bottom","toNode":"continuity-blockers","toSide":"top"},
+		{"id":"e-continuity-4","fromNode":"family-continuity","fromSide":"bottom","toNode":"continuity-archive","toSide":"top"},
+
+		{"id":"e-navigation-1","fromNode":"family-navigation","fromSide":"bottom","toNode":"navigation-roots","toSide":"top"},
+		{"id":"e-navigation-2","fromNode":"family-navigation","fromSide":"bottom","toNode":"navigation-paths","toSide":"top"},
+		{"id":"e-navigation-3","fromNode":"family-navigation","fromSide":"bottom","toNode":"navigation-classifications","toSide":"top"},
+		{"id":"e-navigation-4","fromNode":"family-navigation","fromSide":"bottom","toNode":"navigation-access-points","toSide":"top"},
+		{"id":"e-navigation-5","fromNode":"family-navigation","fromSide":"bottom","toNode":"navigation-managed-paths","toSide":"top"},
+
+		{"id":"e-correctness-1","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-expectations","toSide":"top"},
+		{"id":"e-correctness-2","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-invariants","toSide":"top"},
+		{"id":"e-correctness-3","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-completion-criteria","toSide":"top"},
+		{"id":"e-correctness-4","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-validation-path","toSide":"top"},
+		{"id":"e-correctness-5","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-required-evidence","toSide":"top"},
+		{"id":"e-correctness-6","fromNode":"family-correctness","fromSide":"bottom","toNode":"correctness-delivery","toSide":"top"},
+
+		{"id":"e-relationships-1","fromNode":"family-relationships","fromSide":"bottom","toNode":"relationships-links","toSide":"top"},
+
+		{"id":"e-evidence-1","fromNode":"family-evidence","fromSide":"bottom","toNode":"evidence-facts","toSide":"top"},
+		{"id":"e-evidence-2","fromNode":"family-evidence","fromSide":"bottom","toNode":"evidence-rules","toSide":"top"},
+		{"id":"e-evidence-3","fromNode":"family-evidence","fromSide":"bottom","toNode":"evidence-map","toSide":"top"},
+
+		{"id":"e-gaps-1","fromNode":"family-gaps","fromSide":"bottom","toNode":"gaps-ambiguities","toSide":"top"},
+		{"id":"e-gaps-2","fromNode":"family-gaps","fromSide":"bottom","toNode":"gaps-unmapped-paths","toSide":"top"}
+	]
+}

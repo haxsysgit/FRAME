@@ -1,0 +1,46 @@
+{
+  "facts": {
+    "entries": [
+      {
+        "id": "project.identity",
+        "title": "Backend API",
+        "summary": "Service that exposes REST endpoints for order management.",
+        "payload": {
+          "kind": "backend-api",
+          "language": "python",
+          "runtime": "fastapi",
+          "persistence": ["postgres"]
+        }
+      }
+    ]
+  },
+  "rules": {
+    "entries": [
+      {
+        "id": "behavior.migrations",
+        "title": "Migration rule",
+        "summary": "Schema changes must include migration notes and rollback steps.",
+        "payload": {
+          "priority": "high"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "entries": [
+      {
+        "id": "correctness.verification",
+        "title": "Verification expectations",
+        "summary": "Endpoint changes should include tests and basic request/response verification.",
+        "payload": {
+          "verification": ["tests", "manual-smoke"]
+        }
+      }
+    ]
+  },
+  "extensions": {
+    "unknown_runtime_detail": {
+      "deployment": "containerized"
+    }
+  }
+}

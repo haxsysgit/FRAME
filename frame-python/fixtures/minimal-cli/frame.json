@@ -1,0 +1,31 @@
+{
+  "facts": {
+    "entries": [
+      {
+        "id": "project.identity",
+        "title": "Project identity",
+        "summary": "A tiny command-line tool that formats text.",
+        "payload": {
+          "kind": "cli",
+          "language": "python",
+          "primary_command": "fmtx"
+        }
+      }
+    ]
+  },
+  "rules": {
+    "entries": [
+      {
+        "id": "behavior.scope",
+        "title": "Scope rule",
+        "summary": "Do not add server or web-specific abstractions.",
+        "payload": {
+          "priority": "high"
+        }
+      }
+    ]
+  },
+  "extensions": {
+    "fixture_note": "Other parts intentionally omitted to test provisional behavior."
+  }
+}

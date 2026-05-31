@@ -1,0 +1,44 @@
+{
+  "facts": {
+    "entries": [
+      {
+        "id": "project.slice",
+        "title": "Monorepo slice",
+        "summary": "This FRAME document only describes the billing package inside a larger monorepo.",
+        "payload": {
+          "kind": "monorepo-slice",
+          "language": "typescript",
+          "bounded_area": "packages/billing"
+        }
+      }
+    ]
+  },
+  "map": {
+    "entries": [
+      {
+        "id": "navigation.boundaries",
+        "title": "Boundary map",
+        "summary": "Billing may import shared contracts but should not depend on frontend app code.",
+        "payload": {
+          "allowed": ["packages/contracts", "packages/shared-utils"],
+          "disallowed": ["apps/web"]
+        }
+      }
+    ]
+  },
+  "acts": {
+    "entries": [
+      {
+        "id": "continuity.recent-work",
+        "title": "Recent continuity",
+        "summary": "Invoice retry logic is being refactored; assumptions may be incomplete.",
+        "payload": {
+          "confidence": "partial"
+        }
+      }
+    ]
+  },
+  "extensions": {
+    "coverage": "partial"
+  }
+}
