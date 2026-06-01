@@ -1,0 +1,23 @@
+__pycache__/
+*.json
+.vscode/
+.venv/
+*.log
+Docs/
+*.lock
+dist/
+build/
+*.egg-info/
+*.tar.gz
+scripts/
+COMMIT_MESSAGE.txt
+Docs/
+about.txt
+.env
+
+# Centralized data directory - exclude user data
+data/
+!data/.gitkeep
+
+
+FEATURE_SUGGESTIONS.txt

@@ -1,0 +1,85 @@
+frame:
+  file: acts
+  schema_version: 0.1.0
+  role: checked_activity_record
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: Record checked fitting activity for pharmax fixture; not a baseline project map.
+representation_policy:
+  baseline_project_representation: false
+  note: This file records the fit/check/handoff activity performed while creating the FRAME five-file representation. Stable project facts and path mapping live in facts.yaml and map.yaml.
+action_overview:
+  task: Fit adjusted FRAME five-file schema against pharmax fixture.
+  fixture: /home/hax/FRAME/Frame lab/fixtures/pharmax/project
+  output_dir: /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax
+  report: /home/hax/FRAME/Frame lab/evaluations/reports/fit__frame-five-part-v0.1.0__pharmax.md
+  checked_at: "2026-06-01T21:53:45Z"
+  files_written:
+    - facts.yaml
+    - rules.yaml
+    - acts.yaml
+    - map.yaml
+    - expect.yaml
+    - report markdown
+reflect_loop:
+  - id: reflect_adjusted_schema_fit
+    finding: Adjusted schema intent cleanly separates stable project truth, command inventory, repository map, expectation contract, and checked activity.
+    recommendation: Keep acts.yaml minimal and avoid using it to restate frontend/backend structure.
+    links:
+      - rel: follows
+        ref: rules.negative_instructions.do_not_model_acts_as_baseline
+  - id: reflect_full_stack_pressure
+    finding: Pharmax needs medium-depth FRAME modeling because important correctness is distributed across backend routes/services/models, frontend route/service surfaces, seed data, and workflow smoke scripts.
+    recommendation: Future fits should preserve cross-file links between business workflows, command refs, and path map rather than over-indexing on docs.
+  - id: reflect_friction_imports
+    finding: The example_projects.pharmax import namespace is the main execution friction in the raw fixture layout.
+    recommendation: Verify import path resolution before treating backend commands as runnable in a different checkout/package context.
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_example_projects_imports
+actions:
+  - id: inspected_schemas
+    summary: Read candidate FRAME schemas for facts, rules, acts, map, expect, and shared frame definitions.
+    status: done
+    outcome: Confirmed schema_version must be 0.1.0 and identified allowed fields, required headers, command_ref usage, and acts representation_policy.
+  - id: inspected_fixture_docs
+    summary: Inspected root README and PROJECT_BRIEF for product purpose, roles, capabilities, stack, setup, and deployment claims.
+    status: done
+    outcome: Captured core app identity and found doc/code drift around database, Streamlit analytics, and render.yaml presence.
+  - id: inspected_backend_surfaces
+    summary: Inspected backend pyproject, app entrypoints, config/session, router, invoice workflow/routes, models, tests, and smoke scripts.
+    status: done
+    outcome: Identified FastAPI/SQLAlchemy app shape, route/service/model split, SQLite/Postgres config, role-based workflows, migration and seed surfaces, and smoke verification commands.
+  - id: inspected_frontend_surfaces
+    summary: Inspected frontend package metadata, API client, and router configuration.
+    status: done
+    outcome: Identified Vue 3/Vite/Pinia/Vue Router surfaces, route role metadata, API timeout/auth behavior, build/dev commands, and report/analytics/invoice/product views.
+  - id: wrote_fit_files
+    summary: Wrote facts.yaml, rules.yaml, acts.yaml, map.yaml, expect.yaml, and a short markdown fit report in the requested evaluation locations.
+    status: done
+    outcome: Five-part FRAME fit captures project_profile, structural quirks, source truth ranking, command inventory, command_ref verification, map boundaries, and handoff state.
+  - id: validated_yaml_shape
+    summary: Used write-time YAML linting and a follow-up schema validation script to check fit files against schemas.
+    status: done
+    outcome: Completed after correcting schema constraints encountered during validation.
+blockers: []
+archive:
+  checked_files_sample:
+    - /home/hax/FRAME/schemas/facts.schema.yaml
+    - /home/hax/FRAME/schemas/rules.schema.yaml
+    - /home/hax/FRAME/schemas/acts.schema.yaml
+    - /home/hax/FRAME/schemas/map.schema.yaml
+    - /home/hax/FRAME/schemas/expect.schema.yaml
+    - /home/hax/FRAME/schemas/frame.schema.yaml
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/README.md
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/PROJECT_BRIEF.md
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/pyproject.toml
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/app/main.py
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/app/api/router.py
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/app/api/routes/invoices_route.py
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/app/services/invoice_workflow_service.py
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Backend/scripts/smoke_test_workflows.py
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Frontend/package.json
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Frontend/src/router/index.js
+    - /home/hax/FRAME/Frame lab/fixtures/pharmax/project/Frontend/src/services/api.js

@@ -1,0 +1,95 @@
+frame:
+  file: facts
+  schema_version: "0.1.0"
+  role: current_project_truth
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: "Refit organize fixture against adjusted FRAME five-file schema."
+project_profile:
+  summary: "Tiny Python 3 command-line utility that organizes files by extension and filename relation."
+  family: cli-tool
+  system_role: "Local filesystem organizer; mutates user-selected directories by creating folders and moving files."
+  complexity: tiny
+  scale_guidance: "Keep representation aggressively compact: one script, one README, one license; avoid expanding per-flag behavior beyond stable interface summaries."
+  evidence:
+    - id: ev_code_profile
+      source: Frame lab/fixtures/organize/project/organize.py
+      why: "Single argparse-driven Python script contains all runtime behavior."
+      refs: [facts.project_profile]
+      checked_at: "2026-06-01T21:53:06Z"
+      confidence: high
+identity:
+  name: organize
+  description: "Python CLI script for file-management automation."
+  repository: "https://github.com/haxsysgit/organize.git"
+  license: MIT
+classification:
+  primary_type: cli_script
+  domain: local_file_management
+  side_effect_profile: filesystem_mutation
+technology:
+  language: Python
+  runtime: "Python 3"
+  dependencies: "Standard library only: os, sys, shutil, string, argparse."
+architecture:
+  shape: "Single-file script with top-level argparse setup and helper functions."
+  entrypoint: organize.py
+  main_functions:
+    - create_ext_dir
+    - delete_ext_dir
+    - similar_file_group
+    - organize_by_relation
+    - organize_by_extension
+environments:
+  platform_notes: "Code branches on sys.platform; Linux branch assigns a hardcoded default path, Windows prompts interactively, other platforms exit unsupported."
+persistence:
+  stores_data: false
+  mutates_existing_filesystem: true
+  mutation_summary: "Creates extension/name folders, moves files into them, and can move files back/delete generated extension folders."
+source_truth:
+  - id: source_code
+    source: Frame lab/fixtures/organize/project/organize.py
+    authority: canonical
+    reason: "Actual CLI flags and filesystem behavior are implemented here."
+    supersedes:
+      - README usage command names where they mention file_manager.py
+  - id: source_readme
+    source: Frame lab/fixtures/organize/project/README.md
+    authority: supporting
+    reason: "Documents purpose and flag intent but includes stale script-name examples."
+  - id: source_license
+    source: Frame lab/fixtures/organize/project/LICENSE
+    authority: supporting
+    reason: "Provides licensing facts only."
+structural_quirks:
+  - id: readme_script_name_drift
+    summary: "README examples invoke file_manager.py, but the repository entrypoint is organize.py."
+    hazard: "Future agents may copy stale README commands instead of running the actual script."
+    kind: doc_code_drift
+    evidence:
+      - id: ev_readme_drift
+        source: "README.md lines 57-107 and organize.py line 1+"
+        why: "README examples use file_manager.py while the checked file is organize.py."
+        refs: [facts.source_truth.source_readme, map.access_points.cli]
+        checked_at: "2026-06-01T21:53:06Z"
+        confidence: high
+  - id: hardcoded_linux_default
+    summary: "On Linux, loc is hardcoded to /home/haxsys/downloadscopy2/Downloads."
+    hazard: "Running without explicit -p for mutating actions can target an environment-specific path or fail unexpectedly."
+    kind: environment_assumption
+  - id: import_time_argparse
+    summary: "Argument parsing and command dispatch run at module import/top level."
+    hazard: "Importing organize.py as a library would parse current process args and may trigger side effects."
+    kind: operational_caveat
+  - id: syntax_warning
+    summary: "python3 organize.py --help succeeds but emits SyntaxWarning for invalid escape sequence at organize.py:239."
+    hazard: "A clean-help check is not warning-free; validators treating warnings as failures need to account for this."
+    kind: operational_caveat
+ambiguities:
+  - id: intended_package_name
+    question: "Should the documented command name be changed from file_manager.py to organize.py, or was the source file renamed after documentation?"
+    status: unresolved
+  - id: tests_absent
+    question: "No project test suite was found; correctness expectations rely on smoke/manual checks unless tests are added."
+    status: settled_for_fixture

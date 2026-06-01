@@ -41,7 +41,7 @@ That is the start of an agent-ready repo passport.
 ```yaml
 frame:
   file: facts
-  schema_version: 0.8.0
+  schema_version: 0.1.0
   role: stable_project_truth
   status: draft
   last_reviewed: null
@@ -83,7 +83,7 @@ Example:
 | Tool question | Frontmatter answer |
 | --- | --- |
 | Is this really `facts.yaml`? | `file: facts` |
-| Which validator should I use? | `schema_version: 0.8.0` |
+| Which validator should I use? | `schema_version: 0.1.0` |
 | How should I treat this file? | `role: stable_project_truth` |
 | Should I fully trust it yet? | `status: draft` or `status: active` |
 | Could the file be stale? | `last_reviewed` |

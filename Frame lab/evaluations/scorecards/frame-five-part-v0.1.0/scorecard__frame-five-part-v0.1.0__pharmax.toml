@@ -1,0 +1,73 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.1.0"
+fixture = "pharmax"
+fixture_family = "full-stack-web-app"
+fixture_system_role = "pharmacy-operations-platform"
+evaluator = "haxsys-hermes"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 5
+clarity = 4
+stability = 4
+agent_usefulness = 5
+retrieval_usefulness = 5
+adoptability = 3
+bloat_resistance = 3
+token_efficiency = 3
+
+[phase_notes]
+phase_1 = "Excellent coverage under full-stack app pressure. The schema represents frontend/backend split, role policy, invoice workflow, persistence/deployment assumptions, seed/smoke scripts, and drift hazards. Clarity is strong but not perfect because business workflow truth naturally appears in Facts, Rules, Map, and Expect from different angles."
+phase_2 = "Very useful operationally. The representation would help an agent avoid role-policy mistakes, wrong-surface edits, generated-noise churn, DB/deployment confusion, and workflow regressions."
+phase_3 = "Pressure is real. Pharmax creates duplication temptation around business workflows, role policy, and verification. The schema resisted app-specific fields, but maintainability/token cost are only okay, not great."
+
+[notes]
+summary = "FRAME 0.1.0 handles Pharmax well, but Pharmax exposes the next schema pressure: workflow/role semantics need a shared lightweight pattern or linking convention to reduce repetition."
+coverage = "Covers backend/frontend split, roles, invoice and inventory workflows, auth/RBAC, deployment/env assumptions, persistence, migrations, smoke scripts, and docs/code drift."
+clarity = "Mostly clear, but role and invoice workflow truth is naturally repeated across architecture, critical rules, map access points, and expect invariants."
+stability = "The candidate still works after moving from tiny CLI to medium package to full-stack app, so the core structure is stable."
+agent_usefulness = "High: an agent would make better routing and safety decisions from the FRAME pack."
+retrieval_usefulness = "High: key operational surfaces and source-of-truth priorities are much easier to find."
+adoptability = "A team could maintain it, but workflow-heavy apps risk turning FRAME into a second docs layer unless links/compression improve."
+bloat_resistance = "No Pharmax-specific core fields were added, but the fixture strongly tempts role/workflow-specific schema growth."
+token_efficiency = "Useful but verbose; workflow facts and expectations repeat in multiple files."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/expect.yaml"]
+clarity = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/expect.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/facts.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/expect.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/map.yaml"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/expect.yaml"]
+bloat_resistance = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/facts.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/pharmax/expect.yaml"]
+
+[friction]
+forced_fits = ["acts is provenance rather than baseline repo truth"]
+missing_semantics = ["lightweight shared representation for business workflows / role policy / lifecycle constraints"]
+redundant_fields = ["role and invoice workflow truth appears across facts.architecture, rules.critical_rules, map.access_points, and expect.invariants"]
+stale_risk_fields = ["role names", "invoice lifecycle", "deployment/env assumptions", "seed/smoke command inventory"]
+extension_candidates = ["workflow_policy", "role_policy", "lifecycle_constraint"]
+
+[recommendation]
+keep = ["project_profile", "source_truth", "structural_quirks", "managed_paths", "command_ref verification model"]
+change = ["add a shared lightweight policy/workflow reference pattern before adding fixture-specific fields", "make baseline project representation explicitly able to exclude Acts"]
+avoid = ["adding pharmacy-specific or app-state-specific core fields"]

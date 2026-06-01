@@ -1,19 +1,50 @@
 # Python-generated files
 __pycache__/
+**/__pycache__/
 *.py[oc]
 .pytest_cache/
+**/.pytest_cache/
 build/
 dist/
+**/dist/
 wheels/
 *.egg-info
 
-# Virtual environments
+# Virtual environments and dependency installs
 .venv/
+**/.venv/
+node_modules/
+**/node_modules/
 
 # Local agent/session state
 .hermes/
 
+# Local env/secrets/state
+.env
+.env.*
+**/.env
+**/.env.*
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.log
+
+# Nested third-party git checkouts should never be vendored into FRAME
+**/.git/
+
+# Frame Lab fixture corpora / heavyweight scratch clones
+Frame lab/fixtures/real/
+Frame lab/fixtures/public/
+
+# Known generated fixture state/build output
+Frame lab/fixtures/**/app/_db/
+Frame lab/fixtures/**/data/backups/
+Frame lab/fixtures/**/data/records/*.backup.*
+Frame lab/fixtures/**/features/json_data/execution_data.json
+
 # OS/editor noise
 .DS_Store
 .vscode/
+**/.vscode/
 .idea/

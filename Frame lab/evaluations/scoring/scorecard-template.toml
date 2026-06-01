@@ -1,0 +1,74 @@
+[meta]
+status = "draft"
+candidate = "replace-me"
+candidate_version = "v0"
+fixture = "replace-me"
+fixture_family = "replace-me"
+fixture_system_role = "replace-me"
+evaluator = "replace-me"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "hold"
+# allowed examples: hold, advance_to_phase_2, advance_to_phase_3, candidate_rejected
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 0
+clarity = 0
+stability = 0
+agent_usefulness = 0
+retrieval_usefulness = 0
+adoptability = 0
+bloat_resistance = 0
+token_efficiency = 0
+
+[phase_notes]
+phase_1 = "What did the schema structurally fit or fail to fit?"
+phase_2 = "If it fit, how would it help agents/humans operate in the repo?"
+phase_3 = "Was the fit worth the token cost and bloat pressure?"
+
+[notes]
+summary = "Short overall judgment."
+coverage = ""
+clarity = ""
+stability = ""
+agent_usefulness = ""
+retrieval_usefulness = ""
+adoptability = ""
+bloat_resistance = ""
+token_efficiency = ""
+
+[evidence]
+coverage = []
+clarity = []
+stability = []
+agent_usefulness = []
+retrieval_usefulness = []
+adoptability = []
+bloat_resistance = []
+token_efficiency = []
+
+[friction]
+forced_fits = []
+missing_semantics = []
+redundant_fields = []
+stale_risk_fields = []
+extension_candidates = []
+
+[recommendation]
+keep = []
+change = []
+avoid = []

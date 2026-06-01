@@ -1,0 +1,68 @@
+frame:
+  file: expect
+  schema_version: "0.1.0"
+  role: project_correctness_contract
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: "Refit organize fixture against adjusted FRAME five-file schema."
+outcomes:
+  cli_surface_available:
+    summary: "The script exposes argparse help and the documented flags through organize.py."
+    links:
+      - rel: checked_by
+        ref: expect.verify.cli_help_surface
+  safe_file_organization:
+    summary: "Given an explicit safe target directory, extension/relation commands create folders and move files according to flag intent without targeting unrelated paths."
+  cleanup_available:
+    summary: "Delete extension commands can move files back from generated extension folders and remove those folders."
+invariants:
+  explicit_target_for_mutation:
+    summary: "Verification of mutating behavior must use an explicit disposable path, not fixture root or a real user directory."
+    links:
+      - rel: enforced_by
+        ref: rules.critical_rules.safe_paths_only
+  actual_entrypoint:
+    summary: "The executable script for this fixture is organize.py, regardless of README examples that mention file_manager.py."
+    links:
+      - rel: grounded_by
+        ref: facts.structural_quirks.readme_script_name_drift
+done_when:
+  docs_or_cli_change:
+    summary: "After changing flags or docs, help output and README examples agree on the actual script name and available options."
+  behavior_change:
+    summary: "After changing file-moving behavior, smoke checks pass in a temporary directory for the affected create/organize/delete flow."
+verify:
+  cli_help_surface:
+    summary: "Run the non-mutating CLI help command and confirm it exits 0 and lists expected flags; current baseline includes a SyntaxWarning at organize.py:239."
+    command_ref: rules.commands.help
+    proof_type: smoke_test
+  relation_grouping_review:
+    summary: "Inspect or safely run filename matching/grouping against a disposable directory with similarly prefixed files."
+    command_ref: rules.commands.match_files
+    proof_type: manual_check
+  extension_move_smoke:
+    summary: "Use a disposable directory to check extension folder creation/move behavior and cleanup behavior."
+    command_ref: rules.commands.create_extension_dirs
+    proof_type: manual_check
+  cleanup_smoke:
+    summary: "Use the same disposable directory to verify extension folder deletion/move-back behavior."
+    command_ref: rules.commands.delete_extension_dirs
+    proof_type: manual_check
+  automated_tests:
+    summary: "No automated test suite was found in the fixture."
+    command_ref: null
+    proof_type: unavailable
+required_evidence:
+  - id: help_after_cli_change
+    expectation: "Capture python3 organize.py --help output after CLI or docs edits."
+    refs: [expect.verify.cli_help_surface, rules.commands.help]
+  - id: tempdir_for_mutation
+    expectation: "For file-moving changes, record the disposable directory setup and before/after file tree."
+    refs: [expect.verify.extension_move_smoke, expect.verify.cleanup_smoke]
+handoff:
+  current_help_check:
+    command_ref: rules.commands.help
+    exit_code: 0
+    warning: "SyntaxWarning: invalid escape sequence '\\/' at organize.py:239"
+  tests_present: false

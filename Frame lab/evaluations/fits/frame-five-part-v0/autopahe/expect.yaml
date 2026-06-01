@@ -1,0 +1,103 @@
+frame:
+  file: expect
+  schema_version: "0.1.0"
+  role: project_correctness_contract
+  status: draft
+  last_reviewed: null
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit of autopahe fixture to frame-five-part-v0.
+
+outcomes:
+  cli_usable:
+    summary: A valid source checkout can install dependencies, install a Playwright browser engine, and reach the CLI help surface.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Source setup culminates in uv run autopahe --help.
+        confidence: high
+  stateful_features_preserved:
+    summary: Changes should preserve config/path behavior and the project's stateful records/collection model unless the task intentionally redesigns them.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:31-130
+        why: Centralized state model and migration behavior.
+        confidence: high
+
+invariants:
+  setup_keeps_existing_config:
+    summary: Setup should not overwrite an existing config file.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:371-379
+        why: setup_environment only writes config when missing.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Test explicitly checks preservation of an existing config.
+        confidence: high
+  fixture_import_convention:
+    summary: The fixture currently assumes example_projects.autopahe import paths across runtime and tests.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1
+        why: Import convention is embedded in entrypoints and tests.
+        confidence: high
+  browser_handoff_real:
+    summary: Browser download verification includes user handoff and local file confirmation rather than pretending everything is silent automation.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:111-132
+        why: README explains browser link handoff and verification flow.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:163-217
+        why: Runtime code prompts user to verify downloaded files.
+        confidence: high
+
+done_when:
+  setup_changes:
+    summary: Any setup-related change still preserves existing config behavior and missing-browser guidance.
+    links:
+      - rel: validated_by
+        ref: expect.verify.setup_tests
+  cli_changes:
+    summary: Any CLI-facing change keeps legacy flag normalization or intentionally updates tests/docs to match the new contract.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:4-19
+        why: Existing tests encode some compatibility expectations.
+        confidence: high
+  persistence_changes:
+    summary: Any config/data-path change accounts for platform helpers and legacy migration expectations.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-123; Frame lab/fixtures/autopahe/project/config.py:63-130
+        why: Persistence behavior is both OS-aware and migration-aware.
+        confidence: high
+
+verify:
+  help_path:
+    summary: Run uv run autopahe --help after uv sync and uv run playwright install chromium for a basic source-checkout smoke test.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Canonical source-run verification path.
+        confidence: high
+  setup_tests:
+    summary: Run pytest, especially tests/test_setup.py and tests/test_cli.py, when touching setup or CLI normalization behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19
+        why: These tests cover setup preservation and legacy-flag handling.
+        confidence: high
+  docker_path:
+    summary: If container behavior matters, verify the documented Docker help path rather than assuming source-run parity is enough.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: Docker is a documented operating surface.
+        confidence: medium
+
+required_evidence:
+  - id: req_setup_or_cli
+    expectation: Show command output from the relevant smoke path or pytest subset when editing setup, CLI normalization, or path/config logic.
+    refs:
+      - expect.verify.help_path
+      - expect.verify.setup_tests
+  - id: req_persistence_change
+    expectation: If storage layout changes, cite the affected path helper/config anchors and explain migration impact.
+    refs:
+      - expect.done_when.persistence_changes
+
+handoff:
+  notes:
+    - This expect fit works best for repo-level verification anchors, but some items still drift toward task-level QA guidance.
+    - Repetition pressure is highest between rules.commands and expect.verify.

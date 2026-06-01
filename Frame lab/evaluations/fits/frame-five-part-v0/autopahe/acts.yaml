@@ -1,0 +1,40 @@
+frame:
+  file: acts
+  schema_version: "0.1.0"
+  role: checked_activity_record
+  status: draft
+  last_reviewed: null
+  updated_by: Hermes Agent
+  update_reason: Minimal acts fit; repo itself does not naturally supply much durable activity history.
+
+action_overview:
+  summary: Minimal on purpose. The autopahe repo exposes runtime workflows, but the fixture does not contain a strong project-level activity log worth re-encoding here.
+  stance: Keep acts thin rather than duplicating facts, rules, or expect.
+
+reflect_loop:
+  - id: refl_acts_thin
+    finding: Most useful autopahe truths are structural or operational, not historical; acts becomes forced quickly.
+    recommendation: Use acts mainly for real checked work sessions or blockers during future agent execution, not for baseline repo description.
+    evidence:
+      - source: Frame lab/evaluations/task-prompts/fixture-fit-pass.md:21-41
+        why: Fit pass prioritizes project reality first, not synthetic activity narration.
+        confidence: high
+
+actions:
+  - id: act_repo_inspection
+    summary: Inspected package config, README setup paths, CLI entrypoints, platform-path/config code, updater behavior, collection manager, and targeted tests to ground the fit.
+    status: completed
+    outcome: Produced a compact five-part draft centered on setup/runtime constraints, repo boundaries, and fixture quirks.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Packaging and dependencies reviewed.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/README.md:14-59
+        why: Setup and run surfaces reviewed.
+        confidence: high
+
+blockers: []
+
+archive:
+  notes:
+    - No durable action archive was extracted from the fixture itself.

@@ -1,0 +1,60 @@
+# facts.yaml JSON Schema — Project Facts (FRAME model: F)
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "FRAME Facts"
+description: "FRAME facts frontmatter plus the current canonical body blocks."
+type: object
+additionalProperties: false
+
+required:
+  - frame
+
+properties:
+  frame:
+    allOf:
+      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - type: object
+        properties:
+          file:
+            const: facts
+          role:
+            const: current_project_truth
+  project_profile:
+    $ref: "./frame.schema.yaml#/$defs/project_profile_entry"
+  identity:
+    type: object
+    additionalProperties: true
+  classification:
+    type: object
+    additionalProperties: true
+  technology:
+    type: object
+    additionalProperties: true
+  architecture:
+    type: object
+    additionalProperties: true
+  environments:
+    type: object
+    additionalProperties: true
+  persistence:
+    type: object
+    additionalProperties: true
+  source_truth:
+    type: array
+    items:
+      $ref: "./frame.schema.yaml#/$defs/source_truth_entry"
+  structural_quirks:
+    type: array
+    items:
+      $ref: "./frame.schema.yaml#/$defs/quirk_entry"
+  policies:
+    type: array
+    description: "Durable project policies, workflows, lifecycle constraints, role rules, and safety constraints that should be defined once and referenced elsewhere."
+    items:
+      $ref: "./frame.schema.yaml#/$defs/policy_entry"
+  evidence:
+    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+  ambiguities:
+    type: array
+    items:
+      $ref: "./frame.schema.yaml#/$defs/ambiguity_entry"

@@ -1,0 +1,43 @@
+frame:
+  file: acts
+  schema_version: "0.1.0"
+  role: checked_activity_record
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: "Refit organize fixture; acts limited to checked activity and handoff, not baseline representation."
+representation_policy:
+  baseline_project_representation: false
+  note: "For this tiny fixture, stable project truth lives in facts/map/rules/expect. Acts records only what was checked during the fit and what remains for handoff."
+action_overview:
+  fixture: Frame lab/fixtures/organize/project
+  fit_pass: frame-five-part-v0.1.0
+  summary: "Inspected schema files, README, license, organize.py, git metadata, and live CLI help."
+reflect_loop:
+  - id: acts_scale_down
+    finding: "Acts has little natural fixture content once baseline project representation is excluded."
+    recommendation: "Keep acts minimal: checked work, verification events, blockers, and handoff only."
+    links:
+      - rel: reinforces
+        ref: facts.project_profile
+actions:
+  - id: inspected_sources
+    summary: "Read organize.py, README.md, LICENSE, and current FRAME schema files."
+    status: complete
+    outcome: "Identified one-script Python CLI shape, README/code drift, hardcoded Linux path, and warning-producing help command."
+  - id: ran_help_smoke
+    summary: "Ran python3 organize.py --help in the fixture directory."
+    status: complete
+    outcome: "Command exited 0 and printed argparse help; emitted SyntaxWarning for invalid escape sequence at organize.py:239."
+    links:
+      - rel: verifies
+        ref: expect.verify.cli_help_surface
+  - id: avoided_mutating_smoke
+    summary: "Did not run create/delete/organize commands against fixture files because they mutate the filesystem."
+    status: intentionally_skipped
+    outcome: "Mutation verification should use a disposable temp directory."
+blockers: []
+archive:
+  handoff:
+    next_safe_check: "Create a temporary directory with sample files, run -c/-d and relation grouping there, then remove the temp directory."
+    no_project_activity_log_found: true

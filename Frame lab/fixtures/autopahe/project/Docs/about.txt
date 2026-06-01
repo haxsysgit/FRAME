@@ -1,0 +1,155 @@
+AutoPahe - Advanced Anime Downloader
+====================================
+
+Project Overview:
+----------------
+AutoPahe is a powerful, cross-platform command-line tool for downloading anime from AnimePahe (animepahe.com). It provides advanced features including smart caching, batch downloads, desktop notifications, progress tracking, and comprehensive record management.
+
+Key Features:
+-------------
+🔍 Smart Search with Filters
+   - Search anime by name with optional year and status filtering
+   - Fast 3-tier search: disk cache → direct HTTP → browser fallback
+   - 100x faster on repeat searches due to intelligent caching
+
+📦 Advanced Download Options
+   - Single episode downloads
+   - Batch/season downloads (e.g., "1-12", "1,3,5-8,10")
+   - Parallel downloads with configurable workers
+   - Multiple quality options (480p, 720p, 1080p)
+   - Automatic resume support for interrupted downloads
+
+🚀 Performance Optimizations
+   - Smart caching system (6-hour API cache, 24-hour cookie cache)
+   - Browser launches only when needed (no unnecessary startup delays)
+   - Memory and disk caching for faster repeat operations
+   - Optimized API calls with fallback mechanisms
+
+🔔 Desktop Notifications
+   - Cross-platform notifications (Windows PowerShell, macOS AppleScript, Linux notify-send)
+   - Download completion and failure notifications
+   - Configurable notification preferences
+
+📊 Progress Tracking & Records
+   - Visual progress bars for multi-episode downloads
+   - Comprehensive record management system
+   - Track watching progress, ratings, and status
+   - Import/export records in JSON/CSV formats
+   - Search and filter records by various criteria
+
+🗂️ File Organization
+   - Automatic file renaming and organization
+   - Sort downloaded files into anime folders
+   - Configurable sorting modes (rename, organize, or both)
+   - Dry-run preview mode for safe testing
+
+⚙️ Configuration System
+   - Persistent configuration via INI files
+   - Customizable browser, resolution, download paths
+   - Auto-sort preferences and worker settings
+   - Multiple config file locations support
+
+🌐 Cross-Platform Support
+   - Windows, macOS, and Linux compatibility
+   - Automatic driver detection and setup
+   - Platform-specific notification systems
+   - Unified experience across all platforms
+
+Technical Architecture:
+----------------------
+Core Components:
+- auto_pahe.py: Main CLI application with argument parsing and orchestration
+- ap_core/: Core functionality modules (banners, browser automation, caching, config, notifications)
+- features/: Advanced features (record management, execution tracking, file sorting)
+- kwikdown.py: Specialized downloader for Kwik streaming links
+
+Key Technologies:
+- Python 3.8+ with modern async/threading capabilities
+- Playwright for browser automation
+- BeautifulSoup4 for HTML parsing
+- Requests for direct HTTP API calls
+- tqdm for progress visualization
+- Colorama for colored terminal output
+
+Performance Features:
+- 3-tier search caching (memory → disk → API → browser fallback)
+- Session persistence with cookie caching
+- Parallel download support with conflict prevention
+- Smart API endpoint rotation for reliability
+
+Usage Examples:
+--------------
+Basic Usage:
+```bash
+# Search for anime
+python3 auto_pahe.py -s "Naruto"
+
+# Download single episode
+python3 auto_pahe.py -s "Naruto" -i 0 -d 1
+
+# Download multiple episodes
+python3 auto_pahe.py -s "Naruto" -i 0 -md "1-5"
+```
+
+Advanced Features:
+```bash
+# Search with filters
+python3 auto_pahe.py -s "Naruto" --year 2007 --status "Finished"
+
+# Download entire season with notifications
+python3 auto_pahe.py -s "Naruto" -i 0 --season 1 --notify
+
+# Parallel downloads (use with caution)
+python3 auto_pahe.py -s "Naruto" -i 0 -md "1-10" -w 2
+
+# Manage records
+python3 auto_pahe.py -R view
+python3 auto_pahe.py -R progress "Naruto" 27
+python3 auto_pahe.py -R rate "Naruto" 9.5
+
+# File organization
+python3 auto_pahe.py --sort all --sort-path ~/Downloads
+```
+
+Recent Updates (v3.0.0):
+------------------------
+Major performance optimization and code quality improvements:
+- Eliminated unnecessary browser launches (10x faster startup)
+- Optimized search with 3-tier caching (100x faster repeat searches)
+- Removed 150+ lines of dead code
+- Added comprehensive documentation
+- Updated PyPI metadata for professional distribution
+- 100% backward compatible with existing workflows
+
+Installation & Setup:
+-------------------
+1. Clone repository: git clone https://github.com/haxsysgit/autopahe.git
+2. Install dependencies: pip install -r requirements.txt
+3. Install Playwright browsers: python3 -m playwright install
+4. Run: python3 auto_pahe.py --help
+
+Project Status:
+--------------
+- Version: 3.0.0 (stable)
+- Development Status: Beta
+- License: MIT
+- PyPI Package: Available as "autopahe"
+- Repository: https://github.com/haxsysgit/autopahe
+
+Target Audience:
+---------------
+- Anime enthusiasts who want automated downloading capabilities
+- Users who prefer command-line tools with advanced features
+- People who need batch downloading and organization features
+- Users wanting to track their anime watching progress
+- Anyone needing a cross-platform anime management solution
+
+Important Notes:
+---------------
+- AnimePahe uses DDoS-Guard protection; script includes bypass mechanisms
+- Parallel downloads may trigger protection; use sequential mode for stability
+- Supports resume functionality for interrupted downloads
+- Cookie caching reduces verification challenges
+- Configurable quality settings with automatic fallback
+
+AutoPahe represents a comprehensive solution for anime enthusiasts who want automation, organization, and advanced features in their downloading workflow, all while maintaining high performance and cross-platform compatibility.

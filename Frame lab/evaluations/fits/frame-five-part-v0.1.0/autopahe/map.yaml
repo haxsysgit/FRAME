@@ -1,0 +1,243 @@
+frame:
+  file: map
+  schema_version: "0.1.0"
+  role: repo_context_map
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Refit autopahe fixture map to adjusted FRAME five-part v0.1.0 schema.
+
+roots:
+  project_root:
+    path: Frame lab/fixtures/autopahe/project
+    summary: Autopahe Python CLI fixture root containing package metadata, root entry modules, support packages, tests, docs, Docker assets, and checked-in state/generated artifacts.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Confirms package root and install metadata.
+        confidence: high
+  frame_fit_output:
+    path: Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe
+    summary: Requested FRAME v0.1.0 five-file fit output directory.
+
+paths:
+  pyproject:
+    summary: Package metadata, dependencies, console script, setuptools module/package inclusion, and build backend.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Declares project metadata and packaging boundary.
+        confidence: high
+  readme:
+    summary: User-facing install, setup, source update, Docker, command examples, browser verification, cache/resume, and config usage documentation.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:14-220
+        why: Documents common operating surfaces.
+        confidence: high
+  auto_pahe_py:
+    summary: Main runtime command implementation, version resolution, imports, global caches, runtime state access, browser download confirmation, setup/update flows, and feature orchestration.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:26-39,63-120,163-217
+        why: Entrypoint and operational code anchors.
+        confidence: high
+  cli_py:
+    summary: Typer app wrapper with legacy argument normalization, config subcommand handling, broad option inventory, and delegation into auto_pahe.py.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:21-24,47-93,96-181,184-230
+        why: Public CLI parsing boundary.
+        confidence: high
+  ap_core_browser:
+    summary: Playwright install helpers, persistent context management, manual verification sessions, browser fetch helpers, and shared requests session.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:17-30,50-131,179-227,352-457
+        why: Browser and HTTP support boundary.
+        confidence: high
+  ap_core_config:
+    summary: App config defaults, supported browsers/resolutions, config file search order, validation/coercion, sample config writing, and path creation for configured directories.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:21-206
+        why: User config behavior.
+        confidence: high
+  ap_core_platform_paths:
+    summary: Cross-platform directory helpers for config, cache, data, logs, downloads, and legacy config locations.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-248
+        why: Platform path contract.
+        confidence: high
+  root_config:
+    summary: Centralized runtime data directories, record/collection/log/backup files, legacy data migration, and import-time directory initialization.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:19-130
+        why: State directory and migration behavior.
+        confidence: high
+  state_py:
+    summary: Small dataclass container for per-invocation CLI state.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/state.py:1-18
+        why: Defines runtime state fields.
+        confidence: high
+  tests:
+    summary: Pytest regression suite for CLI argument normalization, config fallback, setup preserving existing config, kwikdown filename/security challenge helpers, and updater git root detection.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; tests/test_config.py:1-17; tests/test_setup.py:1-14; tests/test_kwikdown.py:1-13; tests/test_updater.py:1-10
+        why: Test surface inspected.
+        confidence: high
+  docker_assets:
+    summary: Dockerfile, docker-compose.yml, and docker/ helper scripts/docs for Playwright-based container operation and persistent volume mounts.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-29; docker-compose.yml:1-25; docker/README.md:1-48
+        why: Container boundary and helper scripts.
+        confidence: high
+  checked_in_state_and_generated:
+    summary: dist artifacts, __pycache__, data backups/collection/records, json_data, features/json_data, release notes, .env, and lock files exist in the fixture and should be classified carefully.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:1-23; fixture file listing inspected 2026-06-01
+        why: Ignore rules and listing show generated/state paths.
+        confidence: high
+
+classifications:
+  package_metadata:
+    summary: Python package and build metadata.
+    boundary_type: package_metadata
+    interface_role: Source of installable package identity and console script.
+    paths:
+      - pyproject.toml
+      - requirements.txt
+      - uv.lock
+      - .python-version
+  public_cli_boundary:
+    summary: User-facing CLI entry and command option surface.
+    boundary_type: entrypoint
+    interface_role: Public command-line interface and compatibility layer.
+    paths:
+      - auto_pahe.py
+      - cli.py
+  core_support_source:
+    summary: Shared implementation support for browser, cache, config, paths, updater, parser, notifications, resume, and fuzzy search.
+    boundary_type: source
+    interface_role: Internal implementation surface that many commands depend on.
+    paths:
+      - ap_core/
+  feature_source:
+    summary: Domain features for Kwik downloads/streaming, records, sorting, execution data, and collection handling.
+    boundary_type: source
+    interface_role: Internal feature modules behind CLI commands.
+    paths:
+      - kwikdown.py
+      - features/
+      - collection/
+  config_and_state:
+    summary: Runtime state/config helpers and local data path definitions.
+    boundary_type: config
+    interface_role: Persistence and runtime-state boundary; changes here can affect user files.
+    paths:
+      - config.py
+      - state.py
+      - ap_core/config.py
+      - ap_core/platform_paths.py
+  tests:
+    summary: Small pytest regression suite.
+    boundary_type: test
+    interface_role: Automated verification surface for existing behavior.
+    paths:
+      - tests/
+  docs:
+    summary: README, advanced docs, maintenance/publish/project docs, release notes, and Docker guides.
+    boundary_type: docs
+    interface_role: Supporting user/developer instructions; lower authority than runtime code for exact behavior.
+    paths:
+      - README.md
+      - ADVANCED.md
+      - Docs/
+      - release-notes/
+      - docker/*.md
+  infra:
+    summary: Docker build/run support and compose configuration.
+    boundary_type: infra
+    interface_role: Containerized operation and test support.
+    paths:
+      - Dockerfile
+      - docker-compose.yml
+      - .dockerignore
+      - docker/
+  generated_state_noise:
+    summary: Build outputs, pyc caches, local data/backups, runtime JSON, .env, and generated package artifacts that should not dominate source understanding.
+    boundary_type: generated
+    interface_role: Noise/hazard or state examples unless specifically targeted.
+    paths:
+      - dist/
+      - __pycache__/
+      - ap_core/__pycache__/
+      - collection/__pycache__/
+      - features/__pycache__/
+      - data/
+      - json_data/
+      - features/json_data/
+      - .env
+
+access_points:
+  console_script:
+    path: pyproject.toml
+    summary: Package exposes autopahe = auto_pahe:main.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45
+        why: Console script declaration.
+        confidence: high
+  typer_app:
+    path: cli.py
+    summary: Typer application object and callback define option parsing/orchestration.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:21-24,184-230
+        why: Typer app and callback inspected.
+        confidence: high
+  docker_entry:
+    path: Dockerfile
+    summary: Container entrypoint runs python -m auto_pahe.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:27-29
+        why: ENTRYPOINT declaration.
+        confidence: high
+  tests_entry:
+    path: tests/
+    summary: Pytest discovers tests under tests/.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19
+        why: Standard pytest tests present.
+        confidence: high
+
+managed_paths:
+  config_file:
+    path: platform config dir / autopahe / config.ini
+    reason: Created/read by ap_core/config.py and CLI config commands; user-owned settings.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:8-19,84-169
+        why: Config search/write behavior.
+        confidence: high
+  data_dir:
+    path: platform data dir or local/portable alternate
+    reason: Records, collection metadata, logs, backups, and migration flag live here.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:19-45,123-130
+        why: Runtime data constants and import-time setup.
+        confidence: high
+  browser_profile:
+    path: platform cache dir / autopahe / playwright / <browser>
+    reason: Persistent Playwright user data is stored there for browser verification/session reuse.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:205-210
+        why: User data dir selection.
+        confidence: high
+  docker_volumes:
+    path: ./data, ./json_data, ./collection, ~/Downloads/autopahe
+    reason: Container paths are mounted for persistent state/download support.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57; docker-compose.yml:14-18
+        why: Documented and compose volume mounts.
+        confidence: high
+
+unmapped_paths:
+  - .git/
+
+evidence:
+  - id: ev_map_refit
+    source: Manual inspection on 2026-06-01 of fixture files and schema definitions.
+    why: Map entries were grounded in inspected paths and classifications.
+    confidence: high

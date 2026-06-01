@@ -1,0 +1,148 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part-v0"
+candidate_version = "v0"
+fixture = "autopahe"
+fixture_family = "cli-tools"
+fixture_system_role = "anime download/stream assistant"
+evaluator = "hermes"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "hold"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 4
+clarity = 3
+stability = 3
+agent_usefulness = 4
+retrieval_usefulness = 4
+adoptability = 3
+bloat_resistance = 2
+token_efficiency = 2
+
+[phase_notes]
+phase_1 = "This fixture gives facts, rules, map, and expect real work to do, so the candidate clears the structural gate better than it did on organize. But the fit is only moderately clean: acts is still weak, and several boundaries blur once setup commands, path logic, and verification all matter."
+phase_2 = "For a medium CLI repo with runtime prerequisites, path logic, updater behavior, and a few key tests, the representation would likely help an agent orient faster and avoid obvious mistakes."
+phase_3 = "The cost problem is still real. The five-part split stores autopahe, but it also encourages repeated restatement of surfaces and command/verification paths, which drags down bloat resistance and token efficiency."
+
+[notes]
+summary = "Moderately strong medium-repo fit, but not a clean win. The candidate represents autopahe better than tiny fixtures, yet it still pays too much in overlap and keeps revealing that acts is not a natural baseline repo-representation part."
+coverage = "The candidate captures autopahe's identity, package/CLI shape, Playwright prerequisite, cross-platform state paths, updater split, and main source surfaces without obvious holes."
+clarity = "Facts, rules, map, and expect are all usable here, but evaluator placement is still not crisp. Setup commands and runtime constraints drift between rules and expect, while major surfaces appear in both facts.architecture and map.paths."
+stability = "Autopahe shows the candidate can scale up to a medium Python CLI/tooling repo, but the earlier organize pass already showed it does not scale down gracefully. That makes the structure workable across shapes, not convincingly stable across them."
+agent_usefulness = "An agent would benefit from seeing Playwright/browser setup, centralized path helpers, fixture-specific import conventions, updater mode split, and the separation between cli.py and auto_pahe.py before making edits."
+retrieval_usefulness = "The fit turns scattered truths from README, pyproject, CLI code, path/config helpers, updater logic, and tests into a more reusable index. It would reduce repo scavenging for setup, persistence, and entrypoint questions."
+adoptability = "A disciplined team could maintain this fit for autopahe, but only if they resist copying long command inventories and feature lists forward. The five-file burden is still noticeable for a project of this size."
+bloat_resistance = "This candidate resists some over-modeling, but not enough. Autopahe immediately creates overlap between facts and map, and between rules.commands and expect.verify; acts adds another file with little enduring project truth."
+token_efficiency = "The value is real, but too much of it comes with repetition. The fit spends extra text re-stating surfaces, setup flows, and verification paths that are already anchored elsewhere."
+
+[evidence]
+coverage = [
+  "Frame lab/fixtures/autopahe/project/pyproject.toml:1-55",
+  "Frame lab/fixtures/autopahe/project/README.md:14-59",
+  "Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-151",
+  "Frame lab/fixtures/autopahe/project/config.py:19-130",
+  "Frame lab/fixtures/autopahe/project/ap_core/updater.py:45-145"
+]
+clarity = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/facts.yaml:49-70",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/map.yaml:22-67",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/rules.yaml:48-83",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/expect.yaml:69-87"
+]
+stability = [
+  "Frame lab/evaluations/scoring/frame-five-part-v0__organize.toml:28-35",
+  "Frame lab/evaluations/reports/subagent-fit__autopahe.md:120-140",
+  "Frame lab/fixtures/autopahe/project/cli.py:47-93",
+  "Frame lab/fixtures/autopahe/project/auto_pahe.py:366-391"
+]
+agent_usefulness = [
+  "Frame lab/fixtures/autopahe/project/README.md:24-31",
+  "Frame lab/fixtures/autopahe/project/cli.py:47-93",
+  "Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-151",
+  "Frame lab/fixtures/autopahe/project/ap_core/updater.py:74-145",
+  "Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14"
+]
+retrieval_usefulness = [
+  "Frame lab/fixtures/autopahe/project/pyproject.toml:24-55",
+  "Frame lab/fixtures/autopahe/project/README.md:24-57",
+  "Frame lab/fixtures/autopahe/project/config.py:31-130",
+  "Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-87",
+  "Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19"
+]
+adoptability = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/rules.yaml:48-128",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/expect.yaml:50-104",
+  "Frame lab/fixtures/autopahe/project/README.md:24-59",
+  "Frame lab/fixtures/autopahe/project/README.md:81-178"
+]
+bloat_resistance = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/facts.yaml:49-70",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/map.yaml:22-67",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/rules.yaml:48-83",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/expect.yaml:69-87",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/acts.yaml:10-40"
+]
+token_efficiency = [
+  "Frame lab/evaluations/reports/subagent-fit__autopahe.md:104-116",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/rules.yaml:48-83",
+  "Frame lab/evaluations/fits/frame-five-part-v0/autopahe/expect.yaml:69-104",
+  "Frame lab/fixtures/autopahe/project/README.md:24-57"
+]
+
+[friction]
+forced_fits = [
+  "Acts remains largely synthetic for baseline repo representation; autopahe still does not give it durable project truth beyond the evaluation activity itself.",
+  "Structural quirks like the fixture-specific example_projects.autopahe import prefix and checked-in noise paths do not have a very crisp first-class home."
+]
+missing_semantics = [
+  "Need a cleaner place for structural quirks or drift hazards that are neither plain facts nor agent instructions.",
+  "Need a sharper distinction between descriptive operating truth and prescriptive rule when setup/runtime constraints are both."
+]
+redundant_fields = [
+  "facts.architecture.major_surfaces vs map.paths for the same repo boundaries",
+  "rules.commands vs expect.verify for the same setup and smoke-test routes",
+  "acts.action_overview/recommendation text vs the fit report's discussion of why acts is thin"
+]
+stale_risk_fields = [
+  "Long command inventories copied from README installation and Docker sections",
+  "Feature lists that mirror README usage examples instead of only stable structural truth",
+  "Secondary noise-path listings like dist/, data/, __pycache__/, and historical docs if they are maintained too literally"
+]
+extension_candidates = [
+  "A compact structural-quirks or drift-hazards block",
+  "Stronger anti-duplication guidance between commands and verification",
+  "Treat acts as execution-memory or session-history, not mandatory baseline repo representation"
+]
+
+[recommendation]
+keep = [
+  "Facts for project identity, runtime shape, and persistence truth",
+  "Rules for real setup and operating constraints",
+  "Map for entrypoints and major module boundaries",
+  "Expect for concrete repo-level verification anchors"
+]
+change = [
+  "Tighten boundaries between facts and map on major surfaces",
+  "Reduce command/verification duplication across rules and expect",
+  "Stop treating acts as if every repo naturally supplies durable activity-state worth storing"
+]
+avoid = [
+  "Do not score this as excellent just because autopahe is rich enough to fill most sections.",
+  "Do not let Phase 2 usefulness hide the Phase 3 repetition cost.",
+  "Do not reward repeated README restatement as schema fitness."
+]

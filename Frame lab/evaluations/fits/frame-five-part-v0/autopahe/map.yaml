@@ -1,0 +1,143 @@
+frame:
+  file: map
+  schema_version: "0.1.0"
+  role: repo_context_map
+  status: draft
+  last_reviewed: null
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit of autopahe fixture to frame-five-part-v0.
+
+roots:
+  repo:
+    path: Frame lab/fixtures/autopahe/project
+    summary: Medium Python CLI/tooling repo with code, tests, docs, Docker assets, release notes, and checked-in data/artifact noise.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:14-59
+        why: Documents setup and delivery paths.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Confirms package root and console entrypoint.
+        confidence: high
+
+paths:
+  auto_pahe:
+    summary: Main operational module; owns setup_environment and the heavier search/download/stream/record flows.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:366-391
+        why: setup_environment is defined here.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:437-500
+        why: Search flow and cache-first behavior live here.
+        confidence: high
+  cli:
+    summary: Typer-facing CLI adapter that normalizes legacy flags and forwards work into the main module.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:47-93,184-220
+        why: Flag normalization and CLI option definitions.
+        confidence: high
+  ap_core:
+    summary: Shared runtime support for browser automation, platform paths, config, cache, parser, notifications, and updating.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-87,179-227
+        why: Browser install and persistent context behavior.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-123
+        why: Platform path model.
+        confidence: high
+  features:
+    summary: Record-management and sorting feature layer used by the main module.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:76-90
+        why: Main module imports features.manager and features.pahesort.
+        confidence: high
+  collection:
+    summary: Collection metadata and file organization surface, separate from but synchronized with records data.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/collection/manager.py:36-79,115-153
+        why: Collection manager loads metadata and syncs from records.
+        confidence: high
+  tests:
+    summary: Narrow regression suite focused on setup preservation, CLI compatibility helpers, config normalization, kwikdown helpers, and updater behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14
+        why: Setup behavior coverage.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19
+        why: Legacy flag normalization coverage.
+        confidence: high
+
+classifications:
+  source_of_truth:
+    summary: Package truth is spread across pyproject.toml, README.md, cli.py, auto_pahe.py, and ap_core path/config helpers.
+    paths:
+      - Frame lab/fixtures/autopahe/project/pyproject.toml
+      - Frame lab/fixtures/autopahe/project/README.md
+      - Frame lab/fixtures/autopahe/project/cli.py
+      - Frame lab/fixtures/autopahe/project/auto_pahe.py
+      - Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py
+      - Frame lab/fixtures/autopahe/project/config.py
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60; Frame lab/fixtures/autopahe/project/README.md:14-59
+        why: Setup and package identity anchors.
+        confidence: high
+  fixture_noise:
+    summary: dist/, data/, __pycache__/, and release-note/history material are present but should not dominate source reasoning.
+    paths:
+      - Frame lab/fixtures/autopahe/project/dist/
+      - Frame lab/fixtures/autopahe/project/data/
+      - Frame lab/fixtures/autopahe/project/ap_core/__pycache__/
+      - Frame lab/fixtures/autopahe/project/release-notes/
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project
+        why: Directory inspection shows built artifacts, checked-in state, caches, and historical notes alongside source.
+        confidence: medium
+
+access_points:
+  console_entry:
+    path: Frame lab/fixtures/autopahe/project/pyproject.toml
+    summary: Defines console script autopahe = auto_pahe:main.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-46
+        why: Console entrypoint anchor.
+        confidence: high
+  setup_entry:
+    path: Frame lab/fixtures/autopahe/project/auto_pahe.py
+    summary: setup_environment writes config if missing and installs the Chromium browser engine.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:366-391
+        why: Explicit setup flow.
+        confidence: high
+  config_entry:
+    path: Frame lab/fixtures/autopahe/project/cli.py
+    summary: CLI has a special config command workflow for edit/show/validate behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:96-181
+        why: Dedicated config command handler.
+        confidence: high
+
+managed_paths:
+  persistent_state:
+    path: Frame lab/fixtures/autopahe/project/config.py
+    reason: Centralizes current data directories plus one-time legacy migration behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:31-130
+        why: Defines data subdirs, files, and migration flag.
+        confidence: high
+  browser_profile:
+    path: Frame lab/fixtures/autopahe/project/ap_core/browser.py
+    reason: Manages Playwright installation and persistent browser-profile state under cache directories.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-87,179-227
+        why: Browser engine installation and persistent context logic.
+        confidence: high
+
+unmapped_paths:
+  - Frame lab/fixtures/autopahe/project/Docs/
+  - Frame lab/fixtures/autopahe/project/docker/
+  - Frame lab/fixtures/autopahe/project/release-notes/
+
+evidence:
+  - id: ev_map_tree
+    source: Frame lab/fixtures/autopahe/project
+    why: Directory inspection establishes the main surfaces and checked-in noise.
+    confidence: high

@@ -1,0 +1,224 @@
+frame:
+  file: map
+  schema_version: 0.1.0
+  role: repo_context_map
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: Fit adjusted FRAME repository map to pharmax fixture.
+roots:
+  project_root:
+    path: /home/hax/FRAME/Frame lab/fixtures/pharmax/project
+    summary: Fixture root containing Pharmax full-stack app, docs, data, frontend/backend subprojects, and generated/state artifacts.
+  backend_root:
+    path: Backend
+    summary: FastAPI backend with app package, SQLAlchemy models, routes, services, Alembic migrations, scripts, tests, local DB, and Python project metadata.
+  frontend_root:
+    path: Frontend
+    summary: Vue 3/Vite frontend with route-driven views, components, stores, service modules, public assets, build output, and package metadata.
+  docs_root:
+    path: docs
+    summary: Supporting implementation, deployment, adoption, AI feature, and modernization documentation.
+  data_root:
+    path: data
+    summary: Product master list data files used by import/seed workflows.
+paths:
+  Backend/main.py:
+    summary: Thin backend ASGI entrypoint importing app from example_projects.pharmax.Backend.app.main.
+  Backend/app/main.py:
+    summary: FastAPI app construction; root health-ish endpoint, CORS/session middleware, startup database/admin setup, and api_router inclusion.
+  Backend/app/api/router.py:
+    summary: Aggregates auth, activity logs, dashboard, users, products, and invoices routers.
+  Backend/app/api/routes/auth_route.py:
+    summary: Authentication and registration route surface for JWT/PIN/user identity flows.
+  Backend/app/api/routes/products_route.py:
+    summary: Product catalog, unit, stock adjustment, and inventory API surface.
+  Backend/app/api/routes/invoices_route.py:
+    summary: Invoice lifecycle and reconciliation API surface including create/add/finalize/dispense/cancel/return/print and after-hours grants.
+  Backend/app/api/routes/users_route.py:
+    summary: Team/access management API surface.
+  Backend/app/api/routes/dashboard_route.py:
+    summary: Dashboard metrics API surface for operational overview.
+  Backend/app/api/routes/activity_route.py:
+    summary: Activity/audit log API surface.
+  Backend/app/services/invoice_workflow_service.py:
+    summary: Central orchestration for invoice business workflow, daily reconciliation lock/access policy, status display/filtering, after-hours grants, and response building.
+  Backend/app/services/invoice_service.py:
+    summary: Lower-level invoice operations including stock and invoice item behavior used by workflow layer.
+  Backend/app/services/product_service.py:
+    summary: Product catalog and stock-related business logic.
+  Backend/app/services/product_unit_service.py:
+    summary: Product unit/pricing logic.
+  Backend/app/services/user_service.py:
+    summary: User/account business logic.
+  Backend/app/services/audit_service.py:
+    summary: Audit log write/read support for traceability.
+  Backend/app/services/printing_service.py:
+    summary: Receipt/thermal printer integration surface.
+  Backend/app/models:
+    summary: SQLAlchemy ORM tables for users, products, units, stock adjustments, invoices/items, and audit logs.
+  Backend/app/schemas:
+    summary: Pydantic schemas for product, unit, user, stock adjustment, invoice, and invoice item request/response contracts.
+  Backend/app/core/config.py:
+    summary: Environment and database configuration, including SQLite default, production Postgres URL normalization, JWT/CORS, and printer settings.
+  Backend/app/db/session.py:
+    summary: SQLAlchemy engine/session factory, local table init, and default user creation from env.
+  Backend/alembic:
+    summary: Alembic migration environment and migration history for schema evolution.
+  Backend/scripts:
+    summary: Seed/import/smoke helper scripts for products, users, dev data, and workflow verification.
+  Backend/tests:
+    summary: Script-style endpoint smoke/RBAC checks and invoice flow checks; some role naming appears stale.
+  Backend/pyproject.toml:
+    summary: Backend Python project metadata and dependency inventory.
+  Backend/app/_db/pharmax.db:
+    summary: Local SQLite database state file; operational state, not source.
+  Frontend/package.json:
+    summary: Frontend npm scripts and dependency inventory for Vue/Vite/Pinia/Vue Router/Vuestic/ECharts.
+  Frontend/src/main.js:
+    summary: Vue app bootstrap.
+  Frontend/src/App.vue:
+    summary: Top-level frontend component.
+  Frontend/src/router/index.js:
+    summary: Route table mapping app surfaces to views, labels, shell metadata, and ADMIN/CASHIER/STAFF role metadata.
+  Frontend/src/services/api.js:
+    summary: Shared fetch wrapper for API base URL, auth header injection, JSON/error handling, request timeout, and loading tracking.
+  Frontend/src/services:
+    summary: Domain service modules for products, invoices, users, dashboard, loading, and API interaction.
+  Frontend/src/stores:
+    summary: Pinia state modules for auth, dashboard, products, settings, and theme.
+  Frontend/src/views:
+    summary: View layer for dashboard, auth/login, products/units, stock, invoices, cashier, reports, analytics, activity logs, settings, team access, and placeholders.
+  Frontend/src/components:
+    summary: Shared UI components such as side nav, modals, loading overlay, and toast notifications.
+  Frontend/dist:
+    summary: Built frontend output; generated artifact.
+  Frontend/node_modules:
+    summary: Installed frontend dependencies; generated artifact.
+  README.md:
+    summary: Operational project overview, role list, core capabilities, stack, setup commands, env notes, and deployment notes.
+  PROJECT_BRIEF.md:
+    summary: Academic/product brief with problem statement, desired workflows, success criteria, and older stack/scope statements.
+  docs:
+    summary: Supporting documentation and plans; useful but lower authority than runtime source.
+  agents/developer-workflows:
+    summary: Developer workflow and context docs.
+  data/Product Master List.csv:
+    summary: Product catalog source data for import/seed workflows.
+classifications:
+  backend_source:
+    summary: Backend runtime source and primary API/business logic.
+    boundary_type: source
+    interface_role: public API and internal business implementation
+    paths:
+      - Backend/app
+      - Backend/main.py
+  backend_tests_scripts:
+    summary: Backend verification and data population scripts, including no-server workflow smoke and server-backed endpoint smoke scripts.
+    boundary_type: test
+    interface_role: verification and fixture maintenance surface
+    paths:
+      - Backend/tests
+      - Backend/scripts
+  backend_migrations:
+    summary: Database schema evolution surface.
+    boundary_type: infra
+    interface_role: persistence migration support
+    paths:
+      - Backend/alembic
+      - Backend/alembic.ini
+  frontend_source:
+    summary: Vue frontend source code for SPA routes, views, stores, services, and shared components.
+    boundary_type: source
+    interface_role: user-facing UI implementation
+    paths:
+      - Frontend/src
+      - Frontend/index.html
+      - Frontend/vite.config.js
+  package_metadata:
+    summary: Backend and frontend dependency/script metadata.
+    boundary_type: package_metadata
+    interface_role: setup/build command source
+    paths:
+      - Backend/pyproject.toml
+      - Backend/uv.lock
+      - Frontend/package.json
+      - Frontend/package-lock.json
+  docs:
+    summary: README, brief, and supplemental project docs.
+    boundary_type: docs
+    interface_role: supporting product and operational context
+    paths:
+      - README.md
+      - PROJECT_BRIEF.md
+      - PROGRESS.md
+      - docs
+      - agents/developer-workflows
+      - copilot-instructions.md
+  generated_and_state:
+    summary: Installed dependencies, compiled assets, caches, pyc files, local DB, and environment files.
+    boundary_type: generated
+    interface_role: avoid as source of truth unless task explicitly targets generated/state behavior
+    paths:
+      - Frontend/node_modules
+      - Frontend/dist
+      - Backend/.venv
+      - Backend/__pycache__
+      - Backend/app/**/__pycache__
+      - Backend/.pytest_cache
+      - Backend/app/_db
+      - Backend/.env
+      - Frontend/.env
+access_points:
+  backend_asgi_app:
+    path: Backend/main.py
+    summary: ASGI app import point used by fastapi dev main.py.
+  backend_app_factory_surface:
+    path: Backend/app/main.py
+    summary: Actual FastAPI app object and startup/middleware/router configuration.
+  backend_api_router:
+    path: Backend/app/api/router.py
+    summary: Central API router composition.
+  frontend_app:
+    path: Frontend/src/main.js
+    summary: Vue app bootstrap access point.
+  frontend_router:
+    path: Frontend/src/router/index.js
+    summary: Frontend navigation and role authorization metadata access point.
+  frontend_api_client:
+    path: Frontend/src/services/api.js
+    summary: Frontend HTTP integration access point.
+  workflow_smoke:
+    path: Backend/scripts/smoke_test_workflows.py
+    summary: No-server backend workflow verification access point.
+managed_paths:
+  backend_env:
+    path: Backend/.env
+    reason: Local secret/config file; inspect only when explicitly needed and avoid committing secrets.
+  frontend_env:
+    path: Frontend/.env
+    reason: Local API URL/timeout config; inspect only when explicitly needed and avoid committing secrets.
+  local_sqlite_db:
+    path: Backend/app/_db/pharmax.db
+    reason: Mutable local DB state used by the fixture; do not edit directly without confirmation.
+  generated_frontend_dependencies:
+    path: Frontend/node_modules
+    reason: Installed dependencies should be regenerated through npm install, not manually edited.
+  generated_backend_environment:
+    path: Backend/.venv
+    reason: Python virtual environment should be regenerated through uv sync, not manually edited.
+  frontend_build_output:
+    path: Frontend/dist
+    reason: Build artifact should be regenerated by npm run build.
+unmapped_paths:
+  - Backend/.pytest_cache
+  - Backend/**/__pycache__
+  - Frontend/.vscode/extensions.json
+  - Frontend/src/assets/vue.svg
+evidence:
+  - id: ev_map_inspection
+    source: fixture file listing plus selected source reads
+    why: Map derived from inspected source/docs/package files while excluding generated dependency/build/cache noise from source truth.
+    refs: []
+    checked_at: "2026-06-01T21:53:45Z"
+    confidence: high

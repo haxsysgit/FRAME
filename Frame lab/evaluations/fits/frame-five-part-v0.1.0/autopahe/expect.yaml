@@ -1,0 +1,229 @@
+frame:
+  file: expect
+  schema_version: "0.1.0"
+  role: project_correctness_contract
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Refit autopahe fixture to adjusted FRAME five-part v0.1.0 schema with verify.command_ref links.
+
+outcomes:
+  cli_package_boundary_works:
+    summary: A source or installed checkout should expose the autopahe CLI through package metadata and reach the help surface after dependencies are installed.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45; Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Console script and source smoke command are documented.
+        confidence: high
+  browser_setup_is_actionable:
+    summary: Browser-assisted flows should either use an installed Playwright browser engine or provide actionable setup/install guidance.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-91,179-197,229-292
+        why: Browser install helpers and missing-browser handling are implemented.
+        confidence: high
+  state_paths_are_preserved:
+    summary: Config, cache, data, log, collection, backup, and browser profile locations should continue to flow through project path/config helpers unless intentionally redesigned.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-180; Frame lab/fixtures/autopahe/project/config.py:19-45
+        why: OS-aware path helpers and central data paths define persistent behavior.
+        confidence: high
+  tests_cover_regression_surface:
+    summary: Existing pytest tests should remain meaningful for CLI normalization, setup preservation, config fallback, kwikdown helper behavior, and updater git-root detection.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; tests/test_config.py:1-17; tests/test_setup.py:1-14; tests/test_kwikdown.py:1-13; tests/test_updater.py:1-10
+        why: Checked-in tests define the automated regression surface.
+        confidence: high
+
+invariants:
+  console_script_target:
+    summary: pyproject.toml continues to expose autopahe = auto_pahe:main unless packaging and docs are changed together.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45
+        why: Current public package command.
+        confidence: high
+  setup_preserves_existing_config:
+    summary: Setup must not overwrite an existing config file.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Test explicitly asserts existing config content remains unchanged.
+        confidence: high
+  invalid_browser_fallback:
+    summary: Invalid configured browser values fall back to chromium with a warning rather than raising.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:72-81,127-130; Frame lab/fixtures/autopahe/project/tests/test_config.py:9-17
+        why: Implementation and test both encode fallback behavior.
+        confidence: high
+  legacy_cli_flags:
+    summary: Legacy flags such as -md and multi-token -R records values remain normalized for Typer/Click parsing unless compatibility is intentionally broken.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:47-93; Frame lab/fixtures/autopahe/project/tests/test_cli.py:4-19
+        why: Normalizer and tests encode compatibility behavior.
+        confidence: high
+  browser_handoff_not_silent_download:
+    summary: Browser download flows include user/browser handoff and local video file confirmation rather than silent guaranteed download automation.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:111-132; Frame lab/fixtures/autopahe/project/auto_pahe.py:163-217
+        why: Docs and runtime prompt logic agree.
+        confidence: high
+  docker_playwright_base:
+    summary: Docker support uses a Playwright Python base image and installs Chromium before running the editable package.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-16
+        why: Dockerfile base image and install steps.
+        confidence: high
+
+done_when:
+  cli_or_packaging_change:
+    summary: CLI/package changes preserve console-script wiring and help-path behavior, or update docs/tests to the new command contract.
+    links:
+      - rel: verified_by
+        ref: expect.verify.cli_help_smoke
+      - rel: verified_by
+        ref: expect.verify.pytest_suite
+  setup_or_browser_change:
+    summary: Setup/browser changes preserve config safety, actionable missing-browser guidance, and Chromium install path behavior.
+    links:
+      - rel: verified_by
+        ref: expect.verify.installed_setup
+      - rel: verified_by
+        ref: expect.verify.browser_engine_install
+      - rel: verified_by
+        ref: expect.verify.pytest_suite
+  config_or_state_change:
+    summary: Config/state changes account for platform path helpers, legacy migration behavior, and import-time side effects.
+    links:
+      - rel: verified_by
+        ref: expect.verify.config_validate
+      - rel: verified_by
+        ref: expect.verify.pytest_suite
+  docker_change:
+    summary: Docker changes still build the Playwright-based image and reach CLI help with documented volume mounts/helper scripts.
+    links:
+      - rel: verified_by
+        ref: expect.verify.docker_build
+      - rel: verified_by
+        ref: expect.verify.docker_help
+
+verify:
+  source_setup:
+    summary: Install source dependencies before source-run verification.
+    command_ref: rules.commands.install_source_uv
+    proof_type: automated_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README source setup command.
+        confidence: high
+  browser_engine_install:
+    summary: Confirm the Chromium engine is installed in the same uv environment used for source runs.
+    command_ref: rules.commands.install_browser_chromium_uv
+    proof_type: automated_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31; Frame lab/fixtures/autopahe/project/ap_core/updater.py:53-58
+        why: Source setup/update install Chromium via uv.
+        confidence: high
+  cli_help_smoke:
+    summary: Confirm the source-checkout CLI reaches its help output after setup.
+    command_ref: rules.commands.run_help_source
+    proof_type: smoke_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Documented first source smoke command.
+        confidence: high
+  installed_setup:
+    summary: Confirm installed-tool setup writes config only when missing and installs browser support.
+    command_ref: rules.commands.run_setup_installed
+    proof_type: smoke_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:16-23; Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Setup command and preservation test.
+        confidence: high
+  config_show:
+    summary: Inspect effective or sample configuration without editing it.
+    command_ref: rules.commands.run_config_show
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:158-167
+        why: Handler prints existing or sample config.
+        confidence: high
+  config_validate:
+    summary: Validate config normalization/warnings after config/path changes.
+    command_ref: rules.commands.run_config_validate
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:168-178; Frame lab/fixtures/autopahe/project/tests/test_config.py:9-17
+        why: Handler and tests cover config validation/fallback.
+        confidence: high
+  pytest_suite:
+    summary: Run checked-in pytest regression suite for CLI normalization, setup/config, kwikdown helpers, and updater behavior.
+    command_ref: rules.commands.run_pytest_all
+    proof_type: automated_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/
+        why: Test files are present and use pytest assertions.
+        confidence: high
+  browser_verify_manual:
+    summary: For live site/challenge issues, open the persistent browser profile and manually complete verification without claiming bypass automation.
+    command_ref: rules.commands.run_browser_verify
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:124-132; Frame lab/fixtures/autopahe/project/ap_core/browser.py:94-131
+        why: Manual verification session behavior is documented and implemented.
+        confidence: high
+  package_build:
+    summary: For packaging/release changes, build the package artifact from pyproject metadata.
+    command_ref: rules.commands.build_package
+    proof_type: automated_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:53-55
+        why: Build backend declared.
+        confidence: medium
+  source_update_flow:
+    summary: For updater changes, verify source update logic continues to fast-forward clean checkouts and refresh dependencies/browser engine.
+    command_ref: rules.commands.update_source
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/updater.py:74-104
+        why: Source updater implementation.
+        confidence: high
+  docker_build:
+    summary: For Docker changes, build the documented container image.
+    command_ref: rules.commands.docker_build
+    proof_type: automated_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-29; Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: Docker build path exists.
+        confidence: high
+  docker_help:
+    summary: For Docker changes, run CLI help in the built image with documented state volumes.
+    command_ref: rules.commands.docker_run_help
+    proof_type: smoke_test
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: README documents the container help command.
+        confidence: high
+
+required_evidence:
+  - id: req_cli_setup
+    expectation: For CLI/setup changes, include command output from pytest and a relevant help/setup/config smoke path.
+    refs:
+      - expect.verify.pytest_suite
+      - expect.verify.cli_help_smoke
+      - expect.verify.installed_setup
+  - id: req_browser_live
+    expectation: For browser/download/verification changes, state whether the check was automated, manual, or unavailable due to network/site/browser constraints.
+    refs:
+      - expect.verify.browser_engine_install
+      - expect.verify.browser_verify_manual
+  - id: req_state_paths
+    expectation: For persistence changes, cite affected platform path/config lines and describe migration/import-side-effect impact.
+    refs:
+      - expect.done_when.config_or_state_change
+  - id: req_docker
+    expectation: For container changes, provide Docker build/help output or explicitly report why Docker verification was unavailable.
+    refs:
+      - expect.verify.docker_build
+      - expect.verify.docker_help
+
+handoff:
+  notes:
+    - expect.verify intentionally uses command_ref links to rules.commands rather than repeating command strings.
+    - Live AnimePahe/Kwik checks may depend on network and site challenge state; classify such proof honestly as manual/unavailable when appropriate.

@@ -1,0 +1,82 @@
+frame:
+  file: expect
+  schema_version: "0.1.0"
+  role: project_correctness_contract
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit for organize fixture.
+
+outcomes:
+  cli_surface_available:
+    summary: The script should expose its flag surface through argparse help and remain runnable as a Python 3 CLI script.
+    evidence:
+      - id: ev_expect_help
+        source: "command: python3 organize.py --help"
+        why: Live run succeeded with exit code 0.
+        confidence: high
+
+invariants:
+  cli_flags_are_primary_interface:
+    summary: Behavior changes should preserve a coherent flag-based interface because the repo has no richer UI or package surface.
+    evidence:
+      - id: ev_inv_parser
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: Parser options define the working interface.
+        confidence: high
+  filesystem_mutation_is_core_behavior:
+    summary: Organize and delete flows are supposed to create directories and move files; verification should account for side effects.
+    evidence:
+      - id: ev_inv_mutation
+        source: Frame lab/fixtures/organize/project/organize.py:92-192
+        why: create_ext_dir implements the main mutation flow.
+        confidence: high
+      - id: ev_inv_delete
+        source: Frame lab/fixtures/organize/project/organize.py:196-289
+        why: delete_ext_dir reverses extension-folder organization.
+        confidence: high
+
+done_when:
+  docs_and_code_agree_on_entrypoint:
+    summary: A good change leaves the executable script name and examples aligned, or explicitly documents any mismatch.
+    evidence:
+      - id: ev_done_drift
+        source: Frame lab/fixtures/organize/project/README.md:55-109
+        why: Current README/code mismatch is a known correctness hazard.
+        confidence: high
+  verification_path_is_safe:
+    summary: Destructive commands are only considered verified when run against a disposable sample directory, not a personal filesystem path.
+    evidence:
+      - id: ev_done_safe_path
+        source: Frame lab/fixtures/organize/project/organize.py:10-16
+        why: Source contains a personal Linux default path, so explicit safe paths matter.
+        confidence: high
+
+verify:
+  help_command:
+    summary: Run python3 organize.py --help to confirm the CLI still parses and exposes the expected flags.
+    evidence:
+      - id: ev_verify_help_live
+        source: "command: python3 organize.py --help"
+        why: This is the cheapest real verification surface in the repo.
+        confidence: high
+  manual_mutation_check:
+    summary: For behavioral changes, use a disposable directory with representative files and confirm create, organize, and delete flows move files as intended.
+    evidence:
+      - id: ev_verify_manual
+        source: Frame lab/fixtures/organize/project/README.md:63-109
+        why: README documents the intended mutation flows.
+        confidence: medium
+
+required_evidence:
+  - id: req_help_output
+    expectation: Capture the live help output for any CLI-surface change.
+    refs:
+      - expect.verify.help_command
+  - id: req_safe_directory_note
+    expectation: Record which disposable directory was used for any mutation-flow verification.
+    refs:
+      - expect.verify.manual_mutation_check
+
+handoff:
+  note: Keep expect lean here; this repo has no formal test suite, so correctness evidence is mostly CLI help plus careful manual filesystem checks.

@@ -74,17 +74,34 @@ Until then:
 - repo tags = FRAME milestone tags
 - package versions inside `frame-python` can stay lightweight and pre-1.0
 
+## Release rhythm
+
+Do not jump versions casually.
+
+Recommended rule for this repo:
+- stay inside a themed minor line for a while
+- use patch releases for logical progress within that theme
+- only move to the next minor line when the project theme changes meaningfully
+
+Example:
+- `0.1.1`
+- `0.1.2`
+- `0.1.3`
+- `0.1.4`
+- `0.1.5`
+- then later `0.2.0`
+
+Suggested meaning:
+- `0.1.x` = one coherent implementation theme
+- `0.2.x` = the next coherent implementation theme
+
+A good minor bump should feel like: "we started a new chapter," not "we made another commit."
+
 ## Recommended current baseline
 
-The current reset-and-rebuild state is best treated as:
-- `v0.1.0-alpha.1`
+The current reset-and-rebuild state is best treated as an early pre-release baseline, not as a signal to accelerate minor bumps.
 
-Why:
-- the architecture reset is real
-- the repo structure has been intentionally reset
-- docs are now unified
-- `frame-python` has a defined lane
-- but the implementation is still early and clearly unstable
+The repo currently has pre-release tags, but the intended longer-term rhythm should favor patch progression inside themes unless the architecture genuinely enters a new line.
 
 ## Release note habit
 

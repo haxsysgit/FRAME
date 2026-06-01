@@ -1,0 +1,140 @@
+frame:
+  file: facts
+  schema_version: "0.1.0"
+  role: current_project_truth
+  status: draft
+  last_reviewed: null
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit of autopahe fixture to frame-five-part-v0.
+
+identity:
+  fixture_id: autopahe
+  repo_root: Frame lab/fixtures/autopahe/project
+  delivery_family: medium CLI/tooling app
+  system_role: AnimePahe assistant/downloader helper
+  summary: Python CLI package for AnimePahe search, browser-download handoff, streaming, record management, sorting, and collection tracking.
+
+classification:
+  primary_stack:
+    - Python >= 3.10
+    - Typer
+    - Click
+    - requests
+    - BeautifulSoup
+    - Playwright
+    - Rich
+  repo_shape: Python package-style repo with entry scripts, core modules, tests, docs, Docker assets, and checked-in local-state examples.
+  structural_quirks:
+    - Fixture-adapted imports use the prefix example_projects.autopahe across runtime modules and tests.
+    - Local state and release artifacts are checked into the fixture, so not every root path is active source.
+
+technology:
+  packaging:
+    build_backend: setuptools.build_meta
+    entrypoint: autopahe = auto_pahe:main
+    package_includes:
+      - ap_core*
+      - features*
+      - collection*
+  runtime_dependencies:
+    - requests
+    - playwright
+    - rich
+    - beautifulsoup4
+    - typer
+    - click
+  test_surface:
+    - pytest tests for CLI normalization, setup behavior, config normalization, kwikdown helpers, and updater helpers
+
+architecture:
+  major_surfaces:
+    - path: auto_pahe.py
+      role: Main command flow and operational logic.
+    - path: cli.py
+      role: Typer CLI wrapper and legacy-flag normalization/orchestration layer.
+    - path: ap_core/
+      role: Shared browser, cache, parser, updater, config, and platform-path support.
+    - path: features/
+      role: Record-management and sorting features.
+    - path: collection/
+      role: Collection metadata and file-organization logic.
+    - path: tests/
+      role: Small but real regression checks around setup and compatibility helpers.
+  boundaries:
+    - CLI parsing/orchestration is split from heavier operational logic.
+    - Browser/runtime setup lives under ap_core rather than directly in the entrypoint.
+    - Collection metadata is separate from legacy records management, but the two still sync.
+  quirks:
+    - Browser-assisted download flow is part of the core product shape, not an optional plugin.
+    - Update behavior distinguishes source checkouts from installed tools and changes commands accordingly.
+
+environments:
+  supported_platforms:
+    - Windows
+    - macOS
+    - Linux
+  operating_assumptions:
+    - Real runs need Playwright plus an installed browser engine, typically Chromium.
+    - Config, cache, data, and logs are routed through platform-specific directories.
+    - Docker is a supported operating path, not just incidental scaffolding.
+
+persistence:
+  config:
+    primary_location: platform config dir /config.ini
+    notes:
+      - Default config location resolves via ap_core/platform_paths.py.
+      - Legacy config locations are still scanned for backwards compatibility.
+  data:
+    notes:
+      - Standard mode stores records, collection data, logs, cache, and backups under a centralized data directory.
+      - AUTO_PAHE_PORTABLE and AUTO_PAHE_DEV change where data is stored.
+    key_files:
+      - data/records/animerecord.json equivalent via config.DATABASE_FILE
+      - data/collection/collection.json equivalent via config.COLLECTION_METADATA_FILE
+      - migration flag .migrated
+
+evidence:
+  - id: ev_pyproject
+    source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+    why: Package identity, Python requirement, dependencies, and console script.
+    confidence: high
+  - id: ev_readme_setup
+    source: Frame lab/fixtures/autopahe/project/README.md:14-59
+    why: Setup flow, Playwright requirement, and Docker support.
+    confidence: high
+  - id: ev_cli_split
+    source: Frame lab/fixtures/autopahe/project/cli.py:21-24,184-220
+    why: Typer wrapper and broad CLI option surface.
+    confidence: high
+  - id: ev_import_quirk
+    source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/auto_pahe.py:63-90; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-3
+    why: Fixture-adapted example_projects.autopahe import prefix is structural and repeated.
+    confidence: high
+  - id: ev_platform_paths
+    source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-123
+    why: Cross-platform config/cache/data path behavior.
+    confidence: high
+  - id: ev_data_config
+    source: Frame lab/fixtures/autopahe/project/config.py:19-130
+    why: Centralized data directories, legacy migration, and environment-dependent storage.
+    confidence: high
+  - id: ev_update_modes
+    source: Frame lab/fixtures/autopahe/project/ap_core/updater.py:45-145
+    why: Source-checkout versus installed-tool update paths.
+    confidence: high
+  - id: ev_tests
+    source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14
+    why: Concrete regression coverage around CLI normalization and setup behavior.
+    confidence: high
+
+ambiguities:
+  - id: amb_browser_core
+    question: Is browser automation intended as the dominant runtime path, or mainly a fallback behind HTTP/cache paths?
+    status: open
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:111-132
+        why: README presents browser download handoff as a core flow.
+        confidence: medium
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:437-500
+        why: Search path prefers cache/HTTP first and launches browser only when needed.
+        confidence: medium

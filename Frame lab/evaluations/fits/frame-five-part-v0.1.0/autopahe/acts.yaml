@@ -1,0 +1,79 @@
+frame:
+  file: acts
+  schema_version: "0.1.0"
+  role: checked_activity_record
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Record checked refit activity only; baseline representation belongs in facts/map/rules/expect.
+
+representation_policy:
+  baseline_project_representation: false
+  note: Acts records checked work and handoff state for this FRAME refit; it intentionally does not model stable autopahe repo structure.
+
+action_overview:
+  task: Refit adjusted FRAME five-file schema against autopahe fixture.
+  fixture: /home/hax/FRAME/Frame lab/fixtures/autopahe/project
+  output_dir: /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe
+  checked_at: "2026-06-01T22:53:46+01:00"
+  completion_state: files_written_and_schema_checked
+
+reflect_loop:
+  - id: reflect_adjusted_schema_intent
+    finding: The adjusted schema gives facts.project_profile, facts.source_truth, facts.structural_quirks, command inventory in rules.commands, verification meaning in expect.verify with command_ref, and keeps acts as checked activity/handoff rather than baseline repo description.
+    recommendation: Keep future fit updates aligned to this separation; avoid copying command prose into expect when a rules.commands key exists.
+    evidence:
+      - source: /home/hax/FRAME/schemas/facts.schema.yaml:22-49; /home/hax/FRAME/schemas/rules.schema.yaml:26-30; /home/hax/FRAME/schemas/expect.schema.yaml:34-38; /home/hax/FRAME/schemas/acts.schema.yaml:22-33
+        why: Schema files define these adjusted fields and intent.
+        confidence: high
+  - id: reflect_noise_pressure
+    finding: The autopahe fixture contains substantial checked-in generated/state/build material, so source truth ranking and structural quirks are necessary to prevent over-modeling noise.
+    recommendation: Treat dist, __pycache__, data backups, runtime JSON, and similar paths as hazards unless a task targets release artifacts or state migration.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:1-23; fixture file listing inspected 2026-06-01
+        why: Ignore rules and file listing show generated/state paths are present.
+        confidence: high
+
+actions:
+  - id: act_inspected_schemas
+    summary: Inspected FRAME v0.1.0 candidate schema files for facts, rules, acts, map, expect, and shared frame definitions.
+    status: done
+    outcome: Confirmed required headers, command_entry.kind requirement, verification_entry.command_ref, and acts representation_policy shape.
+    evidence:
+      - source: /home/hax/FRAME/schemas/frame.schema.yaml:8-43,185-347,402-498; /home/hax/FRAME/schemas/acts.schema.yaml:22-33
+        why: These definitions governed the YAML files written.
+        confidence: high
+  - id: act_inspected_fixture
+    summary: Inspected package metadata, README, CLI, browser setup, config/path/state helpers, tests, Docker files, requirements, and ignore rules in the autopahe fixture.
+    status: done
+    outcome: Grounded the fit in actual files and identified CLI/package boundaries, Playwright setup, state/config/path helpers, tests, Docker paths, and checked-in noise.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml; README.md; cli.py; auto_pahe.py; ap_core/browser.py; ap_core/config.py; ap_core/platform_paths.py; config.py; state.py; tests/; Dockerfile; docker-compose.yml; docker/README.md; requirements.txt; .gitignore
+        why: These files were read or listed during the refit.
+        confidence: high
+  - id: act_wrote_fit_files
+    summary: Wrote facts.yaml, rules.yaml, acts.yaml, map.yaml, and expect.yaml to the requested adjusted v0.1.0 output directory.
+    status: done
+    outcome: Five FRAME fit YAML files created under frame-five-part-v0.1.0/autopahe.
+    evidence:
+      - source: /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/
+        why: Output directory and file paths written by this task.
+        confidence: high
+  - id: act_wrote_report
+    summary: Wrote the requested short fit report.
+    status: done
+    outcome: Report created at Frame lab/evaluations/reports/refit__frame-five-part-v0.1.0__autopahe.md.
+    evidence:
+      - source: /home/hax/FRAME/Frame lab/evaluations/reports/refit__frame-five-part-v0.1.0__autopahe.md
+        why: Report path written by this task.
+        confidence: high
+
+blockers: []
+
+archive:
+  prior_fit_consulted:
+    - /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0/autopahe/facts.yaml
+    - /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0/autopahe/rules.yaml
+    - /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0/autopahe/expect.yaml
+  notes:
+    - Prior v0 fit was used only as context; the new output was adjusted to schema v0.1.0 and re-grounded from inspected fixture files.

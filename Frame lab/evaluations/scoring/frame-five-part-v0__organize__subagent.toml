@@ -1,0 +1,145 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part-v0"
+candidate_version = "v0"
+fixture = "organize"
+fixture_family = "cli-tools"
+fixture_system_role = "file organization helper"
+evaluator = "hermes-subagent"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "candidate_rejected"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 3
+clarity = 2
+stability = 2
+agent_usefulness = 3
+retrieval_usefulness = 2
+adoptability = 2
+bloat_resistance = 1
+token_efficiency = 1
+
+[phase_notes]
+phase_1 = "Coverage is only workable, while clarity and scale-down stability both fail the gate for a one-script repo. The candidate can store organize, but the fit is structurally awkward rather than clean."
+phase_2 = "The five-part fit still gives some value by surfacing the real entrypoint, README/code drift, destructive filesystem behavior, and lack of tests. That usefulness is limited because the repo itself is tiny and the same truths are easy to recover directly."
+phase_3 = "Cost pressure is the clearest failure. The organize fit repeats the same tiny set of truths across facts, rules, map, and expect, while acts mostly records framework overhead rather than project reality."
+
+[notes]
+summary = "Structurally weak scale-down fit. The schema can represent organize, but Phase 1 is not earned cleanly and Phase 3 is poor because five files spread a one-script repo across repetitive buckets."
+coverage = "Most important reality fits somewhere: tiny Python CLI, README/code drift, destructive file moves, and minimal verification surface. Coverage is only moderate because acts has no natural project truth to carry and recurring drift hazards have no clean dedicated home."
+clarity = "Boundary confusion is persistent. organize.py as the main surface appears in facts.architecture, map.paths, and expect.verify; help-command truth appears in rules.commands and expect.verify; README drift gets threaded through multiple parts instead of landing in one obvious place."
+stability = "organize is the scale-down probe, and the candidate needs special restraint just to avoid looking silly on it. A schema that only works when evaluators aggressively compress facts, map, expect, and acts is not stable across smaller fixtures."
+agent_usefulness = "An agent would make somewhat better choices after reading the fit: it would know to trust argparse over README examples, avoid the hardcoded Linux default path, and treat file-moving commands as destructive."
+retrieval_usefulness = "There is some indexing value, but not much leverage. The repo already concentrates truth in README.md and organize.py, and the five-part fit does not reduce lookup enough to justify all of its splits."
+adoptability = "Maintaining five FRAME files for a repo with organize.py, README.md, and LICENSE would feel like ceremony. The stale-risk is especially high for command examples, drift notes, and verification instructions that are all copies of a very small source base."
+bloat_resistance = "This candidate resists bloat poorly on tiny repos. organize tempts the schema to restate the same script path, safety note, and help command across multiple core files, and acts becomes filler."
+token_efficiency = "Value per token is weak here. The fit spends five documents to describe one script, one README, one path hazard, one doc-drift issue, and one cheap verification command."
+
+[evidence]
+coverage = [
+  "Frame lab/fixtures/organize/project/organize.py:10-16",
+  "Frame lab/fixtures/organize/project/organize.py:19-52",
+  "Frame lab/fixtures/organize/project/organize.py:92-289",
+  "Frame lab/fixtures/organize/project/README.md:17-109",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/acts.yaml:10-52"
+]
+clarity = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/facts.yaml:56-79",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/rules.yaml:41-74",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/map.yaml:20-42",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/expect.yaml:55-69"
+]
+stability = [
+  "Frame lab/fixtures/organize/project/README.md:3-15",
+  "Frame lab/fixtures/organize/project/organize.py:1-52",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/acts.yaml:10-52",
+  "Frame lab/evaluations/reports/subagent-fit__organize.md:65-72"
+]
+agent_usefulness = [
+  "Frame lab/fixtures/organize/project/organize.py:10-16",
+  "Frame lab/fixtures/organize/project/organize.py:19-52",
+  "Frame lab/fixtures/organize/project/README.md:55-109",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/rules.yaml:10-109"
+]
+retrieval_usefulness = [
+  "Frame lab/fixtures/organize/project/README.md:17-49",
+  "Frame lab/fixtures/organize/project/organize.py:19-52",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/map.yaml:20-92"
+]
+adoptability = [
+  "Frame lab/fixtures/organize/project/README.md:3-109",
+  "Frame lab/fixtures/organize/project/organize.py:1-488",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/facts.yaml:1-126",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/rules.yaml:1-115",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/expect.yaml:1-82"
+]
+bloat_resistance = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/facts.yaml:56-62",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/rules.yaml:41-74",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/map.yaml:21-42",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/expect.yaml:39-69",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/acts.yaml:18-52"
+]
+token_efficiency = [
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/facts.yaml:56-62",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/map.yaml:52-92",
+  "Frame lab/evaluations/fits/frame-five-part-v0/organize/expect.yaml:55-79",
+  "Frame lab/evaluations/reports/subagent-fit__organize.md:50-72"
+]
+
+[friction]
+forced_fits = [
+  "acts is mostly meta-evaluation residue on this fixture instead of durable project reality",
+  "facts/map/expect all want to own the same organize.py entry-surface truth",
+  "rules.commands and expect.verify both want to restate the same help command because the repo has only one cheap verification surface"
+]
+missing_semantics = [
+  "no clean compact slot for recurring structural drift hazards like README examples naming file_manager.py while the repo ships organize.py",
+  "no built-in tiny-repo mode, so evaluators have to self-police how much of the five-part split is actually justified"
+]
+redundant_fields = [
+  "facts.architecture.entrypoint + map.paths.organize_script + map.access_points.parser_block all point at the same script surface",
+  "rules.commands.help + expect.verify.help_command duplicate the same verification action",
+  "README/code drift appears in facts.architecture.notable_quirks, rules.critical_rules, map.paths.readme, and expect.done_when"
+]
+stale_risk_fields = [
+  "command examples copied from README or argparse help",
+  "verification guidance that mirrors the current one-command reality",
+  "acts entries that capture evaluation-time checks instead of stable repo truth"
+]
+extension_candidates = [
+  "a compact drift-or-quirks slot would fit organize better than smearing the same mismatch across multiple files",
+  "an explicit tiny-repo compression rule would be cleaner than pretending all five files pull equal weight here"
+]
+
+[recommendation]
+keep = [
+  "facts for stable identity, stack, and repo-shape truth",
+  "map for source-of-truth navigation when there are genuinely multiple meaningful surfaces",
+  "expect for real verification contracts on repos that have richer correctness surfaces"
+]
+change = [
+  "treat Phase 1 gate as failed here because clarity and stability both scored 2",
+  "add or permit a compact mode for tiny repos so one-script fixtures do not have to fake five equally meaningful layers",
+  "reduce core overlap between facts, map, rules, and expect around entrypoints and verification commands"
+]
+avoid = [
+  "do not count mere storability as structural success",
+  "do not use acts as filler when the repo has no durable activity surface",
+  "do not reward repeated organize.py/help/drift restatements as completeness"
+]

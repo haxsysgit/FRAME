@@ -1,0 +1,51 @@
+frame:
+  file: acts
+  schema_version: "0.1.0"
+  role: checked_activity_record
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Minimal acts fit; repo does not naturally justify richer activity modeling.
+
+action_overview:
+  summary: Lean acts record only; the repo itself does not expose a durable activity or workflow log surface.
+  evidence:
+    - id: ev_act_repo_small
+      source: Frame lab/fixtures/organize/project
+      why: Inspection shows a tiny single-script repo with no tests, CI, or workflow artifacts.
+      confidence: medium
+
+reflect_loop:
+  - id: reflect_acts_weak
+    finding: Acts feels weak on this fixture because project reality is mostly static repo truth, not ongoing recorded activity.
+    recommendation: Keep acts minimal on tiny repos rather than inventing pseudo-history.
+    evidence:
+      - id: ev_reflect_small_repo
+        source: Frame lab/fixtures/metadata/core-seven-project-cards.md:49-52
+        why: This fixture explicitly pressures tiny-repo representation.
+        confidence: high
+
+actions:
+  - id: act_help_check
+    summary: Ran the CLI help command to confirm the live verification surface.
+    status: done
+    outcome: Command succeeded and exposed current flags, but emitted a SyntaxWarning about an invalid escape sequence.
+    evidence:
+      - id: ev_act_help_output
+        source: "command: python3 organize.py --help"
+        why: Live run returned exit code 0 with the parser help text and warning.
+        confidence: high
+
+blockers:
+  - id: blocker_safe_mutation_example
+    summary: Destructive organize flows were not executed against a real directory during this fit.
+    next_step: Use a disposable sample directory if a future pass needs behavioral verification beyond --help.
+    evidence:
+      - id: ev_blocker_mutation_risk
+        source: Frame lab/fixtures/organize/project/organize.py:92-192
+        why: Main operations move files and create folders, so a safe fixture directory is required.
+        confidence: high
+
+archive:
+  notes:
+    - No natural project activity archive exists in the repo.

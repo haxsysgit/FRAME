@@ -1,0 +1,115 @@
+frame:
+  file: rules
+  schema_version: "0.1.0"
+  role: project_instruction_blueprint
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit for organize fixture.
+
+critical_rules:
+  - id: rule_cli_surface
+    text: Treat command-line flags as the primary public interface; check argparse before changing behavior or docs.
+    evidence:
+      - id: ev_rule_cli_surface
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: The parser defines the real entry surface.
+        confidence: high
+  - id: rule_path_safety
+    text: Assume operations are destructive to local directory layout; inspect the target path before running create, organize, or delete flows.
+    evidence:
+      - id: ev_rule_path_safety
+        source: Frame lab/fixtures/organize/project/organize.py:92-192
+        why: create_ext_dir creates folders and moves files.
+        confidence: high
+      - id: ev_rule_delete_safety
+        source: Frame lab/fixtures/organize/project/organize.py:196-289
+        why: delete_ext_dir moves files back and removes folders.
+        confidence: high
+  - id: rule_doc_drift
+    text: Do not trust README command names blindly; verify against organize.py because docs currently drift.
+    evidence:
+      - id: ev_rule_doc_drift_readme
+        source: Frame lab/fixtures/organize/project/README.md:55-109
+        why: README examples use file_manager.py.
+        confidence: high
+      - id: ev_rule_doc_drift_code
+        source: Frame lab/fixtures/organize/project/organize.py:1-488
+        why: organize.py is the actual script in the repo.
+        confidence: high
+
+commands:
+  help:
+    run: python3 organize.py --help
+    purpose: Show the actual CLI flags and current parser help.
+    evidence:
+      - id: ev_cmd_help
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: Parser declares the available options.
+        confidence: high
+  relation_match:
+    run: python3 organize.py -m "/path/to/files"
+    purpose: Print grouped related files by shared filename prefix.
+    evidence:
+      - id: ev_cmd_match
+        source: Frame lab/fixtures/organize/project/README.md:55-61
+        why: README documents the match flow.
+        confidence: medium
+      - id: ev_cmd_match_code
+        source: Frame lab/fixtures/organize/project/organize.py:447-449
+        why: Argument handling wires -m to similar_file_group.
+        confidence: high
+  organize_extension:
+    run: python3 organize.py -obe -p "/path/to/files"
+    purpose: Create extension folders and then group related files inside them.
+    evidence:
+      - id: ev_cmd_obe_readme
+        source: Frame lab/fixtures/organize/project/README.md:79-85
+        why: README documents the combined organize flow.
+        confidence: medium
+      - id: ev_cmd_obe_code
+        source: Frame lab/fixtures/organize/project/organize.py:472-474
+        why: Argument handling wires -obe to organize_by_extension(..., group=True).
+        confidence: high
+
+negative_instructions:
+  - id: neg_no_fake_tests
+    text: Do not claim automated test coverage or packaging workflows; none were found in this tiny fixture.
+    evidence:
+      - id: ev_neg_no_tests
+        source: Frame lab/fixtures/organize/project
+        why: Repo inspection found only the script, README, LICENSE, and git metadata.
+        confidence: medium
+  - id: neg_no_default_linux_path
+    text: Do not rely on the hardcoded Linux default path for verification; pass an explicit safe path instead.
+    evidence:
+      - id: ev_neg_default_path
+        source: Frame lab/fixtures/organize/project/organize.py:10-16
+        why: Linux branch sets a personal absolute path.
+        confidence: high
+
+stop_and_ask:
+  - id: ask_before_mutating_real_files
+    trigger: When the requested run would move or delete files in a non-sandbox directory.
+    question: Which directory is safe to mutate for this task?
+    evidence:
+      - id: ev_ask_mutation
+        source: Frame lab/fixtures/organize/project/organize.py:92-192
+        why: Core commands move files and create directories.
+        confidence: high
+
+skill_hints:
+  - id: hint_verify_help_first
+    trigger: When starting work on CLI behavior or documentation.
+    hint: Run the help command first because the parser is the clearest source of current flag truth.
+    evidence:
+      - id: ev_hint_help
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: The parser is small and authoritative.
+        confidence: high
+
+evidence:
+  - id: ev_rules_card
+    source: Frame lab/fixtures/metadata/core-seven-project-cards.md:37-45
+    why: Project card captures the structural rules and run surface this file is fitting into rule form.
+    confidence: high

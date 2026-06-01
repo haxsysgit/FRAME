@@ -1,0 +1,208 @@
+frame:
+  file: facts
+  schema_version: 0.1.0
+  role: current_project_truth
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: Fit adjusted FRAME five-file schema to pharmax fixture.
+project_profile:
+  summary: Pharmax is a medium-sized full-stack pharmacy operations web app with a FastAPI/SQLAlchemy backend and Vue 3/Vite frontend for inventory, invoices, cashier workflows, reporting, team access, and activity audit logs.
+  family: web-app
+  system_role: Role-based pharmacy management platform spanning operational UI, REST API, persistence models, migrations, seed scripts, and smoke-test workflows.
+  complexity: medium
+  scale_guidance: Represent as a split frontend/backend app; preserve business workflow and verification surfaces rather than exhaustively listing generated dependencies or build output.
+  evidence:
+    - id: ev_readme_profile
+      source: README.md:1-55
+      why: Declares Pharmax purpose, capabilities, and FastAPI/Vue/SQLite stack.
+      refs: []
+      checked_at: "2026-06-01T21:53:45Z"
+      confidence: high
+identity:
+  name: Pharmax
+  description: Role-based pharmacy management system for day-to-day pharmacy operations.
+  product_domain: pharmacy operations
+  primary_roles:
+    - ADMIN
+    - CASHIER
+    - STAFF
+  core_capabilities:
+    - JWT and PIN login flows
+    - Public registration with admin activation
+    - Product master list, units, pricing, and stock adjustment tracking
+    - Invoice lifecycle from draft through finalized/stamped, dispensed, returned, or cancelled
+    - Dashboard, analytics, reports, team access, and activity logs
+classification:
+  app_shape: full-stack SPA plus REST API
+  frontend: Vue 3 app using Pinia, Vue Router, Vuestic UI, ECharts, and Vite/Rolldown Vite.
+  backend: FastAPI app using SQLAlchemy ORM, Alembic migrations, JWT auth, SQLAdmin, reporting/printing helpers, and workflow services.
+  persistence: SQLite by default with production PostgreSQL support through PHARMAX_DATABASE_URL or DATABASE_URL.
+technology:
+  backend:
+    language: Python >=3.12
+    framework: FastAPI
+    orm: SQLAlchemy
+    migrations: Alembic
+    package_manager: uv
+    notable_dependencies:
+      - fastapi[standard]
+      - sqlalchemy
+      - alembic
+      - python-jose[cryptography]
+      - passlib[bcrypt]
+      - psycopg[binary]
+      - reportlab
+      - python-escpos
+  frontend:
+    language: JavaScript
+    framework: Vue 3
+    build_tool: Vite via rolldown-vite override
+    package_manager: npm
+    state: Pinia
+    routing: Vue Router
+    charts: ECharts / vue-echarts
+architecture:
+  backend_split:
+    entrypoints:
+      - Backend/main.py delegates to example_projects.pharmax.Backend.app.main:app.
+      - Backend/app/main.py creates FastAPI app, CORS/session middleware, startup init_db/setup_admin, and includes api_router.
+    route_modules:
+      - auth_route.py
+      - activity_route.py
+      - dashboard_route.py
+      - users_route.py
+      - products_route.py
+      - invoices_route.py
+    service_modules:
+      - user_service.py
+      - product_service.py
+      - product_unit_service.py
+      - invoice_service.py
+      - invoice_workflow_service.py
+      - audit_service.py
+      - printing_service.py
+    model_modules:
+      - user_table.py
+      - product_table.py
+      - product_unit_table.py
+      - stock_adjustment_table.py
+      - invoice_table.py
+      - invoice_item_table.py
+      - audit_log_table.py
+  frontend_split:
+    app_shell: Frontend/src/layouts/AppShell.vue with router-driven views.
+    api_client: Frontend/src/services/api.js wraps fetch with auth header, JSON handling, global loading, and timeout.
+    route_surfaces:
+      - login/auth
+      - dashboard
+      - products and units
+      - stock and stock reports
+      - invoices/create/detail/list
+      - cashier desk
+      - analytics and reports
+      - team access and activity logs
+  business_workflows:
+    invoice: create invoice, add items, list/read, finalize with payment method, dispense, cancel, return to sender, print receipt.
+    reconciliation: daily lock/run reconciliation and after-hours access grants/revokes.
+    inventory: product catalog, units, stock adjustments, low/out-of-stock reporting.
+    access_control: ADMIN/CASHIER/STAFF roles enforced by route dependencies and frontend route metadata.
+environments:
+  local_backend:
+    cwd: Backend
+    setup: uv sync; copy .env.example to .env; uv run fastapi dev main.py
+    default_url: http://127.0.0.1:8000
+  local_frontend:
+    cwd: Frontend
+    setup: npm install; npm run dev
+    default_url: http://localhost:5173
+  deployment:
+    platform_doc: README mentions Render blueprint-compatible deployment via render.yaml, but render.yaml was not present in the inspected fixture root listing.
+    frontend_env: VITE_API_URL and VITE_API_TIMEOUT_MS
+    backend_env: PHARMAX_SECRET_KEY, role default passwords, PHARMAX_CORS_ORIGINS, optional database URL
+persistence:
+  default_database: Backend/app/_db/pharmax.db SQLite file
+  database_switch: Production ENVIRONMENT with PHARMAX_DATABASE_URL or DATABASE_URL uses PostgreSQL/psycopg URL normalization.
+  migration_system: Backend/alembic with many migration versions including invoices, users, audit logs, product units, soft delete, UUID/Postgres compatibility, stock review, and presence columns.
+  seed_sources:
+    - Backend/scripts/seed_products.py
+    - Backend/scripts/seed_realistic_products.py
+    - Backend/scripts/seed_users.py
+    - Backend/scripts/seed_dev_data.py
+    - data/Product Master List.csv and xlsx variants
+source_truth:
+  - id: source_runtime_code
+    source: Backend/app and Frontend/src
+    authority: canonical
+    reason: Runtime backend and frontend source define actual routes, services, models, UI navigation, and API contract.
+  - id: source_tests_scripts
+    source: Backend/tests and Backend/scripts/smoke_test_workflows.py
+    authority: strong
+    reason: They encode executable expectations for auth/RBAC and invoice workflow behavior.
+  - id: source_docs
+    source: README.md, PROJECT_BRIEF.md, docs/*, agents/developer-workflows/*
+    authority: supporting
+    reason: Useful product intent and setup guidance, but some details drift from code/runtime behavior.
+  - id: source_generated_state
+    source: Backend/.venv, Backend/__pycache__, Backend/.pytest_cache, Frontend/node_modules, Frontend/dist
+    authority: generated
+    reason: Generated or installed artifacts are present in the fixture but should not drive project truth except as evidence of prior builds/installs.
+structural_quirks:
+  - id: quirk_example_projects_imports
+    summary: Backend code imports modules through example_projects.pharmax.Backend... even though fixture root is Frame lab/fixtures/pharmax/project.
+    hazard: Running the backend from the fixture may require PYTHONPATH/package layout compatibility; naive local imports from Backend/app may fail if example_projects is absent.
+    kind: source_layout_surprise
+    evidence:
+      - id: ev_import_paths
+        source: Backend/app/main.py:5-8; Backend/main.py:1
+        why: Entrypoints import example_projects.pharmax.Backend modules.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  - id: quirk_role_name_drift
+    summary: Current code and README use STAFF, while an older auth RBAC script still uses SALES in test setup and expectations.
+    hazard: Future verification may fail or test the wrong role if it treats tests/test_auth_rbac.py as canonical without reconciling role rename.
+    kind: doc_code_drift
+    evidence:
+      - id: ev_role_drift
+        source: README.md:14-19; Backend/tests/test_auth_rbac.py:103-158
+        why: README states STAFF role; older test script registers and tests SALES.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  - id: quirk_db_doc_drift
+    summary: README says SQLite default and code supports SQLite default/PostgreSQL production, while PROJECT_BRIEF lists PostgreSQL and Streamlit analytics.
+    hazard: Project brief should not be used as the sole operational stack source.
+    kind: doc_code_drift
+    evidence:
+      - id: ev_db_drift
+        source: README.md:39-55; PROJECT_BRIEF.md:60-69; Backend/app/core/config.py:14-27
+        why: Operational README/code differ from brief-era stack table.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  - id: quirk_generated_artifacts_committed
+    summary: Fixture contains node_modules, dist, .venv, __pycache__, .pytest_cache, and SQLite DB state.
+    hazard: Search and mapping can be swamped by generated files; edits should target source paths, not dependency/build/cache/state artifacts.
+    kind: generated_or_cached_noise
+    evidence:
+      - id: ev_generated_noise
+        source: fixture file listing
+        why: Listing showed installed frontend/backed dependencies, build output, caches, and DB state under the fixture.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  - id: quirk_render_yaml_absent
+    summary: README references root render.yaml, but the inspected fixture file listing did not show render.yaml.
+    hazard: Deployment instructions may be incomplete in this fixture snapshot.
+    kind: doc_code_drift
+ambiguities:
+  - id: amb_frontend_tests_absent
+    question: No frontend test runner or lint command is declared in package.json; should frontend verification rely on npm run build only?
+    status: open
+  - id: amb_render_blueprint_absent
+    question: Is render.yaml intentionally omitted from the fixture, or should deployment mapping include a missing-file issue?
+    status: open
+  - id: amb_import_namespace
+    question: Should example_projects.pharmax imports be treated as fixture adaptation scaffolding or production package namespace?
+    status: open

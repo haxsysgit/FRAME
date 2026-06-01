@@ -1,0 +1,214 @@
+frame:
+  file: rules
+  schema_version: 0.1.0
+  role: project_instruction_blueprint
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: Fit adjusted FRAME command inventory and rules to pharmax fixture.
+critical_rules:
+  - id: preserve_business_workflow
+    text: Treat invoice, stock, access-control, reconciliation, and audit behavior as the highest-risk business workflows; do not change them without reading both route and service layers.
+    links:
+      - rel: supports
+        ref: facts.architecture.business_workflows
+  - id: respect_role_policy
+    text: Preserve ADMIN/CASHIER/STAFF permissions across backend require_role dependencies and frontend route metadata; resolve legacy SALES references before relying on old scripts.
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_role_name_drift
+  - id: avoid_generated_noise
+    text: Do not edit or model node_modules, dist, .venv, __pycache__, .pytest_cache, or SQLite DB files as source; treat them as generated/state artifacts unless a task explicitly targets them.
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_generated_artifacts_committed
+  - id: check_import_namespace
+    text: Before running backend code outside its prepared fixture environment, verify that the example_projects.pharmax import namespace resolves.
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_example_projects_imports
+  - id: prefer_runtime_over_docs
+    text: When docs and source conflict, prefer Backend/app, Frontend/src, and executable smoke tests over README/PROJECT_BRIEF claims.
+    links:
+      - rel: supports
+        ref: facts.source_truth.source_runtime_code
+commands:
+  backend_setup:
+    run: cd Backend && uv sync
+    kind: setup
+    purpose: Install/synchronize backend Python dependencies into the project-managed environment.
+    when_to_use: Before running backend app, scripts, tests, or migrations if dependencies are missing/outdated.
+    evidence:
+      - id: ev_backend_setup_cmd
+        source: README.md:71-78; Backend/pyproject.toml:1-25
+        why: README lists uv sync and pyproject declares backend package dependencies.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  backend_dev_server:
+    run: cd Backend && uv run fastapi dev main.py
+    kind: run
+    purpose: Start the FastAPI backend locally at the default development URL.
+    when_to_use: For manual API exploration or API-backed smoke scripts that require a running server.
+    evidence:
+      - id: ev_backend_run_cmd
+        source: README.md:73-80
+        why: README gives local backend dev command and URL.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  backend_workflow_smoke:
+    run: cd Backend && uv run python scripts/smoke_test_workflows.py
+    kind: verify
+    purpose: Validate core invoice workflow in an isolated SQLite DB without needing a running API server.
+    when_to_use: After backend workflow/model/service changes, especially invoices, stock deduction/restoration, return-to-sender, or audit actions.
+    evidence:
+      - id: ev_workflow_smoke_cmd
+        source: Backend/scripts/smoke_test_workflows.py:1-17
+        why: Script documents its no-server smoke coverage and command.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  backend_server_invoice_smoke:
+    run: cd Backend && uv run python3 -m tests.test_invoices_flow
+    kind: verify
+    purpose: Exercise invoice API endpoints against a running local backend server.
+    when_to_use: After starting backend_dev_server and seeding products; useful for end-to-end API route validation.
+    evidence:
+      - id: ev_server_invoice_smoke_cmd
+        source: Backend/tests/test_invoices_flow.py:1-17
+        why: Script documents running server prerequisite and endpoint flow.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: medium
+  backend_auth_rbac_script:
+    run: cd Backend && uv run python tests/test_auth_rbac.py
+    kind: verify
+    purpose: Legacy auth/RBAC endpoint script for login, product, invoice, stock, and delete permissions.
+    when_to_use: Use only after reconciling STAFF versus SALES role drift; otherwise expect possible failures or stale assertions.
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_role_name_drift
+    evidence:
+      - id: ev_auth_rbac_cmd
+        source: Backend/tests/test_auth_rbac.py:1-5; Backend/tests/test_auth_rbac.py:103-158
+        why: Header gives command, but script uses older SALES role references.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: medium
+  backend_seed_dev_data:
+    run: cd Backend && uv run python scripts/seed_dev_data.py
+    kind: maintenance
+    purpose: Populate local development database with users/products/data needed for manual or server-backed tests.
+    when_to_use: Before manual local demos or server smoke tests when the SQLite DB lacks required products/users.
+    evidence:
+      - id: ev_seed_scripts
+        source: Backend/scripts/seed_dev_data.py; Backend/scripts/seed_users.py; Backend/scripts/seed_products.py
+        why: Fixture includes multiple seed/import scripts.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  backend_import_products:
+    run: cd Backend && uv run python scripts/import_products.py
+    kind: maintenance
+    purpose: Import product master data into the backend database.
+    when_to_use: When product catalog needs to be rebuilt from data/Product Master List sources.
+    evidence:
+      - id: ev_import_products_cmd
+        source: Backend/scripts/import_products.py; data/Product Master List.csv
+        why: Import script and product master data files are present.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: medium
+  backend_migrate:
+    run: cd Backend && uv run alembic upgrade head
+    kind: maintenance
+    purpose: Apply database migrations for production-like/PostgreSQL-backed environments.
+    when_to_use: Before deploying or testing with an external database rather than auto-created local SQLite tables.
+    evidence:
+      - id: ev_migrate_cmd
+        source: Backend/alembic.ini; Backend/alembic/env.py; Backend/alembic/versions/*
+        why: Alembic config and migration versions are present.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  frontend_setup:
+    run: cd Frontend && npm install
+    kind: setup
+    purpose: Install frontend dependencies.
+    when_to_use: Before local frontend dev or build if node_modules is absent/stale.
+    evidence:
+      - id: ev_frontend_setup_cmd
+        source: README.md:82-90; Frontend/package.json:1-27
+        why: README and package metadata define npm setup.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  frontend_dev_server:
+    run: cd Frontend && npm run dev
+    kind: run
+    purpose: Start Vite development server for the Vue frontend.
+    when_to_use: For local UI development against configured VITE_API_URL backend.
+    evidence:
+      - id: ev_frontend_run_cmd
+        source: README.md:84-90; Frontend/package.json:6-10
+        why: README and scripts list dev command.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  frontend_build:
+    run: cd Frontend && npm run build
+    kind: build
+    purpose: Compile the Vue/Vite frontend into Frontend/dist.
+    when_to_use: After frontend changes and before deployment/static hosting checks.
+    evidence:
+      - id: ev_frontend_build_cmd
+        source: Frontend/package.json:6-10
+        why: package.json exposes build script.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+  frontend_preview:
+    run: cd Frontend && npm run preview
+    kind: run
+    purpose: Serve the built frontend locally for preview.
+    when_to_use: After frontend_build when checking production bundle behavior.
+    evidence:
+      - id: ev_frontend_preview_cmd
+        source: Frontend/package.json:6-10
+        why: package.json exposes preview script.
+        refs: []
+        checked_at: "2026-06-01T21:53:45Z"
+        confidence: high
+code_style:
+  - id: backend_layering_style
+    text: Backend changes should keep routes thin and delegate business rules to services; schemas and models remain separate from route orchestration.
+  - id: frontend_api_style
+    text: Frontend API calls should use Frontend/src/services/api.js or service modules rather than ad hoc fetch calls so auth, timeout, and loading behavior stay consistent.
+  - id: route_metadata_style
+    text: Frontend route role metadata should stay aligned with backend role dependencies for the same feature surface.
+git_workflow:
+  - id: no_fixture_generated_commits
+    text: Avoid committing regenerated node_modules, dist, .venv, __pycache__, .pytest_cache, or local DB state when making source changes.
+negative_instructions:
+  - id: do_not_model_acts_as_baseline
+    text: Do not place stable repo structure or baseline project representation in acts.yaml; acts records checked activity and handoff state only.
+  - id: do_not_duplicate_verify_commands
+    text: Do not repeat full command strings in expect.verify; use command_ref to point at this command inventory.
+  - id: do_not_trust_old_sales_role
+    text: Do not assume SALES is a valid current role without confirming current UserRole and route dependencies.
+stop_and_ask:
+  - id: ask_before_deployment
+    trigger: Task would deploy to Render or alter production-like env/secrets.
+    question: Confirm deployment target and secrets handling before changing or deploying production configuration.
+  - id: ask_before_db_state_edit
+    trigger: Task would directly mutate Backend/app/_db/pharmax.db or product master data files.
+    question: Confirm whether fixture DB/data state should be changed or only source/scripts should be updated.
+skill_hints: []
+evidence:
+  - id: ev_rules_inspection
+    source: README.md; Backend/pyproject.toml; Frontend/package.json; Backend/scripts; Backend/tests
+    why: Commands and rules were extracted from actual docs, package metadata, scripts, and tests.
+    refs: []
+    checked_at: "2026-06-01T21:53:45Z"
+    confidence: high

@@ -1,0 +1,255 @@
+frame:
+  file: rules
+  schema_version: "0.1.0"
+  role: project_instruction_blueprint
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Refit autopahe fixture to adjusted FRAME five-part v0.1.0 schema with command inventory separated from verification meaning.
+
+critical_rules:
+  - id: rule_preserve_cli_contract
+    text: Preserve the package console-script boundary and CLI compatibility layer unless a task explicitly redesigns user-facing commands.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-51; Frame lab/fixtures/autopahe/project/cli.py:47-93,184-230
+        why: Console script and Typer wrapper define the public CLI boundary.
+        confidence: high
+  - id: rule_install_browser_real
+    text: Treat Playwright browser engine installation as part of real setup for browser/download paths, not optional polish.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:16-31; Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-91,179-197
+        why: README and runtime code both require/install browser engines.
+        confidence: high
+  - id: rule_respect_platform_paths
+    text: Use the project path/config helpers for config, cache, data, logs, and download defaults instead of hardcoding local paths.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-180; Frame lab/fixtures/autopahe/project/config.py:19-45
+        why: OS-aware path helpers and central data constants are established architecture.
+        confidence: high
+  - id: rule_do_not_treat_noise_as_source
+    text: Do not treat checked-in dist artifacts, __pycache__, data backups/state JSON, or generated execution JSON as the main baseline project representation.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:1-23
+        why: Ignore policy marks these outputs/state paths as non-source.
+        confidence: high
+  - id: rule_keep_fixture_imports_consistent
+    text: In this fixture, keep example_projects.autopahe import conventions consistent unless all runtime modules, tests, and packaging paths are intentionally normalized together.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1
+        why: Fixture prefix is embedded in runtime and test imports.
+        confidence: high
+
+commands:
+  install_source_uv:
+    run: uv sync
+    kind: setup
+    purpose: Install project dependencies for source checkout work using uv.
+    when_to_use: Before running source-checkout CLI commands or tests in a uv-managed environment.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README source install instructions use uv sync.
+        confidence: high
+  install_browser_chromium_uv:
+    run: uv run playwright install chromium
+    kind: setup
+    purpose: Install the bundled Chromium browser engine for source-checkout Playwright flows.
+    when_to_use: After uv sync and before real browser-assisted CLI smoke or download flows.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31; Frame lab/fixtures/autopahe/project/ap_core/updater.py:45-58
+        why: Source setup/update path installs Chromium through uv.
+        confidence: high
+  install_browser_deps_linux:
+    run: python -m playwright install-deps chromium
+    kind: setup
+    purpose: Install Linux system libraries if Playwright browser launch/install reports missing dependencies.
+    when_to_use: On Linux when browser install or launch fails due to missing system libraries.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:72-80
+        why: Runtime guidance prints install-deps fallback on Linux failures.
+        confidence: high
+  run_help_source:
+    run: uv run autopahe --help
+    kind: run
+    purpose: Exercise the source-checkout CLI help path through the package entrypoint.
+    when_to_use: Basic CLI smoke after source setup.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README uses this as the first source-run command.
+        confidence: high
+  run_setup_installed:
+    run: autopahe --setup
+    kind: setup
+    purpose: Write default config when missing and install the Playwright Chromium engine in the active app environment.
+    when_to_use: First run after installing the package as a tool.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:16-23; Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: README documents setup and tests verify existing config preservation.
+        confidence: high
+  run_config_show:
+    run: autopahe config show
+    kind: inspect
+    purpose: Print the active or sample configuration.
+    when_to_use: Inspect config defaults/location without editing.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:180-195; Frame lab/fixtures/autopahe/project/cli.py:158-167
+        why: README and CLI handler expose config show.
+        confidence: high
+  run_config_validate:
+    run: autopahe config validate
+    kind: inspect
+    purpose: Validate config values and print normalized defaults/warnings.
+    when_to_use: After editing config or debugging config fallback behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:180-195; Frame lab/fixtures/autopahe/project/cli.py:168-178
+        why: README and CLI handler expose config validation.
+        confidence: high
+  run_search_example:
+    run: autopahe -s "one piece"
+    kind: run
+    purpose: User-facing AnimePahe search example.
+    when_to_use: Manual live-service smoke where network/site access is allowed.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:83-109
+        why: README documents search examples.
+        confidence: high
+  run_browser_verify:
+    run: autopahe --verify-browser https://kwik.cx
+    kind: run
+    purpose: Open a persistent browser profile for manual site verification.
+    when_to_use: When Kwik/browser verification blocks download flows.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:124-132; Frame lab/fixtures/autopahe/project/ap_core/browser.py:94-131
+        why: Documented and implemented persistent browser verification flow.
+        confidence: high
+  run_pytest_all:
+    run: pytest
+    kind: test
+    purpose: Run the full checked-in pytest regression suite.
+    when_to_use: After changes touching CLI normalization, setup/config, updater, kwikdown helpers, or package/import behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_config.py:1-17; Frame lab/fixtures/autopahe/project/tests/test_kwikdown.py:1-13; Frame lab/fixtures/autopahe/project/tests/test_updater.py:1-10
+        why: Tests are pytest modules.
+        confidence: high
+  build_package:
+    run: python -m build
+    kind: build
+    purpose: Build sdist/wheel from pyproject metadata.
+    when_to_use: Release/package metadata verification when build tooling is installed.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:40-55; Frame lab/fixtures/autopahe/project/Docs/PYPI_PUBLISH_GUIDE.md
+        why: Build backend and publish extra/doc exist.
+        confidence: medium
+  update_tool_uv:
+    run: uv tool upgrade autopahe
+    kind: maintenance
+    purpose: Upgrade an installed uv tool copy of AutoPahe.
+    when_to_use: For existing uv tool installs, rather than using a source checkout update path.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:33-45; Frame lab/fixtures/autopahe/project/ap_core/updater.py:107-123
+        why: README and updater distinguish uv tool upgrades.
+        confidence: high
+  update_source:
+    run: git pull --ff-only && uv sync && uv run playwright install chromium
+    kind: maintenance
+    purpose: Fast-forward a source checkout and refresh dependencies/browser engine.
+    when_to_use: For clean source checkouts; updater refuses dirty repos before pulling.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:38-45; Frame lab/fixtures/autopahe/project/ap_core/updater.py:74-104
+        why: Source update flow is fast-forward plus dependency/browser refresh.
+        confidence: high
+  docker_build:
+    run: docker build -t autopahe:latest .
+    kind: build
+    purpose: Build the documented Playwright-based container image.
+    when_to_use: Before containerized CLI verification or Docker support changes.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57; Frame lab/fixtures/autopahe/project/Dockerfile:1-29
+        why: README and Dockerfile define image build path.
+        confidence: high
+  docker_run_help:
+    run: docker run -it --rm -v $(pwd)/data:/app/data -v $(pwd)/json_data:/app/json_data -v $(pwd)/collection:/app/collection autopahe:latest --help
+    kind: run
+    purpose: Run CLI help inside the built Docker image with documented state volumes.
+    when_to_use: Container smoke after docker_build.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: README gives this exact container run shape.
+        confidence: high
+  docker_helper_unix:
+    run: docker/docker-run.sh run --help
+    kind: run
+    purpose: Exercise the Unix helper script path for Dockerized CLI help.
+    when_to_use: When changing docker/ helper scripts on Linux/macOS.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:61-68; Frame lab/fixtures/autopahe/project/docker/README.md:23-30
+        why: Docker docs expose helper script workflow.
+        confidence: high
+
+code_style:
+  - id: style_targeted_compat
+    text: Prefer targeted compatibility-preserving edits in CLI normalization, config, browser setup, and path helpers over broad rewrites.
+  - id: style_user_guidance
+    text: Keep user-facing browser/setup errors explicit and actionable because missing Playwright dependencies are expected operational friction.
+  - id: style_state_safety
+    text: Treat config.py import side effects carefully in tests/tools and isolate filesystem state with tmp paths or monkeypatching where possible.
+
+git_workflow:
+  - id: git_dirty_guard
+    text: The updater refuses source updates when git status is dirty; do not bypass that safety in maintenance changes.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/updater.py:40-80
+        why: Dirty repo check is explicit.
+        confidence: high
+
+negative_instructions:
+  - id: neg_generated_noise
+    text: Do not summarize or use dist/, __pycache__/, runtime JSON, or backups as core source unless the task is specifically about release/state artifacts.
+  - id: neg_path_hardcode
+    text: Do not replace platform path helpers with Linux-only assumptions like ~/.config or ~/Downloads except as documented fallback behavior.
+  - id: neg_browser_overautomation
+    text: Do not assume browser download flows are end-to-end automated; user handoff and local file verification are part of the current contract.
+
+stop_and_ask:
+  - id: ask_storage_redesign
+    trigger: A change would move config, data, cache, logs, collection metadata, or migration behavior.
+    question: Should the task preserve current cross-platform/legacy storage behavior, or intentionally redesign the storage layout?
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-123; Frame lab/fixtures/autopahe/project/config.py:19-130
+        why: Storage behavior is centralized and migration-aware.
+        confidence: high
+  - id: ask_import_normalization
+    trigger: A change would rewrite imports across entrypoints, tests, and support modules.
+    question: Should the fixture-specific example_projects.autopahe import convention remain, or is this task normalizing the fixture to package-local imports?
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-3
+        why: Import convention affects runtime and tests.
+        confidence: high
+
+skill_hints:
+  - id: hint_cli_trace
+    trigger: Need to trace a user flag or CLI behavior.
+    hint: Start in cli.py for Typer options and legacy normalization, then follow delegation into auto_pahe.py for command implementation.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:47-93,184-230
+        why: CLI option inventory and normalization live there.
+        confidence: high
+  - id: hint_browser_setup
+    trigger: Need to debug browser install/launch, download verification, or site challenge flows.
+    hint: Read ap_core/browser.py and README browser verification docs before editing kwikdown or download flows.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-131,179-227; Frame lab/fixtures/autopahe/project/README.md:111-132
+        why: Setup and persistent browser behavior are concentrated there.
+        confidence: high
+  - id: hint_state_paths
+    trigger: Need to alter records, collection, cache, config, or logs.
+    hint: Read ap_core/platform_paths.py, ap_core/config.py, and root config.py first; root config.py has import-time directory/migration side effects.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-123; Frame lab/fixtures/autopahe/project/ap_core/config.py:84-163; Frame lab/fixtures/autopahe/project/config.py:123-130
+        why: These files define active state path behavior.
+        confidence: high
+
+evidence:
+  - id: ev_rules_refit
+    source: Manual inspection on 2026-06-01 of README.md, pyproject.toml, cli.py, auto_pahe.py, ap_core/browser.py, ap_core/config.py, ap_core/platform_paths.py, config.py, ap_core/updater.py, tests/, Dockerfile, docker-compose.yml, docker/README.md, requirements.txt, and .gitignore.
+    why: Commands and rules were fit from actual files.
+    confidence: high

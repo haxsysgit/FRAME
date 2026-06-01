@@ -1,0 +1,125 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part-v0"
+candidate_version = "v0"
+fixture = "organize"
+fixture_family = "cli-tools"
+fixture_system_role = "file organization helper"
+evaluator = "hermes"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "hold"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 3
+clarity = 2
+stability = 3
+agent_usefulness = 3
+retrieval_usefulness = 3
+adoptability = 2
+bloat_resistance = 2
+token_efficiency = 2
+
+[phase_notes]
+phase_1 = "The candidate can represent organize's identity, stack, layout, CLI surface, and real quirks, but it already shows placement strain on a tiny repo."
+phase_2 = "The representation would help an agent a bit by surfacing the real script name, path risk, and lack of tests, but the help is modest because the repo itself is so small."
+phase_3 = "This is where the candidate struggles most: five parts feel expensive for a repo that is basically one script and a README."
+
+[notes]
+summary = "Structurally workable but visibly overbuilt for a tiny single-script fixture. Useful as a warning pass, not a clean win."
+coverage = "Facts, rules, map, and expect can hold most important organize truth. Acts adds almost no project-representation value here."
+clarity = "Facts vs map vs expect can blur on a tiny repo, and acts feels out of place for project representation."
+stability = "The candidate probably survives this fixture, but only if tiny repos are allowed very compact usage."
+agent_usefulness = "An agent would benefit from knowing the real script name, README/code drift, filesystem-mutation risk, and the absence of tests."
+retrieval_usefulness = "The representation would save a future agent from rereading the tiny repo every time, but the gain is moderate because the repo is already small."
+adoptability = "Maintaining five FRAME files for this project would likely feel like too much ceremony."
+bloat_resistance = "The candidate invites unnecessary splitting and repeated restatement on a repo with almost no internal structure."
+token_efficiency = "The cost-to-signal ratio is weak here unless the fit style is aggressively compressed."
+
+[evidence]
+coverage = [
+  "Frame lab/fixtures/organize/project/README.md:3-15",
+  "Frame lab/fixtures/organize/project/organize.py:19-73",
+  "Frame lab/fixtures/organize/project/organize.py:92-196"
+]
+clarity = [
+  "Frame lab/fixtures/organize/project/README.md:51-109",
+  "Frame lab/fixtures/organize/project/organize.py:19-73"
+]
+stability = [
+  "Frame lab/fixtures/organize/project/README.md:3-15",
+  "Frame lab/fixtures/organize/project/organize.py:1-16"
+]
+agent_usefulness = [
+  "Frame lab/fixtures/organize/project/README.md:57-107",
+  "Frame lab/fixtures/organize/project/organize.py:10-16",
+  "python3 ./Frame lab/fixtures/organize/project/organize.py --help"
+]
+retrieval_usefulness = [
+  "Frame lab/fixtures/organize/project/README.md:17-49",
+  "Frame lab/fixtures/organize/project/organize.py:23-52"
+]
+adoptability = [
+  "Frame lab/fixtures/organize/project/README.md:3-109",
+  "Frame lab/fixtures/organize/project/organize.py:1-488"
+]
+bloat_resistance = [
+  "Frame lab/fixtures/organize/project/README.md:3-109",
+  "Frame lab/fixtures/organize/project/organize.py:1-73"
+]
+token_efficiency = [
+  "Frame lab/fixtures/organize/project/README.md:3-109",
+  "Frame lab/fixtures/organize/project/organize.py:1-196"
+]
+
+[friction]
+forced_fits = [
+  "Acts has almost no natural project-representation content on this fixture.",
+  "Facts/map/expect can start repeating each other when the repo only has one real code surface."
+]
+missing_semantics = [
+  "Need a cleaner way to record recurring structural quirks like doc/code drift.",
+  "Need an explicit compact-mode discipline for tiny repos so FRAME can scale down without ceremony."
+]
+redundant_fields = [
+  "facts.architecture vs map.roots/paths on a one-script repo",
+  "rules.commands vs expect.verify when there is only one cheap verification route"
+]
+stale_risk_fields = [
+  "Detailed flag-by-flag restatements copied from README",
+  "Task-level correctness notes stored as permanent project truth"
+]
+extension_candidates = [
+  "A small, explicit place for structural quirks or drift notes",
+  "A compact fixture profile or size/shape marker to guide how much FRAME detail is justified"
+]
+
+[recommendation]
+keep = [
+  "Facts for identity, stack, and stable project truths",
+  "Map for explicit navigation and key paths",
+  "Expect for real verification surface and correctness checks"
+]
+change = [
+  "Enforce a much leaner tiny-repo fit style",
+  "Keep acts separate from project representation concerns",
+  "Clarify boundaries between facts, map, and expect for very small repos"
+]
+avoid = [
+  "Do not reward the candidate for merely finding a place to store everything.",
+  "Do not let tiny fixtures justify verbose FRAME documents that exceed the repo's own complexity."
+]

@@ -1,0 +1,342 @@
+<!-- Badges -->
+[![PyPI version](https://badge.fury.io/py/autopahe.svg)](https://pypi.org/project/autopahe/)
+[![License](https://img.shields.io/github/license/haxsysgit/autopahe?color=brightgreen)](https://github.com/haxsysgit/autopahe/blob/main/license.md)
+[![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows)](https://github.com/haxsysgit/autopahe/)
+[![macOS](https://img.shields.io/badge/macOS-000000?logo=apple)](https://github.com/haxsysgit/autopahe/)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](https://github.com/haxsysgit/autopahe/)
+
+# AutoPahe
+
+> **Search AnimePahe, prepare browser downloads, stream, and track episodes**
+
+Search AnimePahe, prepare browser-based episode downloads, stream where available, and manage records. Cross-platform (Windows, Mac, Linux).
+
+## 🚀 Installation
+
+**With uv (recommended):**
+```bash
+uv tool install autopahe
+autopahe --setup
+```
+
+`--setup` writes the default config and installs Playwright's bundled Chromium engine in the same environment AutoPahe uses.
+
+**From source:**
+```bash
+git clone https://github.com/haxsysgit/autopahe.git
+cd autopahe
+uv sync
+uv run playwright install chromium
+uv run autopahe --help
+```
+
+**Update an existing install:**
+```bash
+uv tool upgrade autopahe
+```
+
+For source installs, run:
+```bash
+git pull --ff-only
+uv sync
+uv run playwright install chromium
+```
+
+`autopahe --update` is also available as a convenience command. For source checkouts, it safely runs a fast-forward git update and refreshes dependencies. For uv tool installs, prefer `uv tool upgrade autopahe`.
+
+**With Docker:**
+```bash
+git clone https://github.com/haxsysgit/autopahe.git
+cd autopahe
+docker build -t autopahe:latest .
+docker run -it --rm \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/json_data:/app/json_data \
+  -v $(pwd)/collection:/app/collection \
+  autopahe:latest --help
+```
+
+See the `docker/` directory for helper scripts and detailed documentation.
+
+Or use the helper script:
+
+**Linux/Mac:**
+```bash
+docker/docker-run.sh build
+docker/docker-run.sh run --help
+```
+
+**Windows PowerShell:**
+```powershell
+docker\docker-run.ps1 build
+docker\docker-run.ps1 run --help
+```
+
+**Windows Command Prompt:**
+```cmd
+docker\docker-run.bat build
+docker\docker-run.bat run --help
+```
+
+## 📖 Usage
+
+```bash
+# Search for anime
+autopahe -s "anime name"
+
+# Prepare browser download for episode 1
+autopahe -s "anime name" -i 0 -d 1
+
+# Prepare browser downloads for episodes 1-12
+autopahe -s "anime name" -i 0 -md 1-12
+
+# Stream episode 1
+autopahe -s "anime name" -i 0 -st 1
+```
+
+### Core Command Examples
+
+**Search + Select**
+```bash
+# Basic search
+autopahe -s "one piece"
+
+# Search with filters
+autopahe -s "naruto" --year 2002 --status "Finished Airing"
+
+# Exact match only (disable fuzzy search)
+autopahe -s "jujutsu kaisen" --no-fuzzy
+```
+
+**Browser Downloads**
+```bash
+# Single episode: prints the browser link, then verifies the downloaded file
+autopahe -s "demon slayer" -i 0 -d 1
+
+# Range and list formats
+autopahe -s "bleach" -i 0 -md 1-12
+autopahe -s "bleach" -i 0 -md "1,3,5-7"
+
+# Whole season shortcut (12 eps per season)
+autopahe -s "attack on titan" -i 0 --season 1
+```
+
+Kwik requires a regular browser for downloads. `-d` and `-md` guide you through opening the generated link and only mark an episode downloaded after a local video file is verified. Use `-l` when you only want the link without record updates.
+
+If a site asks for browser verification, you can complete it in AutoPahe's persistent browser profile:
+```bash
+autopahe --verify-browser https://kwik.cx
+```
+
+This does not bypass verification. It opens a normal browser session and saves the user-verified profile for later AutoPahe browser work when the site keeps that session valid.
+
+**Streaming**
+```bash
+# Single episode
+autopahe -s "spy x family" -i 0 -st 1
+
+# Multi-episode streaming
+autopahe -s "spy x family" -i 0 -st "1-5"
+
+# Streaming quality and player
+autopahe -s "spy x family" -i 0 -st 1 -p 1080 --player vlc
+```
+
+**Sorting & Organizing**
+```bash
+# Dry-run organize to see changes first
+autopahe --sort organize --sort-dry-run
+
+# Rename files in place
+autopahe --sort rename
+
+# Full sort (rename + organize) for a specific path
+autopahe --sort all --sort-path "/path/to/Downloads"
+```
+
+### More Options
+```bash
+# Different quality (360, 480, 720, 1080)
+autopahe -s "anime name" -i 0 -d 1 -p 1080
+
+# Parallel downloads
+autopahe -s "anime name" -i 0 -md 1-12 --workers 3
+
+# English dub (if available)
+autopahe -s "anime name" -i 0 -d 1 --dub
+
+# Stream with specific player
+autopahe -s "anime name" -i 0 -st 1 --player vlc
+
+# Cache management
+autopahe --cache stats
+autopahe --cache clear
+
+# Resume interrupted downloads
+autopahe --resume
+autopahe --resume-stats
+```
+
+## ⚙️ Configuration
+
+```bash
+# Edit config
+autopahe config edit
+
+# Show config
+autopahe config show
+
+# Validate config
+autopahe config validate
+```
+
+Config location:
+- **Windows**: `%APPDATA%\autopahe\config.ini`
+- **Linux/Mac**: `~/.config/autopahe/config.ini`
+
+## 🐳 Docker Usage
+
+### Quick Start
+
+**Linux/Mac:**
+```bash
+# Build and run with helper script
+docker/docker-run.sh build
+docker/docker-run.sh run --help
+
+# Search for anime (no need to escape quotes!)
+docker/docker-run.sh run search one piece
+docker/docker-run.sh run -s one piece -i 0 -d 1
+
+# Download episodes
+docker/docker-run.sh run -s "one piece" -i 0 -md 1-5
+```
+
+**Windows PowerShell:**
+```powershell
+# Build and run with helper script
+docker\docker-run.ps1 build
+docker\docker-run.ps1 run --help
+
+# Search for anime (no need to escape quotes!)
+docker\docker-run.ps1 run search one piece
+docker\docker-run.ps1 run -s one piece -i 0 -d 1
+
+# Download episodes
+docker\docker-run.ps1 run -s "one piece" -i 0 -md 1-5
+```
+
+**Windows Command Prompt:**
+```cmd
+# Build and run with helper script
+docker\docker-run.bat build
+docker\docker-run.bat run --help
+
+# Search for anime (use quotes for spaces)
+docker\docker-run.bat run search "one piece"
+docker\docker-run.bat run -s "one piece" -i 0 -d 1
+
+# Download episodes
+docker\docker-run.bat run -s "one piece" -i 0 -md 1-5
+```
+
+### Docker Commands
+
+**Linux/Mac:**
+```bash
+# Build image
+docker build -t autopahe:latest .
+
+# Run with volume mounts
+docker run -it --rm \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/json_data:/app/json_data \
+  -v $(pwd)/collection:/app/collection \
+  autopahe:latest [command]
+
+# Use docker-compose
+docker-compose run --rm autopahe --help
+
+# Open shell in container
+docker/docker-run.sh shell
+```
+
+**Windows PowerShell:**
+```powershell
+# Build image
+docker build -t autopahe:latest .
+
+# Run with volume mounts
+docker run -it --rm `
+  -v "${pwd}\data:/app/data" `
+  -v "${pwd}\json_data:/app/json_data" `
+  -v "${pwd}\collection:/app/collection" `
+  autopahe:latest [command]
+
+# Use docker-compose
+docker-compose run --rm autopahe --help
+
+# Open shell in container
+docker\docker-run.ps1 shell
+```
+
+**Windows Command Prompt:**
+```cmd
+# Build image
+docker build -t autopahe:latest .
+
+# Run with volume mounts
+docker run -it --rm ^
+  -v "%cd%\data:/app/data" ^
+  -v "%cd%\json_data:/app/json_data" ^
+  -v "%cd%\collection:/app/collection" ^
+  autopahe:latest [command]
+
+# Use docker-compose
+docker-compose run --rm autopahe --help
+
+# Open shell in container
+docker\docker-run.bat shell
+```
+
+### Volume Mounts
+- `./data` - Download storage
+- `./json_data` - Cache and metadata
+- `./collection` - Your anime collection
+
+### Additional Documentation
+- See `docker/docker-test.md` for testing guide
+- See `docker/docker-test-windows.md` for Windows-specific testing
+- See `docker/README.md` for helper script documentation
+- See `docker/downloads-guide.md` for complete downloads guide
+
+### Script Features
+- **Input Sanitization**: No need to manually escape quotes in most cases
+- **Auto Directory Creation**: Scripts create necessary data directories
+- **Cross-Platform**: Separate scripts for Linux/Mac, PowerShell, and CMD
+- **Clean Command**: Easy Docker resource cleanup with `clean` option
+
+## 📚 Collection Management
+
+```bash
+# View collection stats
+autopahe --collection stats
+
+# Organize downloaded files
+autopahe --collection organize
+
+# Find duplicates
+autopahe --collection duplicates
+```
+
+## 🎬 Supported Players
+
+VLC, MPV, MPC-HC, MPC-BE (Windows), Iina (macOS), SMPlayer, Celluloid (Linux)
+
+## 📜 License
+
+MIT License - see [LICENSE](license.md)
+
+## 🆘 Help
+
+[GitHub Issues](https://github.com/haxsysgit/autopahe/issues) | [Discussions](https://github.com/haxsysgit/autopahe/discussions)

@@ -1,0 +1,233 @@
+frame:
+  file: facts
+  schema_version: "0.1.0"
+  role: current_project_truth
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Refit autopahe fixture to adjusted FRAME five-part v0.1.0 schema.
+
+project_profile:
+  summary: Python CLI package for AnimePahe search, browser download handoff, streaming, record/collection management, sorting, and update/setup support.
+  family: cli-tool
+  system_role: End-user desktop/terminal assistant that coordinates AnimePahe lookup, Kwik/browser handoff, local state, and file organization.
+  complexity: medium
+  scale_guidance: Model the repo through its CLI/package boundary, Playwright/browser setup, platform path/state helpers, tests, Docker support, and checked-in generated/state noise rather than every utility function.
+  evidence:
+    - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+      why: Defines package identity, Python version, dependencies, and console script.
+      confidence: high
+    - source: Frame lab/fixtures/autopahe/project/README.md:8-13,81-178
+      why: Describes the CLI product surface and example command families.
+      confidence: high
+
+identity:
+  fixture_id: autopahe
+  repo_root: Frame lab/fixtures/autopahe/project
+  package_name: autopahe
+  version: "3.6.1"
+  console_script: autopahe = auto_pahe:main
+  python_requirement: ">=3.10"
+
+classification:
+  primary_stack:
+    - Python
+    - Typer
+    - Click
+    - Playwright
+    - requests
+    - BeautifulSoup
+    - Rich
+    - pytest
+  package_shape: setuptools package with root py-modules plus ap_core, features, and collection packages.
+  operating_shape: Stateful CLI with browser-mediated download/streaming flows, cross-platform config/data/cache locations, and Docker support.
+
+technology:
+  packaging:
+    build_backend: setuptools.build_meta
+    console_script: autopahe = auto_pahe:main
+    modules:
+      - auto_pahe
+      - kwikdown
+      - config
+      - state
+      - cli
+    packages:
+      - ap_core
+      - features
+      - collection
+  runtime_dependencies:
+    - requests>=2.31.0
+    - playwright>=1.45.0 in pyproject.toml; playwright==1.56.0 in requirements.txt
+    - tqdm>=4.66.0
+    - colorama>=0.4.6
+    - rich>=13.0.0
+    - beautifulsoup4>=4.12.0
+    - typer>=0.12.5
+    - click>=8.0.0
+  test_dependencies:
+    - pytest>=7.0 optional extra
+
+architecture:
+  entrypoints:
+    - path: auto_pahe.py
+      role: Main command implementation and command flow, exposed by the package console script.
+    - path: cli.py
+      role: Typer callback wrapper, legacy flag normalization, config subcommand handling, and delegation into auto_pahe.py.
+  core_support:
+    - path: ap_core/browser.py
+      role: Shared requests session, Playwright installation, persistent browser context, verification sessions, and browser fetch helpers.
+    - path: ap_core/config.py
+      role: User-facing config file defaults, validation, sample config, and config search order.
+    - path: ap_core/platform_paths.py
+      role: OS-aware config/cache/data/log/download directories and legacy config locations.
+    - path: config.py
+      role: Central data directory constants, legacy data migration, and import-time data directory initialization.
+    - path: state.py
+      role: Small dataclass runtime state container for a single CLI invocation.
+  feature_support:
+    - path: kwikdown.py
+      role: Kwik link/download/streaming helpers and filename/security challenge helpers.
+    - path: features/
+      role: Records, execution tracking, and sort/organize features.
+    - path: collection/
+      role: Collection model, manager, commands, and stats.
+
+persistence:
+  config:
+    primary_locations: Platform config dir config.ini via ap_core/platform_paths.py; explicit --config can override for reads.
+    defaults: browser=chromium, resolution=720, workers=1, optional download_dir/sort settings.
+  data:
+    standard: Platform data dir via get_data_dir().
+    development: AUTO_PAHE_DEV switches DATA_DIR to a local data path derived from config.py.
+    portable: AUTO_PAHE_PORTABLE switches data under ~/autopahe_data.
+    managed_files:
+      - records/animerecord.json
+      - collection/collection.json
+      - logs/autopahe.log
+      - backups/animerecord_backup.json
+      - .migrated
+  browser_profile: Playwright persistent context stores user data under platform cache dir / playwright / browser choice.
+
+source_truth:
+  - id: truth_package_metadata
+    source: pyproject.toml
+    authority: canonical
+    reason: Package identity, version, dependencies, build backend, module/package inclusion, and console script are declared here.
+    supersedes:
+      - README badges or marketing copy if metadata disagrees.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Complete project metadata block.
+        confidence: high
+  - id: truth_runtime_entrypoints
+    source: auto_pahe.py and cli.py
+    authority: canonical
+    reason: Runtime behavior and actual CLI flag normalization/dispatch are implemented here.
+    supersedes:
+      - README examples when code-level option behavior disagrees.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:21-24,47-93,184-230
+        why: Typer app definition and option inventory.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:26-39,63-90,111-120
+        why: Version resolution, core imports, and runtime state helpers.
+        confidence: high
+  - id: truth_setup_paths
+    source: ap_core/browser.py, ap_core/config.py, ap_core/platform_paths.py, config.py
+    authority: canonical
+    reason: Setup, browser, config, and persistence paths are implemented in these helper modules.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:50-91,179-227
+        why: Browser install and context selection behavior.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:21-163
+        why: Config defaults, validation, and search order.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/config.py:19-130
+        why: Data directory and migration behavior.
+        confidence: high
+  - id: truth_tests
+    source: tests/
+    authority: strong
+    reason: Tests encode a small but concrete regression surface for CLI normalization, config fallback, setup preservation, kwikdown helpers, and updater git-root logic.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_config.py:1-17; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14
+        why: Representative pytest coverage.
+        confidence: high
+  - id: truth_readme_docs
+    source: README.md and docker/
+    authority: supporting
+    reason: Docs are useful for intended setup and Docker workflows, but code and package metadata remain stronger for exact behavior.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:14-59,180-220
+        why: Documents install, setup, config, and Docker usage.
+        confidence: high
+  - id: truth_generated_state
+    source: dist/, __pycache__/, data/, json_data/, features/json_data/, release-notes/
+    authority: generated
+    reason: Fixture contains checked-in build artifacts, pyc caches, backups, and runtime state; these show hazards but are not baseline source truth.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:1-23
+        why: Ignore rules exclude pycache, json, locks, dist, docs, env, and data except data/.gitkeep.
+        confidence: high
+
+structural_quirks:
+  - id: quirk_fixture_import_prefix
+    summary: Runtime modules and tests import through example_projects.autopahe rather than plain local package imports.
+    hazard: A future edit may incorrectly strip or mix import conventions and break fixture tests/imports.
+    kind: fixture_adaptation
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/auto_pahe.py:63-90; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1
+        why: Prefix is repeated across entrypoint and tests.
+        confidence: high
+  - id: quirk_checked_in_noise
+    summary: Fixture includes checked-in dist artifacts, __pycache__, data backups/state JSON, json_data, and feature execution JSON despite ignore rules.
+    hazard: Tools may overfit generated/state files as current source or spend context on stale build outputs.
+    kind: generated_or_cached_noise
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/dist/; Frame lab/fixtures/autopahe/project/ap_core/__pycache__/; Frame lab/fixtures/autopahe/project/data/; Frame lab/fixtures/autopahe/project/features/json_data/execution_data.json
+        why: File inspection found these generated/state paths in the fixture.
+        confidence: high
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:1-23
+        why: Ignore rules treat many of these as non-source outputs.
+        confidence: high
+  - id: quirk_requirements_pin_drift
+    summary: pyproject.toml allows playwright>=1.45.0 while requirements.txt pins playwright==1.56.0 and Docker base image uses Playwright Python v1.56.0.
+    hazard: Setup behavior may differ depending on uv/package metadata versus requirements/Docker install path.
+    kind: doc_code_drift
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:24-33; Frame lab/fixtures/autopahe/project/requirements.txt:1-8; Frame lab/fixtures/autopahe/project/Dockerfile:1-10
+        why: Dependency versions differ across install surfaces.
+        confidence: high
+  - id: quirk_browser_handoff
+    summary: Browser downloads are explicit user handoff flows with local file verification; they are not fully silent browser automation.
+    hazard: A tool may design tests or code changes that assume direct automated downloads without user/local-file confirmation.
+    kind: operational_caveat
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:111-132; Frame lab/fixtures/autopahe/project/auto_pahe.py:163-217
+        why: Docs and code both describe browser link handoff and local file checks.
+        confidence: high
+  - id: quirk_config_import_side_effect
+    summary: Root config.py creates data directories and may migrate legacy data at import time.
+    hazard: Importing config.py in tests/tools can mutate filesystem state unless env/path behavior is controlled.
+    kind: operational_caveat
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:123-130
+        why: ensure_data_directories and migration flag logic run on import.
+        confidence: high
+
+ambiguities:
+  - id: amb_docker_download_path
+    question: Dockerfile sets AUTOPAHE_DOWNLOAD_DIR=/app/data/downloads while docker-compose also mounts ~/Downloads/autopahe at /app/downloads; which location is the intended container download target?
+    status: open
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:21-28; Frame lab/fixtures/autopahe/project/docker-compose.yml:14-25
+        why: Container support files expose two plausible download paths.
+        confidence: medium
+
+evidence:
+  - id: ev_refit_inspection
+    source: Manual inspection on 2026-06-01 of pyproject.toml, README.md, cli.py, auto_pahe.py, ap_core/browser.py, ap_core/config.py, ap_core/platform_paths.py, config.py, tests/, Dockerfile, docker-compose.yml, .gitignore, and fixture file listing.
+    why: Grounds this fit in actual repository files rather than previous summaries.
+    confidence: high

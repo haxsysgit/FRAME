@@ -1,0 +1,73 @@
+[meta]
+status = "draft"
+candidate = "frame-five-part-v0"
+candidate_version = "v0"
+fixture = "httpie-cli"
+fixture_family = "cli-tools"
+fixture_system_role = "developer tool"
+evaluator = "pending"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "hold"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 0
+clarity = 0
+stability = 0
+agent_usefulness = 0
+retrieval_usefulness = 0
+adoptability = 0
+bloat_resistance = 0
+token_efficiency = 0
+
+[phase_notes]
+phase_1 = "First pass should decide whether the five-part candidate even fits a lightweight CLI repo cleanly."
+phase_2 = "If Phase 1 looks decent, assess whether the structure would actually help agent work inside httpie/cli."
+phase_3 = "If the structure fits and helps, judge whether it stays lean enough to be worth the context cost."
+
+[notes]
+summary = "First prepared scorecard for the current five-part candidate against a lightweight core fixture. Fill after the fit pass."
+coverage = ""
+clarity = ""
+stability = ""
+agent_usefulness = ""
+retrieval_usefulness = ""
+adoptability = ""
+bloat_resistance = ""
+token_efficiency = ""
+
+[evidence]
+coverage = []
+clarity = []
+stability = []
+agent_usefulness = []
+retrieval_usefulness = []
+adoptability = []
+bloat_resistance = []
+token_efficiency = []
+
+[friction]
+forced_fits = []
+missing_semantics = []
+redundant_fields = []
+stale_risk_fields = []
+extension_candidates = []
+
+[recommendation]
+keep = []
+change = []
+avoid = []

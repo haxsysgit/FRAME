@@ -7,20 +7,21 @@ This file turns the blueprint into a practical first-build boundary.
 Build the smallest useful Python implementation that helps clarify the FRAME contract.
 
 It should:
-- load candidate FRAME data from Python dicts and JSON files
-- normalize into one top-level Python document model
-- preserve unknown structure instead of silently deleting it
+- model shared FRAME schema pieces in Pydantic
+- model the five FRAME files as typed Python models
+- compose those five models into one umbrella FRAME model
+- load actual FRAME YAML files early
 - support strict vs provisional validation modes
 - produce reports that show contract gaps clearly
 - run against a small multi-project fixture set
 
 It should not:
 - declare the schema final
-- declare the five-part model frozen forever
+- erase file-specific structure into a generic bucket too early
 - recreate the old SDK surface
-- implement runtime/lifecycle behavior
+- implement full runtime/lifecycle behavior yet
 - become Haxaml-shaped
-- promise canonical on-disk layout too early
+- skip schema analysis before implementation
 
 ## v0.1 deliverables
 

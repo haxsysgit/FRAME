@@ -1,0 +1,102 @@
+frame:
+  file: map
+  schema_version: "0.1.0"
+  role: repo_context_map
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit for organize fixture.
+
+roots:
+  repo:
+    path: Frame lab/fixtures/organize/project
+    summary: Tiny repo centered on one Python CLI script plus README and LICENSE.
+    evidence:
+      - id: ev_map_root
+        source: Frame lab/fixtures/metadata/core-seven-project-cards.md:28-36
+        why: Project card states repo root and near-minimal shape.
+        confidence: high
+
+paths:
+  organize_script:
+    summary: Main implementation, CLI parser, and all filesystem mutation logic live here.
+    evidence:
+      - id: ev_map_script
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: Parser defines the CLI entry surface.
+        confidence: high
+      - id: ev_map_script_mutation
+        source: Frame lab/fixtures/organize/project/organize.py:92-488
+        why: File organization and deletion logic are implemented here.
+        confidence: high
+  readme:
+    summary: Human usage notes and examples live here, but command names drift from the real script name.
+    evidence:
+      - id: ev_map_readme
+        source: Frame lab/fixtures/organize/project/README.md:17-109
+        why: README documents flags and example invocations.
+        confidence: high
+      - id: ev_map_readme_drift
+        source: Frame lab/fixtures/organize/project/README.md:55-109
+        why: Usage examples call file_manager.py instead of organize.py.
+        confidence: high
+  license:
+    summary: License file only; not a working surface for repo behavior.
+    evidence:
+      - id: ev_map_license
+        source: Frame lab/fixtures/organize/project/LICENSE
+        why: Present in the repo root but not part of execution or navigation flow.
+        confidence: medium
+
+classifications:
+  entry_surface:
+    summary: Command-line flags are the whole user-facing interface.
+    paths:
+      - Frame lab/fixtures/organize/project/organize.py
+      - Frame lab/fixtures/organize/project/README.md
+    evidence:
+      - id: ev_class_entry
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: CLI options are defined in argparse.
+        confidence: high
+  mutation_surface:
+    summary: Extension-folder creation, relation grouping, and deletion are the risky mutation surfaces.
+    paths:
+      - Frame lab/fixtures/organize/project/organize.py
+    evidence:
+      - id: ev_class_mutation
+        source: Frame lab/fixtures/organize/project/organize.py:92-192
+        why: create_ext_dir moves files into created folders.
+        confidence: high
+      - id: ev_class_delete
+        source: Frame lab/fixtures/organize/project/organize.py:196-289
+        why: delete_ext_dir moves files back and removes folders.
+        confidence: high
+
+access_points:
+  cli_help:
+    path: Frame lab/fixtures/organize/project/organize.py
+    summary: Start here to inspect the real flag surface via python3 organize.py --help.
+    evidence:
+      - id: ev_access_help
+        source: "command: python3 organize.py --help"
+        why: Live help run succeeded and reflected the parser state.
+        confidence: high
+  parser_block:
+    path: Frame lab/fixtures/organize/project/organize.py
+    summary: Read argparse definitions before editing behavior or README examples.
+    evidence:
+      - id: ev_access_parser
+        source: Frame lab/fixtures/organize/project/organize.py:19-52
+        why: Parser is the clearest behavior anchor in this repo.
+        confidence: high
+
+managed_paths: {}
+
+unmapped_paths: []
+
+evidence:
+  - id: ev_map_card
+    source: Frame lab/fixtures/metadata/frame-required-signals.md:157-176
+    why: This map stays intentionally small and focused on key source-of-truth paths.
+    confidence: high

@@ -1,0 +1,67 @@
+frame:
+  file: map
+  schema_version: "0.1.0"
+  role: repo_context_map
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: "Refit organize fixture against adjusted FRAME five-file schema."
+roots:
+  fixture_root:
+    path: /home/hax/FRAME/Frame lab/fixtures/organize/project
+    summary: "Tiny standalone fixture repo for the organize Python CLI."
+paths:
+  organize_py:
+    summary: "Only source file; defines argparse CLI, helper functions, and top-level command dispatch."
+    evidence:
+      - id: ev_organize_py_read
+        source: Frame lab/fixtures/organize/project/organize.py
+        why: "File inspected directly during refit."
+        refs: [map.paths.organize_py]
+        checked_at: "2026-06-01T21:53:06Z"
+        confidence: high
+  readme_md:
+    summary: "User-facing docs and flag descriptions; useful but partly stale because examples reference file_manager.py."
+  license:
+    summary: "MIT license text."
+classifications:
+  source:
+    summary: "Runtime implementation and public CLI interface."
+    boundary_type: source
+    interface_role: public CLI entrypoint plus internal implementation
+    paths:
+      - organize.py
+  docs:
+    summary: "Documentation for purpose, prerequisites, flags, and usage examples."
+    boundary_type: docs
+    interface_role: supporting documentation with known command-name drift
+    paths:
+      - README.md
+  legal:
+    summary: "License metadata."
+    boundary_type: package_metadata
+    interface_role: licensing
+    paths:
+      - LICENSE
+access_points:
+  cli:
+    path: organize.py
+    summary: "Run with python3 organize.py and argparse flags."
+  usage_docs:
+    path: README.md
+    summary: "Human-readable usage notes; reconcile with code before copying commands."
+managed_paths:
+  generated_extension_dirs:
+    path: "<target>/<ext>files"
+    reason: "create_ext_dir and delete_ext_dir create, populate, empty, and delete extension folders under the user-supplied target path."
+  generated_relation_dirs:
+    path: "<target>/<common-prefix>"
+    reason: "organize_by_relation creates folders named after common filename prefixes and moves grouped files into them."
+unmapped_paths: []
+evidence:
+  - id: ev_repo_file_list
+    source: "search_files over /home/hax/FRAME/Frame lab/fixtures/organize/project"
+    why: "Fixture root contains organize.py, README.md, LICENSE, and git metadata; compact map intentionally omits .git internals."
+    refs: [map.roots.fixture_root]
+    checked_at: "2026-06-01T21:53:06Z"
+    confidence: high

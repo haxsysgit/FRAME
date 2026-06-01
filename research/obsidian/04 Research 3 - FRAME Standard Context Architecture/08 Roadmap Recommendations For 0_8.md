@@ -99,7 +99,7 @@ Every FRAME file should probably have:
 ```yaml
 frame:
   file: facts
-  schema_version: 0.8.0
+  schema_version: 0.1.0
   role: stable_project_truth
   status: draft
   last_reviewed: null

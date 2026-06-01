@@ -6,7 +6,8 @@ Its job is to test and clarify the FRAME contract, not to freeze it too early.
 ## Design intent
 
 `frame-python` should act as:
-- a normalized-model experiment bed
+- the Python implementation of the five-file FRAME architecture
+- a typed modeling layer for shared schema pieces and file-specific contracts
 - a validator for clearly earned invariants
 - a fixture runner for project-family examples
 - a reporter of underspecified contract areas
@@ -14,12 +15,12 @@ Its job is to test and clarify the FRAME contract, not to freeze it too early.
 It should not act as:
 - the owner of FRAME meaning
 - a full old-SDK recreation
-- a schema-first code generator pipeline
+- a generic bucket model that erases file-specific structure too early
 - a runtime-specific interpretation of FRAME canon
 
 ## Recommended package layout
 
-Keep the first layout small and biased toward fixtures/tests rather than feature surface.
+Keep the first layout small, but center it on the real five-file architecture.
 
 ```text
 frame-python/
@@ -29,25 +30,46 @@ frame-python/
   src/
     frame_python/
       __init__.py
-      model.py
-      validate.py
+      shared.py
+      facts.py
+      rules.py
+      acts.py
+      map_file.py
+      expect.py
+      frame_set.py
       load.py
+      validate.py
       report.py
+      graph.py
       provisional.py
   tests/
-    test_model_minimal.py
-    test_validate_strict_vs_provisional.py
-    test_fixture_roundtrip.py
-    test_contract_gaps_are_reported.py
+    test_shared_models.py
+    test_facts_model.py
+    test_rules_model.py
+    test_frame_set.py
+    test_yaml_loading.py
+    test_cross_file_refs.py
   fixtures/
     minimal-cli/
-      frame.json
+      facts.yaml
+      rules.yaml
+      acts.yaml
+      map.yaml
+      expect.yaml
       notes.md
     backend-api/
-      frame.json
+      facts.yaml
+      rules.yaml
+      acts.yaml
+      map.yaml
+      expect.yaml
       notes.md
     monorepo-slice/
-      frame.json
+      facts.yaml
+      rules.yaml
+      acts.yaml
+      map.yaml
+      expect.yaml
       notes.md
   examples/
     inspect_fixture.py

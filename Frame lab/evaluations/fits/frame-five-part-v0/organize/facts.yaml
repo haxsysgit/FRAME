@@ -1,0 +1,126 @@
+frame:
+  file: facts
+  schema_version: "0.1.0"
+  role: current_project_truth
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: Hermes Agent
+  update_reason: Initial grounded fit for organize fixture.
+
+identity:
+  fixture_id: organize
+  repo_root: Frame lab/fixtures/organize/project
+  delivery_family: tiny CLI utility
+  system_role: file/folder organization helper
+  evidence:
+    - id: ev_identity_card
+      source: Frame lab/fixtures/metadata/core-seven-project-cards.md:26-52
+      why: Project card gives the compact fixture identity used for this fit.
+      confidence: high
+
+classification:
+  repo_shape: near-minimal single-script repo with README and LICENSE
+  major_surfaces:
+    - organize.py
+    - README.md
+  evidence:
+    - id: ev_shape_card
+      source: Frame lab/fixtures/metadata/core-seven-project-cards.md:33-36
+      why: Card names the repo shape and major surfaces.
+      confidence: high
+    - id: ev_shape_files
+      source: Frame lab/fixtures/organize/project/README.md:3-15
+      why: README describes a single command-line script.
+      confidence: medium
+
+technology:
+  primary_stack:
+    - Python 3
+    - argparse
+    - os
+    - shutil
+    - string
+    - sys
+  runtime_notes:
+    - stdlib-only script; no package metadata or dependency manifest found
+  evidence:
+    - id: ev_stack_imports
+      source: Frame lab/fixtures/organize/project/organize.py:1-1
+      why: Imports show stdlib-only implementation.
+      confidence: high
+    - id: ev_stack_readme
+      source: Frame lab/fixtures/organize/project/README.md:7-15
+      why: README states Python 3 command-line use.
+      confidence: high
+
+architecture:
+  summary: CLI flags are the whole interface; main behavior is local filesystem mutation for grouping and moving files.
+  entrypoint: Frame lab/fixtures/organize/project/organize.py
+  notable_quirks:
+    - Linux path default is hardcoded to /home/haxsys/downloadscopy2/Downloads when no path is passed.
+    - README usage examples call the script file_manager.py, but the real script is organize.py.
+    - No test suite or package scaffolding was discovered in the fixture repo.
+  evidence:
+    - id: ev_arch_platform
+      source: Frame lab/fixtures/organize/project/organize.py:10-16
+      why: Code sets Windows interactive input, Linux hardcoded path, and exits on other platforms.
+      confidence: high
+    - id: ev_arch_args
+      source: Frame lab/fixtures/organize/project/organize.py:19-52
+      why: Argument parser defines the full user interface.
+      confidence: high
+    - id: ev_arch_mutation
+      source: Frame lab/fixtures/organize/project/organize.py:92-192
+      why: create_ext_dir creates directories and moves files.
+      confidence: high
+    - id: ev_arch_drift
+      source: Frame lab/fixtures/organize/project/README.md:55-109
+      why: README command examples use file_manager.py instead of organize.py.
+      confidence: high
+
+environments:
+  supported_or_assumed:
+    - Windows with interactive path prompt
+    - Linux with hardcoded default path in source
+  unsupported_or_unclear:
+    - Other platforms exit immediately
+  evidence:
+    - id: ev_env_platform
+      source: Frame lab/fixtures/organize/project/organize.py:10-16
+      why: Platform branch defines the current environment assumptions.
+      confidence: high
+
+persistence:
+  filesystem_scope:
+    - creates extension-named folders like mp4files
+    - moves files into extension or relation-based folders
+    - can move files back and delete created folders
+  evidence:
+    - id: ev_persist_create
+      source: Frame lab/fixtures/organize/project/organize.py:92-192
+      why: create_ext_dir mutates the directory structure.
+      confidence: high
+    - id: ev_persist_delete
+      source: Frame lab/fixtures/organize/project/organize.py:196-289
+      why: delete_ext_dir moves files back and removes folders.
+      confidence: high
+
+evidence:
+  - id: ev_repo_root
+    source: Frame lab/fixtures/organize/project
+    why: Fixture repo inspected directly for this fit.
+    confidence: high
+
+ambiguities:
+  - id: amb_readme_script_name
+    question: Should README examples be treated as stale docs or as evidence of an intended rename from file_manager.py to organize.py?
+    status: open
+    evidence:
+      - id: ev_amb_readme_name
+        source: Frame lab/fixtures/organize/project/README.md:55-109
+        why: All usage examples use file_manager.py.
+        confidence: high
+      - id: ev_amb_real_name
+        source: Frame lab/fixtures/organize/project/organize.py:1-488
+        why: organize.py is the actual script present in the repo.
+        confidence: high

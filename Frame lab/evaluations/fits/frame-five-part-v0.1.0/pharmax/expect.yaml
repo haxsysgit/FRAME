@@ -1,0 +1,147 @@
+frame:
+  file: expect
+  schema_version: 0.1.0
+  role: project_correctness_contract
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: Fit adjusted FRAME correctness contract to pharmax fixture with command_ref-based verification.
+outcomes:
+  local_backend_runs:
+    summary: Backend starts as a FastAPI app, initializes local tables outside production, creates configured default users from env, exposes root status, and includes all domain routers.
+    links:
+      - rel: verify_with
+        ref: expect.verify.backend_startup_manual
+  local_frontend_builds:
+    summary: Frontend Vue/Vite app builds successfully and can point to the backend through VITE_API_URL with request timeout behavior.
+    links:
+      - rel: verify_with
+        ref: expect.verify.frontend_build
+  invoice_workflow_correct:
+    summary: Invoice workflow supports draft creation, add item, cashier draft listing with items, detail with items, cancellation, finalize/stamp, dispense, return-to-sender, and audit recording.
+    links:
+      - rel: verify_with
+        ref: expect.verify.backend_workflow_smoke
+  role_policy_correct:
+    summary: ADMIN/CASHIER/STAFF authorization remains aligned across backend route dependencies and frontend route metadata for products, invoices, stock, cashier, analytics, reports, users, and activity logs.
+    links:
+      - rel: verify_with
+        ref: expect.verify.role_policy_review
+  inventory_catalog_correct:
+    summary: Product catalog supports units/pricing, stock quantities, reorder/low-stock reporting, stock adjustments with audit trail, and product import/seed workflows.
+    links:
+      - rel: verify_with
+        ref: expect.verify.seed_data_available
+  docs_help_operator:
+    summary: README/setup docs remain accurate enough for a local developer to install backend/frontend dependencies, configure env, run dev servers, and understand operational caveats.
+    links:
+      - rel: verify_with
+        ref: expect.verify.docs_runtime_review
+invariants:
+  invoice_stock_integrity:
+    summary: Finalizing/dispensing/cancelling invoice flows must not lose stock integrity; stock deductions/restorations must match product unit multiplier and invoice status transitions.
+  auditability:
+    summary: Security-relevant and workflow-relevant actions should be auditable via AuditLog-backed services and activity route surfaces.
+  auth_token_flow:
+    summary: Frontend API requests include bearer token from localStorage when present; backend authenticated routes use JWT/current-user dependencies and role checks.
+  generated_noise_ignored:
+    summary: Generated dependencies, build output, pycache, pytest cache, local DB state, and env files must not be treated as canonical source.
+  persistence_selection:
+    summary: Development defaults to local SQLite while production-like environments can use external PostgreSQL through normalized PHARMAX_DATABASE_URL/DATABASE_URL.
+  command_ref_contract:
+    summary: Verification entries should refer to rules.commands command inventory via command_ref and should not duplicate full command strings.
+done_when:
+  backend_change_done:
+    summary: Relevant backend smoke or API checks pass, business workflows and role policies are reviewed, and migration/seed implications are documented when applicable.
+  frontend_change_done:
+    summary: npm build passes, changed routes/views/services preserve API client conventions and role metadata, and UI flows are manually reviewed where no automated tests exist.
+  workflow_change_done:
+    summary: No-server workflow smoke passes and, where endpoint behavior changed, server-backed smoke/API checks or equivalent manual route checks are recorded.
+  schema_fit_done:
+    summary: All five FRAME YAML files validate against schema version 0.1.0, capture full-stack pressure points, and a report records friction and coverage.
+verify:
+  backend_workflow_smoke:
+    summary: Run isolated backend workflow smoke to prove invoice create/add/list/detail/cancel/finalize/dispense/return/audit behavior without a running server.
+    command_ref: rules.commands.backend_workflow_smoke
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.invoice_workflow_correct
+  backend_startup_manual:
+    summary: Start backend dev server and manually check root/openapi or route reachability, after resolving example_projects import namespace if needed.
+    command_ref: rules.commands.backend_dev_server
+    proof_type: manual_check
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_example_projects_imports
+  backend_server_invoice_smoke:
+    summary: With backend server running and products/users seeded, exercise invoice endpoints over HTTP to catch route/dependency/API serialization regressions.
+    command_ref: rules.commands.backend_server_invoice_smoke
+    proof_type: smoke_test
+  backend_auth_rbac_script:
+    summary: Legacy RBAC script can be used as supporting verification only after STAFF/SALES drift is fixed or consciously adapted.
+    command_ref: rules.commands.backend_auth_rbac_script
+    proof_type: smoke_test
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_role_name_drift
+  frontend_build:
+    summary: Build frontend bundle to catch Vue/Vite syntax, import, and bundling failures.
+    command_ref: rules.commands.frontend_build
+    proof_type: static_check
+  frontend_preview_manual:
+    summary: Preview built frontend and manually inspect navigation/auth/API URL behavior when UI behavior matters.
+    command_ref: rules.commands.frontend_preview
+    proof_type: manual_check
+  seed_data_available:
+    summary: Run or review seed/import scripts to ensure a local DB has products, units, and users required for manual/server-backed workflows.
+    command_ref: rules.commands.backend_seed_dev_data
+    proof_type: manual_check
+  migrations_apply:
+    summary: Apply Alembic migrations in production-like DB contexts to ensure schema history is valid outside auto-created SQLite local tables.
+    command_ref: rules.commands.backend_migrate
+    proof_type: automated_test
+  docs_runtime_review:
+    summary: Review README/setup/deployment docs against actual package scripts, config, and source layout, especially database and render.yaml claims.
+    command_ref: null
+    proof_type: review
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_db_doc_drift
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_render_yaml_absent
+  role_policy_review:
+    summary: Review backend require_role dependencies and Frontend/src/router/index.js role metadata together; resolve stale SALES references before treating RBAC smoke as current.
+    command_ref: null
+    proof_type: review
+    links:
+      - rel: caveat
+        ref: facts.structural_quirks.quirk_role_name_drift
+required_evidence:
+  - id: evidence_backend_workflow
+    expectation: Backend workflow changes include smoke output from backend_workflow_smoke or a documented blocker.
+    refs:
+      - expect.verify.backend_workflow_smoke
+  - id: evidence_frontend_build
+    expectation: Frontend source changes include npm build output or a documented blocker.
+    refs:
+      - expect.verify.frontend_build
+  - id: evidence_role_policy
+    expectation: Auth/RBAC changes include a role-policy review across backend dependencies and frontend route metadata.
+    refs:
+      - expect.verify.role_policy_review
+  - id: evidence_docs_accuracy
+    expectation: Operational doc changes are checked against actual package scripts and runtime config.
+    refs:
+      - expect.verify.docs_runtime_review
+handoff:
+  current_fit_status: Five FRAME YAML files and report written as draft fit artifacts for schema 0.1.0.
+  strongest_coverage:
+    - Full-stack source layout and source-truth ranking
+    - Backend command inventory and workflow smoke verification contract
+    - Frontend route/API/build surfaces
+    - Structural quirks from import namespace, generated noise, role/doc drift
+  gaps_or_manual_followup:
+    - Actually running backend commands may require example_projects namespace setup.
+    - Frontend has no declared tests/lint beyond build/preview.
+    - README references render.yaml but fixture listing did not show it.

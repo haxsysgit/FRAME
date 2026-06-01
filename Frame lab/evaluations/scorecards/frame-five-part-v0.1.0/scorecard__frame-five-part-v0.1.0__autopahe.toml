@@ -1,0 +1,73 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.1.0"
+fixture = "autopahe"
+fixture_family = "python-cli-package"
+fixture_system_role = "media-search-and-browser-assisted-download-tool"
+evaluator = "haxsys-hermes"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 4
+clarity = 4
+stability = 4
+agent_usefulness = 4
+retrieval_usefulness = 4
+adoptability = 4
+bloat_resistance = 4
+token_efficiency = 4
+
+[phase_notes]
+phase_1 = "Strong fit for a medium Python CLI/package. The schema captures packaging truth, runtime entrypoints, browser setup caveats, platform state paths, tests, Docker support, and generated/noisy files."
+phase_2 = "Operationally useful: commands, negative instructions, stop-and-ask points, and verification expectations would directly improve agent behavior around browser setup and state safety."
+phase_3 = "Good pressure result. The schema avoided browser-specific core fields and used general quirks/source_truth/managed_paths structures instead. Acts remains useful only as fit provenance, not baseline context."
+
+[notes]
+summary = "FRAME 0.1.0 fits autopahe well and shows the adjusted fields generalize beyond tiny scripts."
+coverage = "Captures CLI/package identity, Typer entrypoint, Playwright/browser dependency, config/data paths, Docker support, tests, and checked-in noise."
+clarity = "Boundaries are understandable: package metadata in Facts, commands in Rules, file routing in Map, proof obligations in Expect."
+stability = "The same model that scaled down to organize also scales to this package-shaped repo."
+agent_usefulness = "An agent would be less likely to break CLI contract, hardcode paths, or treat browser setup as invisible magic."
+retrieval_usefulness = "FRAME points to pyproject, CLI modules, config/path helpers, tests, and state directories cleanly."
+adoptability = "A maintainer could plausibly keep these facts current without too much ceremony."
+bloat_resistance = "Browser and state complexity did not force app-specific schema growth."
+token_efficiency = "Good value per token; some Acts provenance is optional but not too harmful here."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/map.yaml"]
+clarity = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/expect.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/facts.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/rules.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/map.yaml"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/facts.yaml"]
+bloat_resistance = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/facts.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/autopahe/acts.yaml"]
+
+[friction]
+forced_fits = ["acts is mostly fit-history/provenance rather than project representation"]
+missing_semantics = ["baseline-vs-provenance packaging policy is still implicit"]
+redundant_fields = []
+stale_risk_fields = ["browser setup commands", "state-path assumptions"]
+extension_candidates = []
+
+[recommendation]
+keep = ["source_truth", "structural_quirks", "managed_paths", "command_ref verification model"]
+change = ["clarify that Acts is provenance/work-history, not baseline repo context"]
+avoid = ["promoting browser-specific setup semantics into core FRAME"]

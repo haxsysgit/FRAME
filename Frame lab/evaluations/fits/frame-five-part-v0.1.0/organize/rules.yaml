@@ -1,0 +1,79 @@
+frame:
+  file: rules
+  schema_version: "0.1.0"
+  role: project_instruction_blueprint
+  status: draft
+  last_reviewed: "2026-06-01"
+  updated_by: hermes-agent
+  update_reason: "Refit organize fixture against adjusted FRAME five-file schema."
+critical_rules:
+  - id: safe_paths_only
+    text: "Treat mutating commands as destructive filesystem operations; run them only against an explicit disposable directory unless the user confirms a real target."
+    links:
+      - rel: protects
+        ref: facts.persistence
+  - id: code_over_readme
+    text: "Prefer organize.py over README examples when command spelling or behavior differs."
+    links:
+      - rel: grounded_by
+        ref: facts.source_truth.source_code
+commands:
+  help:
+    run: "python3 organize.py --help"
+    kind: inspect
+    purpose: "Show the live CLI surface without mutating files."
+    when_to_use: "First smoke check after source or documentation changes."
+  match_files:
+    run: "python3 organize.py -m <path>"
+    kind: inspect
+    purpose: "Print grouped similar filenames for a target directory."
+    when_to_use: "Use on a safe directory to inspect relation grouping."
+  create_extension_dirs:
+    run: "python3 organize.py -c -p <path>"
+    kind: run
+    purpose: "Create extension-named folders and move matching files into them."
+    when_to_use: "Only with an explicit safe target path."
+  create_one_extension_dir:
+    run: "python3 organize.py -ce <extension> -p <path>"
+    kind: run
+    purpose: "Create one extension folder and move files of that extension."
+    when_to_use: "Only with an explicit safe target path."
+  organize_by_relation:
+    run: "python3 organize.py -obr -p <path>"
+    kind: run
+    purpose: "Group similarly named files into relation folders."
+    when_to_use: "Only with an explicit safe target path."
+  organize_by_extension:
+    run: "python3 organize.py -obe -p <path>"
+    kind: run
+    purpose: "Create extension folders, then group related files inside those folders."
+    when_to_use: "Only with an explicit safe target path."
+  delete_extension_dirs:
+    run: "python3 organize.py -d -p <path>"
+    kind: maintenance
+    purpose: "Move files back from generated extension folders and delete those folders."
+    when_to_use: "Only with an explicit safe target path containing generated extension folders."
+  delete_one_extension_dir:
+    run: "python3 organize.py -de <extension> -p <path>"
+    kind: maintenance
+    purpose: "Move files back from and delete one extension folder."
+    when_to_use: "Only with an explicit safe target path containing that generated folder."
+code_style:
+  - "Current project style is simple stdlib Python in one script; preserve CLI flag compatibility unless intentionally changing interface."
+git_workflow:
+  - "Fixture repo is a separate git checkout under Frame lab/fixtures/organize/project; evaluate changes against that local fixture path."
+negative_instructions:
+  - "Do not run mutating commands in the fixture root or a user's real Downloads directory during verification."
+  - "Do not copy README commands that name file_manager.py without reconciling them with organize.py."
+stop_and_ask:
+  - id: real_target_path
+    trigger: "User asks to organize or delete files in a non-disposable path."
+    question: "Confirm the exact target directory before running filesystem-mutating commands."
+skill_hints: []
+evidence:
+  - id: ev_help_command
+    source: "python3 organize.py --help run in Frame lab/fixtures/organize/project"
+    why: "Confirmed live argparse command inventory and warning behavior."
+    refs: [rules.commands.help]
+    checked_at: "2026-06-01T21:53:06Z"
+    confidence: high

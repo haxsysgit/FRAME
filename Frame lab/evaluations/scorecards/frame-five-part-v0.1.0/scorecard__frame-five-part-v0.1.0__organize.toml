@@ -1,0 +1,73 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.1.0"
+fixture = "organize"
+fixture_family = "utility-cli"
+fixture_system_role = "local-file-organization-script"
+evaluator = "haxsys-hermes"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "operational_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+
+[scores]
+coverage = 4
+clarity = 4
+stability = 4
+agent_usefulness = 4
+retrieval_usefulness = 4
+adoptability = 3
+bloat_resistance = 3
+token_efficiency = 3
+
+[phase_notes]
+phase_1 = "Strong structural fit for a tiny single-script repo. The adjusted schema captures identity, source authority, quirks, filesystem side effects, command surface, and verification expectations without needing fixture-specific fields. The main friction is scale: five files still feels heavy for this size."
+phase_2 = "Useful for agents because it clearly separates safe/mutating commands, warns about README/code drift, and identifies the actual entrypoint. Retrieval improves because source_truth and map paths point to the small set of real anchors."
+phase_3 = "Pressure is moderate. The schema can scale down via project_profile, but the existence of all five files still causes ceremony. Acts especially remains low-value for baseline representation."
+
+[notes]
+summary = "FRAME 0.1.0 fits organize cleanly, but the fixture confirms tiny projects need an explicit baseline-pack/optional-acts policy."
+coverage = "Covers project identity, CLI commands, hardcoded path behavior, mutation risk, doc drift, and missing tests."
+clarity = "Placement is mostly clean: Facts for stable truth and quirks, Rules for safe command behavior, Map for file surfaces, Expect for correctness checks."
+stability = "The same fields used for richer fixtures also work here, though scaled-down guidance matters."
+agent_usefulness = "An agent would avoid using stale README commands and avoid mutating a real user path without an explicit target."
+retrieval_usefulness = "Important truth is compact and easy to recover from the FRAME files."
+adoptability = "Maintainable, but five files for a tiny script is still a chore."
+bloat_resistance = "No new core fields were needed, but Acts adds visible ceremony."
+token_efficiency = "Good value in Facts/Rules/Map/Expect; weak value in Acts for baseline context."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/rules.yaml"]
+clarity = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/expect.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/facts.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/expect.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/map.yaml"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/acts.yaml"]
+bloat_resistance = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/acts.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.1.0/organize/acts.yaml"]
+
+[friction]
+forced_fits = ["acts has little natural baseline-project content"]
+missing_semantics = ["baseline project packs need a first-class way to omit or down-rank acts"]
+redundant_fields = []
+stale_risk_fields = ["commands can become stale if README and code drift again"]
+extension_candidates = []
+
+[recommendation]
+keep = ["project_profile", "source_truth", "structural_quirks", "command_ref separation between rules and expect"]
+change = ["make Acts explicitly optional or non-core for baseline project representation"]
+avoid = ["forcing all five files to carry equal weight for tiny repos"]
