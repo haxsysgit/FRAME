@@ -1,0 +1,101 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.2.0"
+fixture = "organize"
+fixture_family = "utility-cli"
+fixture_system_role = "local-file-organization-script"
+evaluator = "hermes-agent"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "interaction_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+typed_design = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+cross_link_quality = 1.5
+governance_usefulness = 1.5
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+name_clarity = 1.5
+
+[scores]
+coverage = 4
+clarity = 5
+stability = 4
+typed_design = 4
+agent_usefulness = 4
+retrieval_usefulness = 5
+cross_link_quality = 4
+governance_usefulness = 4
+adoptability = 4
+bloat_resistance = 4
+token_efficiency = 4
+name_clarity = 5
+
+[phase_notes]
+phase_1 = "The v0.2.0 shape captures organize cleanly as a tiny single-script utility. profile, sources, quirks, rules, groups, checks, and proof all had obvious homes, and Acts now behaves like run history instead of a duplicate project summary."
+phase_2 = "The five parts interact usefully: facts establishes code-over-README authority, map routes directly to the three real repo surfaces, expect links checks to commands, and acts records what was inspected and safely verified."
+phase_3 = "This fixture still pressures FRAME to stay lean, but the simplified names and run-centered Acts reduce ceremony compared with the earlier pass. The remaining cost is the unavoidable five-file overhead on a one-script repo."
+
+[notes]
+summary = "frame-five-part-v0.2.0 is a strong fit for organize. The simplified names lower placement friction, links reduce repetition, and Acts finally fits the fixture as practical run history."
+coverage = "The candidate represents identity, command surface, generated paths, mutation risk, README/code drift, the Linux path assumption, and the current proof surface without obvious holes."
+clarity = "Field ownership is easy to explain: stable repo truth in facts, instructions in rules, navigation in map, correctness obligations in expect, and evaluation history in acts."
+stability = "The same compact shape should travel well across other small and medium repos because the candidate did not need fixture-specific blocks to model organize."
+typed_design = "The entries are small, linkable, and schema-friendly. Simple refs like facts.quirks.readme_name_drift and expect.checks.cli_help were enough."
+agent_usefulness = "An agent reading the fit would avoid stale README commands, know where mutation is safe, and route quickly to the real entrypoint and verification checks."
+retrieval_usefulness = "The fit acts like a sharp index over the real repo: organize.py, README.md, LICENSE, the tempdir smoke checks, and the warning-producing help command are all directly addressable."
+cross_link_quality = "Links are doing real work across all five parts, especially facts -> rules -> expect and map -> expect -> acts."
+governance_usefulness = "Acts now records inspected surfaces, rules followed, and checks run in a way that is reviewable and much easier to supervise than the old reflective layout."
+adoptability = "For a tiny repo the overhead is still noticeable, but the naming and compact entries make this version realistic to maintain."
+bloat_resistance = "The candidate resisted new top-level blocks and mostly solved pressure with clearer names plus links."
+token_efficiency = "The fit stays compact because it points back to organize.py and the checks instead of restating behavior in every file."
+name_clarity = "profile, sources, quirks, rules, groups, entrypoints, checks, and proof are noticeably more obvious than the earlier names."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/expect.yaml"]
+clarity = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/acts.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml"]
+typed_design = ["Frame lab/candidates/frame-five-part-v0.2.0.md", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/map.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/expect.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml"]
+cross_link_quality = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/expect.yaml"]
+governance_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/acts.yaml", "Frame lab/evaluations/reports/fit__frame-five-part-v0.2.0__organize.md"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/acts.yaml"]
+bloat_resistance = ["Frame lab/candidates/frame-five-part-v0.2.0.md", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/acts.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/expect.yaml"]
+name_clarity = ["Frame lab/candidates/frame-five-part-v0.2.0.md", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/organize/facts.yaml"]
+
+[friction]
+forced_fits = ["A five-file pack is still a noticeable amount of ceremony for a repo that is basically organize.py plus README and LICENSE."]
+missing_semantics = []
+redundant_fields = []
+stale_risk_fields = ["facts.quirks.readme_name_drift and related README-derived notes will need updates if the docs are corrected."]
+extension_candidates = []
+name_problems = []
+link_gaps = ["The current fit does not add refs for scorecard/report artifacts because the schemas model project truth rather than evaluation packaging."]
+governance_gaps = ["Mutating organize_by_relation and organize_by_extension flows were not both fully replayed end-to-end in tempdir during this pass; relation grouping was checked directly with -m and create/delete were checked directly with -c/-d."]
+
+[acts_review]
+role_fit = "Acts behaves correctly here as run history for inspection, smoke checks, and schema validation rather than duplicated project truth."
+input_summary_quality = "Good: each run states what repo files, schemas, or commands were read before work."
+output_summary_quality = "Good: each run records concrete outcomes, including the help-command warning and the tempdir before/after behavior."
+touched_surfaces_quality = "Good: runs point back to the real repo surfaces and managed-path areas that were inspected or exercised."
+changed_facts_quality = "Good: changed_facts stays focused on the fit truths that were established or updated."
+rules_followed_quality = "Good: the run history explicitly records code-over-README and safe-temp-path discipline."
+expect_links_quality = "Good: the runs link directly to cli_help, match_groups, and extension_create_delete checks."
+
+[recommendation]
+keep = ["The simplified top-level names", "Acts as summary + runs + blockers + handoff", "Link-first ownership across facts, rules, map, expect, and acts"]
+change = ["Keep emphasizing compressed authoring style for tiny repos so the five-file overhead does not grow back through prose."]
+avoid = ["Reintroducing reflective Acts blocks or abstract names that hide where truth belongs."]

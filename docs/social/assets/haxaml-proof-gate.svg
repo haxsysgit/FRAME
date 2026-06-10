@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img" aria-labelledby="title desc">
+  <title id="title">Haxaml proof gate</title>
+  <desc id="desc">Agent work passing through verification before durable FRAME memory changes.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="76%"><stop offset="0" stop-color="#172033"/><stop offset="60%" stop-color="#07111f"/><stop offset="100%" stop-color="#020617"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.5"/></pattern>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="10" refY="6.5" orient="auto"><path d="M1,1 L12,6.5 L1,12 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect width="1400" height="1400" fill="url(#bg)"/>
+  <rect width="1400" height="1400" fill="url(#grid)"/>
+
+  <g font-family="JetBrains Mono, ui-monospace, monospace">
+    <rect x="95" y="470" width="300" height="250" rx="28" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+    <text x="245" y="545" font-size="34" fill="#e0f2fe" text-anchor="middle">agent work</text>
+    <text x="245" y="585" font-size="18" fill="#bae6fd" text-anchor="middle">edits, claims, summaries</text>
+    <circle cx="180" cy="650" r="18" fill="#22d3ee" opacity="0.8"/>
+    <rect x="220" y="632" width="105" height="35" rx="8" fill="#082f49" stroke="#38bdf8"/>
+
+    <path d="M405 595 C500 595 525 595 610 595" stroke="#38bdf8" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+
+    <g filter="url(#glow)">
+      <rect x="610" y="330" width="230" height="530" rx="30" fill="#111827" stroke="#fbbf24" stroke-width="3"/>
+      <text x="725" y="420" font-size="33" fill="#fef3c7" text-anchor="middle">verify</text>
+      <text x="725" y="458" font-size="17" fill="#fde68a" text-anchor="middle">proof before memory</text>
+      <line x1="650" y1="520" x2="800" y2="520" stroke="#fbbf24" stroke-width="2"/>
+      <line x1="650" y1="595" x2="800" y2="595" stroke="#fbbf24" stroke-width="2"/>
+      <line x1="650" y1="670" x2="800" y2="670" stroke="#fbbf24" stroke-width="2"/>
+      <circle cx="662" cy="520" r="7" fill="#34d399"/>
+      <circle cx="662" cy="595" r="7" fill="#fb7185"/>
+      <circle cx="662" cy="670" r="7" fill="#94a3b8"/>
+      <text x="725" y="550" font-size="16" fill="#cbd5e1" text-anchor="middle">tests / commands</text>
+      <text x="725" y="625" font-size="16" fill="#cbd5e1" text-anchor="middle">touched files</text>
+      <text x="725" y="700" font-size="16" fill="#cbd5e1" text-anchor="middle">assumptions</text>
+    </g>
+
+    <path d="M840 595 C930 595 955 505 1005 455" stroke="#38bdf8" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+    <path d="M840 595 C930 595 955 720 1005 780" stroke="#38bdf8" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+
+    <rect x="1005" y="315" width="305" height="220" rx="26" fill="#881337" stroke="#fb7185" stroke-width="2"/>
+    <text x="1158" y="395" font-size="34" fill="#ffe4e6" text-anchor="middle">Acts</text>
+    <text x="1158" y="435" font-size="18" fill="#fecdd3" text-anchor="middle">durable run memory</text>
+    <text x="1158" y="470" font-size="16" fill="#fecdd3" text-anchor="middle">what actually happened</text>
+
+    <rect x="1005" y="720" width="305" height="220" rx="26" fill="#78350f" stroke="#fbbf24" stroke-width="2"/>
+    <text x="1158" y="800" font-size="34" fill="#fef3c7" text-anchor="middle">Expect</text>
+    <text x="1158" y="840" font-size="18" fill="#fde68a" text-anchor="middle">forward state</text>
+    <text x="1158" y="875" font-size="16" fill="#fde68a" text-anchor="middle">what should be true next</text>
+
+    <path d="M1158 535 L1158 720" stroke="#64748b" stroke-width="2" stroke-dasharray="8 8" fill="none"/>
+    <text x="90" y="1300" font-size="28" fill="#e2e8f0">Haxaml: let agents build, but make the path inspectable.</text>
+  </g>
+</svg>

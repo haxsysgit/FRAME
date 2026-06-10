@@ -1,0 +1,159 @@
+frame:
+  file: facts
+  schema_version: "0.2.0"
+  role: current_project_truth
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+  update_reason: Deep traversal of pharmax project for red room test source of truth
+
+profile:
+  name: "Pharmax"
+  summary: "Role-based pharmacy management system — inventory, invoices, cashier, reporting, team access, audit trail"
+  repo_shape: "split backend/frontend with docs and deployment config"
+  delivery_family: "web-app"
+  system_role: "operational"
+
+identity:
+  author: "Arinze Elenasulu"
+  project_type: "Final Year Project (CST3990)"
+  live_url: "https://pharmax-0ez1.onrender.com"
+  api_url: "https://pharmax-api.onrender.com"
+
+classification:
+  kind: "full-stack-web-app"
+  surface_count: 2
+  surfaces:
+    - "Backend (FastAPI)"
+    - "Frontend (Vue 3)"
+
+technology:
+  backend_stack:
+    - "Python 3"
+    - "FastAPI"
+    - "SQLAlchemy"
+    - "Alembic (migrations)"
+    - "SQLite (local/default)"
+    - "PostgreSQL (production)"
+  frontend_stack:
+    - "Vue 3"
+    - "Vite"
+    - "Pinia (state)"
+    - "Vue Router"
+  auth:
+    - "JWT tokens"
+    - "pbkdf2_sha256 password hashing"
+    - "PIN-based secondary auth"
+  deployment:
+    - "Render (Blueprint-compatible)"
+
+architecture:
+  backend_layers:
+    - "api/router (route orchestration)"
+    - "api/routes (endpoint definitions)"
+    - "services (business logic)"
+    - "models (SQLAlchemy ORM)"
+    - "schemas (Pydantic request/response)"
+    - "core (config, security, dependencies)"
+    - "db (session, base)"
+  frontend_layers:
+    - "views (page components)"
+    - "components (reusable UI)"
+    - "stores (Pinia state)"
+    - "services (API client layer)"
+    - "router (Vue Router)"
+    - "composables (shared logic)"
+    - "lib (printing, charts)"
+  role_model:
+    - "ADMIN: full control, reporting, inventory governance, user management"
+    - "CASHIER: payment handling, cashier queue, invoice completion"
+    - "STAFF: invoice creation, stock/inventory operations"
+
+environments:
+  local:
+    backend: "http://127.0.0.1:8000"
+    database: "SQLite (Backend/app/_db/pharmax.db)"
+  production:
+    backend: "https://pharmax-api.onrender.com"
+    database: "PostgreSQL"
+
+persistence:
+  orm: "SQLAlchemy"
+  migrations: "Alembic (Backend/alembic/)"
+  local_db_path: "Backend/app/_db/pharmax.db"
+  key_models:
+    - "User (roles, hashed PIN)"
+    - "Product (categories, brands, units, pricing)"
+    - "ProductUnit (unit-of-measure variants)"
+    - "Invoice (draft/finalized/dispensed/cancelled lifecycle)"
+    - "InvoiceItem (line items)"
+    - "StockAdjustment (audit trail)"
+    - "AuditLog (activity tracking)"
+
+sources:
+  - id: runtime_code
+    path: "Backend/app/"
+    purpose: "Primary operational truth — backend source code"
+  - id: frontend_source
+    path: "Frontend/src/"
+    purpose: "Frontend application source"
+  - id: project_brief
+    path: "PROJECT_BRIEF.md"
+    purpose: "Official project requirements and design"
+  - id: readme
+    path: "README.md"
+    purpose: "Project overview and setup instructions"
+  - id: migrations
+    path: "Backend/alembic/versions/"
+    purpose: "Database schema history"
+  - id: tests
+    path: "Backend/tests/"
+    purpose: "Test suite"
+
+quirks:
+  - id: example_projects_imports
+    description: "Backend uses 'example_projects.pharmax.Backend.app' import prefix, not 'app'"
+    why: "Fixture directory structure requires this namespace for imports to resolve"
+  - id: pbkdf2_not_bcrypt
+    description: "Password hashing uses pbkdf2_sha256, not bcrypt"
+    why: "Avoids bcrypt backend compilation issues while keeping strong hashing"
+  - id: sqlite_default
+    description: "Local dev uses SQLite, not PostgreSQL"
+    why: "Zero-config local development; production uses PostgreSQL via env config"
+  - id: staff_role_renamed
+    description: "Database role column uses 'STAFF' not 'SALES' (was renamed)"
+    why: "Migration a1b2c3d4e5f6 renamed the role column"
+  - id: brief_stack_drift
+    description: "PROJECT_BRIEF.md mentions Streamlit for analytics but actual app uses Vue with ECharts"
+    why: "Streamlit was planned but Vue-native charts were implemented instead"
+  - id: generated_noise
+    description: "node_modules, __pycache__, uv.lock, package-lock.json are NOT canonical project truth"
+    why: "Generated/managed files should not be treated as source of project knowledge"
+
+policies:
+  - id: role_access_policy
+    name: "Role-Based Access Control"
+    rule: "ADMIN/CASHIER/STAFF roles enforced via require_role dependency. Routes and frontend views restricted by role."
+  - id: invoice_lifecycle_policy
+    name: "Invoice Lifecycle"
+    rule: "Draft → Finalized (stock deducted) → Dispensed. Cancel possible before dispense (stock reversed)."
+  - id: audit_policy
+    name: "Audit Trail"
+    rule: "Every meaningful action logged to AuditLog. Activity visible in ActivityLogsView with filtering."
+  - id: persistence_policy
+    name: "Persistence Mode"
+    rule: "SQLite for local dev (default). PostgreSQL for production via env-driven config and Alembic migrations."
+  - id: auth_policy
+    name: "Authentication Flow"
+    rule: "JWT tokens via /auth/login. PIN verification for sensitive operations. Registration requires admin approval."
+
+open_questions:
+  - id: streamlit_future
+    question: "Will Streamlit analytics dashboards be added as an optional deployment?"
+    context: "PROJECT_BRIEF.md mentions Streamlit but current implementation uses Vue+ECharts"
+
+evidence:
+  - id: audit_source
+    source: "Manual deep traversal of all Backend and Frontend source files"
+    confidence: high

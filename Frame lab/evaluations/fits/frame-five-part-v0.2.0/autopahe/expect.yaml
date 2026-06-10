@@ -1,0 +1,308 @@
+frame:
+  file: expect
+  schema_version: "0.2.0"
+  role: project_correctness_contract
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: Hermes Agent
+  update_reason: Fit autopahe expectations to the simplified FRAME v0.2.0 Expect shape.
+
+outcomes:
+  cli_package_boundary_works:
+    summary: A source or installed checkout should expose the autopahe CLI through package metadata and reach the help surface after setup.
+    links:
+      - rel: uses
+        ref: map.entrypoints.console_script
+      - rel: checks
+        ref: expect.checks.cli_help
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45; Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Console script and help smoke command are both documented.
+        confidence: high
+  browser_setup_is_actionable:
+    summary: Browser-assisted flows should either find an installed Playwright browser engine or emit clear setup guidance.
+    links:
+      - rel: uses
+        ref: map.paths.ap_core_browser
+      - rel: checks
+        ref: expect.checks.browser_engine_install
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:72-80,191-197,230-234
+        why: Browser install helpers and missing-browser guidance are implemented.
+        confidence: high
+  state_paths_are_preserved:
+    summary: Config, cache, data, log, collection, backup, and browser profile behavior should continue to flow through the project path helpers unless intentionally redesigned.
+    links:
+      - rel: uses
+        ref: map.groups.persistence
+      - rel: checks
+        ref: expect.checks.config_validate
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-217; Frame lab/fixtures/autopahe/project/config.py:19-45
+        why: OS-aware path helpers and central data constants define persistence behavior.
+        confidence: high
+  tests_cover_regression_surface:
+    summary: The checked-in pytest suite should remain meaningful for CLI normalization, setup safety, config fallback, kwikdown helpers, and updater behavior.
+    links:
+      - rel: uses
+        ref: map.paths.tests
+      - rel: checks
+        ref: expect.checks.pytest_suite
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_config.py:1-17; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14; Frame lab/fixtures/autopahe/project/tests/test_updater.py:1-10
+        why: These tests define the current automated regression surface.
+        confidence: high
+
+must_hold:
+  console_script_target:
+    summary: pyproject.toml continues to expose autopahe = auto_pahe:main unless packaging and docs are changed together.
+    links:
+      - rel: uses
+        ref: map.entrypoints.console_script
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45
+        why: Current package command declaration.
+        confidence: high
+  setup_preserves_existing_config:
+    summary: Setup must not overwrite an existing config file.
+    links:
+      - rel: checks
+        ref: expect.checks.installed_setup
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Existing config preservation is asserted directly.
+        confidence: high
+  invalid_browser_fallback:
+    summary: Invalid configured browser values fall back to chromium with a warning instead of raising.
+    links:
+      - rel: checks
+        ref: expect.checks.config_validate
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:72-81,127-130; Frame lab/fixtures/autopahe/project/tests/test_config.py:9-17
+        why: Implementation and tests both encode this behavior.
+        confidence: high
+  legacy_cli_flags:
+    summary: Legacy flags like -md and multi-token -R records values remain normalized for Typer and Click parsing unless compatibility is intentionally broken.
+    links:
+      - rel: checks
+        ref: expect.checks.pytest_suite
+      - rel: uses
+        ref: map.paths.cli_py
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:47-93; Frame lab/fixtures/autopahe/project/tests/test_cli.py:4-19
+        why: Normalizer and tests define the compatibility behavior.
+        confidence: high
+  browser_handoff_contract:
+    summary: Browser download flows include user/browser handoff and local video file confirmation rather than silent guaranteed downloads.
+    links:
+      - rel: uses
+        ref: map.paths.auto_pahe_py
+      - rel: explains
+        ref: facts.quirks.browser_handoff_flow
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:111-132; Frame lab/fixtures/autopahe/project/auto_pahe.py:163-217
+        why: Docs and runtime prompt logic agree.
+        confidence: high
+  docker_playwright_base:
+    summary: Docker support uses a Playwright Python base image and installs Chromium before running the editable package.
+    links:
+      - rel: uses
+        ref: map.paths.docker_assets
+      - rel: checks
+        ref: expect.checks.docker_build
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-16
+        why: Dockerfile base image and browser install steps encode this contract.
+        confidence: high
+
+done_when:
+  cli_changes:
+    summary: CLI or packaging changes preserve console-script wiring and reachable help behavior, or update docs and tests to a new command contract.
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+      - rel: checks
+        ref: expect.checks.pytest_suite
+  setup_and_browser_changes:
+    summary: Setup or browser changes preserve config safety and actionable browser-install guidance.
+    links:
+      - rel: checks
+        ref: expect.checks.installed_setup
+      - rel: checks
+        ref: expect.checks.browser_engine_install
+  state_changes:
+    summary: Config and persistence changes account for path helpers, migration behavior, and import-time side effects.
+    links:
+      - rel: checks
+        ref: expect.checks.config_validate
+      - rel: checks
+        ref: expect.checks.pytest_suite
+  docker_changes:
+    summary: Docker changes still build the Playwright-based image and reach CLI help with documented volume mounts or updated docs.
+    links:
+      - rel: checks
+        ref: expect.checks.docker_build
+      - rel: checks
+        ref: expect.checks.docker_help
+
+checks:
+  source_install:
+    summary: Install source dependencies before source-run verification.
+    command_ref: rules.commands.source_install
+    proof_type: automated_test
+    links:
+      - rel: follows
+        ref: rules.rules.require_browser_setup
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README source setup flow starts with uv sync.
+        confidence: high
+  browser_engine_install:
+    summary: Confirm the Chromium engine is installed in the same environment used for source runs.
+    command_ref: rules.commands.browser_install
+    proof_type: automated_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.browser_setup_is_actionable
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README requires browser install for source use.
+        confidence: high
+  cli_help:
+    summary: Confirm the source-checkout CLI reaches its help output after setup.
+    command_ref: rules.commands.cli_help
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.cli_package_boundary_works
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: Documented first source smoke command.
+        confidence: high
+  installed_setup:
+    summary: Confirm installed-tool setup writes config only when missing and preserves existing config.
+    command_ref: rules.commands.tool_setup
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.must_hold.setup_preserves_existing_config
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Setup safety is a checked invariant.
+        confidence: high
+  config_show:
+    summary: Inspect effective or sample configuration without editing it.
+    command_ref: rules.commands.config_show
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:158-167
+        why: Handler prints existing or sample config.
+        confidence: high
+  config_validate:
+    summary: Validate browser fallback, path coercion, and config warnings after config or path changes.
+    command_ref: rules.commands.config_validate
+    proof_type: manual_check
+    links:
+      - rel: proves
+        ref: expect.must_hold.invalid_browser_fallback
+      - rel: proves
+        ref: expect.outcomes.state_paths_are_preserved
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:168-178; Frame lab/fixtures/autopahe/project/tests/test_config.py:9-17
+        why: Validation path and fallback behavior are both explicit.
+        confidence: high
+  pytest_suite:
+    summary: Run the checked-in pytest regression suite.
+    command_ref: rules.commands.pytest_all
+    proof_type: automated_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.tests_cover_regression_surface
+      - rel: proves
+        ref: expect.must_hold.legacy_cli_flags
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/
+        why: Test files are present and use pytest assertions.
+        confidence: high
+  browser_verify_manual:
+    summary: For live site verification issues, open the persistent browser profile and complete verification manually without claiming bypass automation.
+    command_ref: rules.commands.verify_browser
+    proof_type: manual_check
+    links:
+      - rel: uses
+        ref: map.paths.ap_core_browser
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:124-132; Frame lab/fixtures/autopahe/project/cli.py:285-288
+        why: Manual verification session is documented and wired into the CLI.
+        confidence: high
+  source_update_flow:
+    summary: For updater changes, verify source update logic still matches the documented fast-forward plus refresh flow.
+    command_ref: rules.commands.source_update
+    proof_type: manual_check
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:38-45
+        why: Source update contract is documented there.
+        confidence: high
+  docker_build:
+    summary: Build the documented container image.
+    command_ref: rules.commands.docker_build
+    proof_type: automated_test
+    links:
+      - rel: proves
+        ref: expect.must_hold.docker_playwright_base
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-29; Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: Docker build path exists and is documented.
+        confidence: high
+  docker_help:
+    summary: Run CLI help in the built image using the documented volume-mount shape.
+    command_ref: rules.commands.docker_help
+    proof_type: smoke_test
+    links:
+      - rel: uses
+        ref: map.paths.docker_assets
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: README documents the container help command.
+        confidence: high
+
+proof:
+  - id: cli_and_setup_proof
+    expectation: For CLI or setup changes, include pytest output plus one relevant help, setup, or config smoke path.
+    refs:
+      - expect.checks.pytest_suite
+      - expect.checks.cli_help
+      - expect.checks.installed_setup
+    links:
+      - rel: supports
+        ref: expect.done_when.cli_changes
+  - id: browser_flow_proof
+    expectation: For browser or download-flow changes, say whether the proof was automated, manual, or unavailable because of network, browser, or site constraints.
+    refs:
+      - expect.checks.browser_engine_install
+      - expect.checks.browser_verify_manual
+    links:
+      - rel: supports
+        ref: expect.done_when.setup_and_browser_changes
+  - id: persistence_proof
+    expectation: For persistence changes, cite the affected path/config helpers and note any migration or import-time side-effect impact.
+    refs:
+      - expect.outcomes.state_paths_are_preserved
+      - expect.checks.config_validate
+    links:
+      - rel: supports
+        ref: expect.done_when.state_changes
+  - id: docker_proof
+    expectation: For Docker changes, provide docker build/help output or state clearly why Docker verification was unavailable.
+    refs:
+      - expect.checks.docker_build
+      - expect.checks.docker_help
+    links:
+      - rel: supports
+        ref: expect.done_when.docker_changes
+
+handoff:
+  notes:
+    - checks use command_ref links back to rules.commands so command strings are defined once.
+    - Live AnimePahe and Kwik verification may depend on network and site challenge state; record manual or unavailable proof honestly.

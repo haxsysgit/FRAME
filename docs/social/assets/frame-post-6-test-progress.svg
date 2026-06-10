@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img">
+  <defs>
+    <pattern id="paperGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9d6cc" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      .label { font-family: Inter, Arial, sans-serif; }
+      .mono { font-family: Consolas, monospace; }
+    </style>
+  </defs>
+  <rect width="1400" height="1400" fill="#f8f4ea"/>
+  <rect width="1400" height="1400" fill="url(#paperGrid)" opacity="0.8"/>
+  <text x="86" y="112" font-size="47" font-weight="800" fill="#0f172a" class="label">Current progress: promising, not final.</text>
+  <text x="88" y="170" font-size="25" font-weight="450" fill="#475569" class="label">The useful part is seeing where the structure holds and where it needs tightening.</text>
+  <rect x="115" y="325" width="1170" height="720" rx="48" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="510" y="450" class="label" font-size="44" font-weight="800" fill="#0f172a">v0.2.0 fit round</text>
+<rect x="180" y="540" width="300" height="145" rx="28" fill="#ecfeff" stroke="#0891b2" stroke-width="4"/>
+<text x="214" y="598" class="label" font-size="38" font-weight="760" fill="#334155">organize</text>
+<text x="214" y="644" class="label" font-size="26" fill="#64748b">4.25 / 5</text><rect x="550" y="540" width="300" height="145" rx="28" fill="#f5f3ff" stroke="#7c3aed" stroke-width="4"/>
+<text x="584" y="598" class="label" font-size="38" font-weight="760" fill="#334155">autopahe</text>
+<text x="584" y="644" class="label" font-size="26" fill="#64748b">4.29 / 5</text><rect x="920" y="540" width="300" height="145" rx="28" fill="#fff1f2" stroke="#e11d48" stroke-width="4"/>
+<text x="954" y="598" class="label" font-size="38" font-weight="760" fill="#334155">Pharmax</text>
+<text x="954" y="644" class="label" font-size="26" fill="#64748b">4.50 / 5</text><rect x="430" y="780" width="540" height="130" rx="34" fill="#f8fafc" stroke="#0f172a" stroke-width="4"/>
+<text x="535" y="835" class="label" font-size="34" font-weight="760" fill="#0f172a">average: 4.35 / 5</text>
+<text x="330" y="990" class="label" font-size="28" fill="#475569">Scores matter less than what the pressure exposed.</text>
+  <text x="88" y="1288" font-size="38" font-weight="800" fill="#0f172a" class="label">Good scores are not proof. They are signals.</text>
+</svg>

@@ -1,0 +1,200 @@
+frame:
+  file: facts
+  schema_version: "0.2.0"
+  role: current_project_truth
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: "Fit the organize fixture against frame-five-part-v0.2.0."
+profile:
+  summary: "Tiny Python 3 CLI utility that organizes files by extension and filename relation."
+  family: utility-cli
+  system_role: "Local filesystem organizer that creates folders, moves files, and can clean generated extension folders."
+  complexity: tiny
+  scale_guidance: "Keep the fit compact: one runtime script, one README, one LICENSE, and minimal duplication across the five parts."
+  links:
+    - rel: points_to
+      ref: map.entrypoints.cli
+  evidence:
+    - id: ev_profile_code
+      source: "Frame lab/fixtures/organize/project/organize.py:1-74,293-488"
+      why: "One argparse-driven script defines the runtime behavior and CLI dispatch."
+      refs: [facts.profile, map.entrypoints.cli]
+      checked_at: "2026-06-02T08:27:32Z"
+      confidence: high
+identity:
+  name: organize
+  license: MIT
+  repo_shape: "single-script repo"
+  primary_entrypoint: organize.py
+classification:
+  primary_type: cli_script
+  domain: local_file_management
+  side_effect_profile: filesystem_mutation
+technology:
+  language: Python
+  runtime: "Python 3"
+  dependencies:
+    - os
+    - sys
+    - shutil
+    - string
+    - argparse
+architecture:
+  shape: "Single-file CLI with top-level argparse setup and helper functions for grouping, moving, and cleanup."
+  main_functions:
+    - create_ext_dir
+    - delete_ext_dir
+    - similar_file_group
+    - organize_by_relation
+    - organize_by_extension
+environments:
+  platform_behavior:
+    windows: "Prompts for a path at startup."
+    linux: "Assigns a hardcoded default path string before CLI handling."
+    other: "Prints unsupported-platform message and exits."
+persistence:
+  stores_project_state: false
+  mutates_filesystem: true
+  mutation_summary: "Creates extension folders, moves matching files, groups related files into folders, and can move files back while deleting generated extension folders."
+sources:
+  - id: runtime_code
+    source: "Frame lab/fixtures/organize/project/organize.py"
+    authority: canonical
+    reason: "The implementation defines the actual flags, behaviors, and side effects."
+    supersedes:
+      - "README usage examples that still call file_manager.py"
+    links:
+      - rel: points_to
+        ref: map.paths.organize_py
+    evidence:
+      - id: ev_source_code
+        source: "Frame lab/fixtures/organize/project/organize.py:19-74,447-485"
+        why: "Argparse options and command dispatch are defined directly in organize.py."
+        refs: [facts.sources.runtime_code, rules.commands.help]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: readme_docs
+    source: "Frame lab/fixtures/organize/project/README.md"
+    authority: supporting
+    reason: "Documents flag intent and usage examples, but some examples are stale."
+    links:
+      - rel: points_to
+        ref: map.paths.readme_md
+    evidence:
+      - id: ev_source_readme
+        source: "Frame lab/fixtures/organize/project/README.md:17-109"
+        why: "README lists the flags and usage examples."
+        refs: [facts.sources.readme_docs, map.entrypoints.usage_docs]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: license_text
+    source: "Frame lab/fixtures/organize/project/LICENSE"
+    authority: supporting
+    reason: "Supplies the repository license fact."
+    links:
+      - rel: points_to
+        ref: map.paths.license
+quirks:
+  - id: readme_name_drift
+    summary: "README usage examples invoke file_manager.py while the real entrypoint file is organize.py."
+    hazard: "Copying commands from the README without checking code can run the wrong filename."
+    kind: doc_code_drift
+    links:
+      - rel: explains
+        ref: facts.sources.runtime_code
+      - rel: explains
+        ref: facts.sources.readme_docs
+    evidence:
+      - id: ev_readme_name_drift
+        source: "Frame lab/fixtures/organize/project/README.md:57-107; Frame lab/fixtures/organize/project/organize.py:1"
+        why: "The README examples use file_manager.py, but the real script in the fixture root is organize.py."
+        refs: [facts.quirks.readme_name_drift, map.entrypoints.cli]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: linux_default_path
+    summary: "Linux startup assigns loc = /home/haxsys/downloadscopy2/Downloads before parsing CLI arguments."
+    hazard: "The code carries an environment-specific path assumption that could mislead reviewers and future changes."
+    kind: environment_assumption
+    links:
+      - rel: points_to
+        ref: map.paths.organize_py
+    evidence:
+      - id: ev_linux_default_path
+        source: "Frame lab/fixtures/organize/project/organize.py:10-16"
+        why: "The Linux branch hardcodes a Downloads path string."
+        refs: [facts.quirks.linux_default_path]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: import_time_dispatch
+    summary: "Argument parsing and action dispatch run at top level instead of under a main guard."
+    hazard: "Importing organize.py as a library would parse process args and run dispatch logic immediately."
+    kind: operational_caveat
+    links:
+      - rel: points_to
+        ref: map.paths.organize_py
+    evidence:
+      - id: ev_import_time_dispatch
+        source: "Frame lab/fixtures/organize/project/organize.py:19-74,446-485"
+        why: "The parser and flag-driven execution happen at module top level."
+        refs: [facts.quirks.import_time_dispatch]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: help_warns
+    summary: "The live help command succeeds but emits a SyntaxWarning for the invalid escape sequence in ext_dir_dict setup."
+    hazard: "Smoke checks that expect clean stderr need to treat help success and warning cleanliness as separate signals."
+    kind: operational_caveat
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+    evidence:
+      - id: ev_help_warning
+        source: "python3 organize.py --help"
+        why: "The command exited 0 and printed argparse help, but stderr reported a SyntaxWarning at organize.py:239."
+        refs: [facts.quirks.help_warns, expect.checks.cli_help]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+policies:
+  - id: mutate_only_target_path
+    summary: "Mutating operations act on the path supplied through CLI arguments and create generated folders under that target path."
+    kind: safety_constraint
+    applies_to:
+      - organize.py
+      - user-supplied target directories
+    source_refs:
+      - facts.sources.runtime_code
+    expect_refs:
+      - expect.must_hold.safe_mutation_scope
+    links:
+      - rel: supports
+        ref: rules.rules.safe_temp_paths
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+    evidence:
+      - id: ev_mutate_only_target_path
+        source: "Frame lab/fixtures/organize/project/organize.py:92-192,196-288,415-479"
+        why: "create/delete/organize functions operate on the provided path argument."
+        refs: [facts.policies.mutate_only_target_path]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+evidence:
+  - id: ev_fixture_files
+    source: "search_files over /home/hax/FRAME/Frame lab/fixtures/organize/project"
+    why: "Confirmed the fixture root is compact and contains organize.py, README.md, and LICENSE."
+    refs: [facts.profile, map.roots.fixture_root]
+    checked_at: "2026-06-02T08:27:32Z"
+    confidence: high
+open_questions:
+  - id: readme_rename_history
+    question: "Was the README left stale after renaming file_manager.py to organize.py, or is the fixture intentionally preserving the drift?"
+    status: unresolved
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+  - id: tests_absent
+    question: "No automated test suite was found in the fixture; should future verification stay smoke-test only or add tests?"
+    status: settled_for_fixture
+    links:
+      - rel: supports
+        ref: expect.checks.no_tests_present

@@ -1,0 +1,222 @@
+frame:
+  file: map
+  schema_version: "0.2.0"
+  role: repo_context_map
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: Map the real pharmax fixture surfaces using the simplified FRAME v0.2.0 names.
+roots:
+  fixture_root:
+    path: /home/hax/FRAME/Frame lab/fixtures/pharmax/project
+    summary: Full fixture root containing backend, frontend, docs, data, and committed state artifacts.
+  backend_root:
+    path: Backend
+    summary: FastAPI backend source, migrations, scripts, tests, and local DB state.
+  frontend_root:
+    path: Frontend
+    summary: Vue frontend source, public assets, package metadata, and build output.
+  docs_root:
+    path: docs
+    summary: Supplemental implementation and deployment docs.
+  data_root:
+    path: data
+    summary: Product master list source data.
+paths:
+  root_readme:
+    summary: README.md is the main operational overview covering roles, setup, stack, env, and deployment notes.
+  project_brief:
+    summary: PROJECT_BRIEF.md captures the academic project framing and older success criteria.
+  progress_tracker:
+    summary: PROGRESS.md tracks recent stabilization work, validation snapshots, and open roadmap items.
+  backend_main_wrapper:
+    summary: Backend/main.py is the thin ASGI entry wrapper that imports the real app object.
+  backend_app_main:
+    summary: Backend/app/main.py builds the FastAPI app, root route, middleware, startup hooks, and router inclusion.
+  backend_router:
+    summary: Backend/app/api/router.py aggregates auth, activity logs, dashboard, users, products, and invoices routes.
+  backend_config:
+    summary: Backend/app/core/config.py owns environment loading, database URL selection, CORS, JWT, and printer config.
+  backend_products_route:
+    summary: Backend/app/api/routes/products_route.py handles product, unit, import, and stock-adjustment APIs.
+  backend_invoices_route:
+    summary: Backend/app/api/routes/invoices_route.py handles invoice lifecycle, receipt printing, reconciliation, and after-hours grants.
+  backend_users_route:
+    summary: Backend/app/api/routes/users_route.py handles user admin, tasks, role/status changes, and activity lookups.
+  backend_dashboard_route:
+    summary: Backend/app/api/routes/dashboard_route.py provides metrics and dashboard data surfaces.
+  backend_activity_route:
+    summary: Backend/app/api/routes/activity_route.py provides activity-log listing surfaces.
+  backend_invoice_workflow_service:
+    summary: Backend/app/services/invoice_workflow_service.py centralizes invoice workflow rules and reconciliation behavior.
+  backend_product_service:
+    summary: Backend/app/services/product_service.py owns product catalog and stock business logic.
+  backend_user_service:
+    summary: Backend/app/services/user_service.py owns registration, authentication, role, task, and account logic.
+  backend_scripts:
+    summary: Backend/scripts contains seed, import, and smoke helper scripts for local workflow setup.
+  backend_tests:
+    summary: Backend/tests contains script-style smoke checks for auth, invoices, and role policy.
+  backend_test_auth_rbac:
+    summary: Backend/tests/test_auth_rbac.py is a legacy smoke script with stale SALES role usage.
+  backend_test_role_matrix:
+    summary: Backend/tests/test_role_policy_matrix.py is the more current invoice role matrix smoke script.
+  backend_test_invoices_flow:
+    summary: Backend/tests/test_invoices_flow.py is a server-backed invoice flow smoke script.
+  frontend_package:
+    summary: Frontend/package.json defines the npm scripts and package dependencies.
+  frontend_router:
+    summary: Frontend/src/router/index.js maps role-aware app navigation across dashboard, stock, invoices, cashier, analytics, reports, team access, and settings.
+  frontend_api_service:
+    summary: Frontend/src/services/api.js wraps fetch with auth token injection, JSON parsing, loading, and timeout handling.
+  frontend_views:
+    summary: Frontend/src/views contains the main user-facing route surfaces.
+  postgres_runbook:
+    summary: docs/POSTGRES_DEPLOYMENT_RUNBOOK.md describes PostgreSQL deployment and Render-oriented operational steps.
+groups:
+  backend_source:
+    summary: Runtime backend code surface.
+    boundary_type: source
+    interface_role: backend API and business logic
+    paths:
+      - Backend/app
+      - Backend/main.py
+    links:
+      - rel: supports
+        ref: facts.profile
+  backend_verification:
+    summary: Backend smoke, seed, and verification scripts.
+    boundary_type: test
+    interface_role: verification and fixture maintenance
+    paths:
+      - Backend/tests
+      - Backend/scripts
+    links:
+      - rel: supports
+        ref: expect.checks.workflow_smoke
+  backend_persistence:
+    summary: Migration and database support surface.
+    boundary_type: infra
+    interface_role: persistence and schema evolution
+    paths:
+      - Backend/alembic
+      - Backend/alembic.ini
+      - Backend/app/_db
+    links:
+      - rel: supports
+        ref: facts.policies.persistence_policy
+  frontend_source:
+    summary: Runtime frontend code surface.
+    boundary_type: source
+    interface_role: user-facing UI implementation
+    paths:
+      - Frontend/src
+      - Frontend/index.html
+      - Frontend/vite.config.js
+    links:
+      - rel: supports
+        ref: facts.profile
+  package_metadata:
+    summary: Package manifests and lockfiles for backend and frontend tooling.
+    boundary_type: package_metadata
+    interface_role: command and dependency source
+    paths:
+      - Backend/pyproject.toml
+      - Backend/uv.lock
+      - Frontend/package.json
+      - Frontend/package-lock.json
+  docs:
+    summary: Product, development, deployment, and AI workflow documentation.
+    boundary_type: docs
+    interface_role: supporting context
+    paths:
+      - README.md
+      - PROJECT_BRIEF.md
+      - PROGRESS.md
+      - docs
+      - agents/developer-workflows
+      - copilot-instructions.md
+  generated_and_state:
+    summary: Installed dependencies, build output, caches, env files, and mutable local DB state.
+    boundary_type: generated
+    interface_role: avoid as source unless the task is explicitly stateful
+    paths:
+      - Frontend/node_modules
+      - Frontend/dist
+      - Backend/.venv
+      - Backend/.pytest_cache
+      - Backend/app/_db
+      - Backend/.env
+      - Frontend/.env
+entrypoints:
+  backend_app:
+    path: Backend/app/main.py
+    summary: Main FastAPI app entry surface.
+    links:
+      - rel: supports
+        ref: facts.profile
+  auth_api:
+    path: Backend/app/api/routes/auth_route.py
+    summary: Auth and registration route entrypoint.
+  users_api:
+    path: Backend/app/api/routes/users_route.py
+    summary: Team access and user management route entrypoint.
+  products_api:
+    path: Backend/app/api/routes/products_route.py
+    summary: Product, unit, import, and stock route entrypoint.
+  invoice_api:
+    path: Backend/app/api/routes/invoices_route.py
+    summary: Invoice lifecycle and reconciliation route entrypoint.
+  dashboard_api:
+    path: Backend/app/api/routes/dashboard_route.py
+    summary: Dashboard metrics route entrypoint.
+  activity_api:
+    path: Backend/app/api/routes/activity_route.py
+    summary: Activity-log route entrypoint.
+  frontend_app:
+    path: Frontend/src/main.js
+    summary: Vue app bootstrap entrypoint.
+  frontend_router:
+    path: Frontend/src/router/index.js
+    summary: Route table and UI role metadata entrypoint.
+  frontend_api_client:
+    path: Frontend/src/services/api.js
+    summary: Shared frontend HTTP client entrypoint.
+managed_paths:
+  backend_env:
+    path: Backend/.env
+    reason: Local secret and runtime config file; should not be casually edited or committed.
+    links:
+      - rel: supports
+        ref: facts.policies.persistence_policy
+  frontend_env:
+    path: Frontend/.env
+    reason: Local frontend API URL and timeout config; treat as environment state.
+  local_sqlite_db:
+    path: Backend/app/_db/pharmax.db
+    reason: Mutable local database state; direct edits change fixture state rather than source.
+  backend_venv:
+    path: Backend/.venv
+    reason: uv-managed environment; regenerate through tooling instead of manual edits.
+  frontend_dist:
+    path: Frontend/dist
+    reason: Build output; regenerate from npm run build.
+  frontend_node_modules:
+    path: Frontend/node_modules
+    reason: Installed packages; regenerate from npm install.
+unmapped_paths:
+  - Backend/__pycache__
+  - Backend/app/__pycache__
+  - Backend/app/models/__pycache__
+  - Frontend/src/assets/vue.svg
+evidence:
+  - id: ev_map_sources
+    source: fixture listing; Backend/app/main.py:1-41; Backend/app/api/router.py:1-17; Frontend/src/router/index.js:1-220; Frontend/src/services/api.js:1-92
+    why: The map was built from the actual repo layout and key runtime surfaces.
+    refs:
+      - map.roots.fixture_root
+      - map.entrypoints.backend_app
+      - map.entrypoints.frontend_router
+    checked_at: "2026-06-02T08:27:51Z"
+    confidence: high

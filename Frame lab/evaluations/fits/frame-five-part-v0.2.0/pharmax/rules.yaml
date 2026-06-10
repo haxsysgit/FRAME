@@ -1,0 +1,227 @@
+frame:
+  file: rules
+  schema_version: "0.2.0"
+  role: project_instruction_blueprint
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: Capture working rules and command inventory for the pharmax fixture in FRAME v0.2.0 form.
+rules:
+  - id: prefer_runtime_truth
+    text: When docs and code disagree, treat Backend/app, Frontend/src, and smoke-test scripts as the stronger operational truth.
+    links:
+      - rel: uses
+        ref: facts.sources.runtime_code
+      - rel: explains
+        ref: facts.quirks.brief_stack_drift
+  - id: preserve_role_policy
+    text: Keep backend require_role usage and frontend route metadata aligned for ADMIN, CASHIER, and STAFF surfaces.
+    links:
+      - rel: follows
+        ref: facts.policies.role_access_policy
+      - rel: checks
+        ref: expect.checks.role_policy_review
+  - id: preserve_invoice_workflow
+    text: Read both invoices_route.py and invoice_workflow_service.py before changing invoice, reconciliation, printing, or after-hours behavior.
+    links:
+      - rel: follows
+        ref: facts.policies.invoice_lifecycle_policy
+      - rel: points_to
+        ref: map.entrypoints.invoice_api
+  - id: keep_routes_thin
+    text: Match the existing layering pattern where routes orchestrate requests and services hold business rules.
+    links:
+      - rel: supports
+        ref: map.groups.backend_source
+  - id: verify_import_namespace_before_run
+    text: Confirm the example_projects.pharmax package path resolves before assuming backend commands will run cleanly in a fresh checkout.
+    links:
+      - rel: explains
+        ref: facts.quirks.example_projects_imports
+  - id: treat_db_and_env_as_managed_state
+    text: Do not directly edit Backend/app/_db/pharmax.db or env files unless the task explicitly targets stateful setup.
+    links:
+      - rel: points_to
+        ref: map.managed_paths.local_sqlite_db
+      - rel: points_to
+        ref: map.managed_paths.backend_env
+commands:
+  backend_setup:
+    run: cd Backend && uv sync
+    kind: setup
+    purpose: Install or sync backend dependencies.
+    when_to_use: Before running backend code in a clean or stale environment.
+    links:
+      - rel: points_to
+        ref: map.roots.backend_root
+  backend_dev_server:
+    run: cd Backend && uv run fastapi dev main.py
+    kind: run
+    purpose: Start the FastAPI backend locally.
+    when_to_use: For manual API checks or server-backed smoke scripts.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.backend_app
+  backend_workflow_smoke:
+    run: cd Backend && uv run python scripts/smoke_test_workflows.py
+    kind: verify
+    purpose: Exercise core invoice workflow logic without needing a running API server.
+    when_to_use: After backend workflow, stock, or audit changes.
+    links:
+      - rel: checks
+        ref: expect.checks.workflow_smoke
+  backend_server_invoice_smoke:
+    run: cd Backend && uv run python3 -m tests.test_invoices_flow
+    kind: verify
+    purpose: Exercise invoice endpoints against a running backend server.
+    when_to_use: After starting the backend server and seeding products and users.
+    links:
+      - rel: checks
+        ref: expect.checks.server_invoice_smoke
+  backend_role_matrix_smoke:
+    run: cd Backend && uv run python3 -m tests.test_role_policy_matrix
+    kind: verify
+    purpose: Smoke-check route-level invoice role permissions.
+    when_to_use: After role or invoice authorization changes.
+    links:
+      - rel: checks
+        ref: expect.checks.role_policy_review
+  backend_auth_rbac_script:
+    run: cd Backend && uv run python tests/test_auth_rbac.py
+    kind: verify
+    purpose: Legacy auth and RBAC smoke script.
+    when_to_use: Only as supporting evidence after reconciling the stale SALES role references.
+    links:
+      - rel: explains
+        ref: facts.quirks.role_name_drift
+  backend_seed_dev_data:
+    run: cd Backend && uv run python scripts/seed_dev_data.py
+    kind: maintenance
+    purpose: Seed local development data for manual and smoke workflows.
+    when_to_use: When local products, units, or users are missing.
+    links:
+      - rel: points_to
+        ref: map.paths.backend_scripts
+  backend_migrate:
+    run: cd Backend && uv run alembic upgrade head
+    kind: maintenance
+    purpose: Apply schema migrations.
+    when_to_use: Before production-like runs or deployment that depends on Alembic history.
+    links:
+      - rel: checks
+        ref: expect.checks.migration_review
+  frontend_setup:
+    run: cd Frontend && npm install
+    kind: setup
+    purpose: Install frontend dependencies.
+    when_to_use: Before frontend development or builds in a clean environment.
+    links:
+      - rel: points_to
+        ref: map.roots.frontend_root
+  frontend_dev_server:
+    run: cd Frontend && npm run dev
+    kind: run
+    purpose: Start the Vite frontend locally.
+    when_to_use: For UI development against a configured API URL.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.frontend_app
+  frontend_build:
+    run: cd Frontend && npm run build
+    kind: build
+    purpose: Build the frontend bundle.
+    when_to_use: After frontend changes and before deployment checks.
+    links:
+      - rel: checks
+        ref: expect.checks.frontend_build
+code_style:
+  - id: backend_layering
+    text: Keep route handlers thin, service modules authoritative for business logic, and schemas/models separated from request orchestration.
+    links:
+      - rel: supports
+        ref: map.paths.backend_router
+  - id: frontend_service_wrapper
+    text: Use Frontend/src/services/api.js or the service modules built on top of it instead of ad hoc fetch calls.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.frontend_api_client
+  - id: role_metadata_alignment
+    text: Frontend route meta roles should stay in sync with backend authorization dependencies for the same surface.
+    links:
+      - rel: follows
+        ref: facts.policies.role_access_policy
+git:
+  - id: avoid_generated_churn
+    text: Avoid committing changes inside node_modules, dist, .venv, cache folders, or the local SQLite file when the task is source-focused.
+    links:
+      - rel: follows
+        ref: facts.quirks.generated_noise
+donts:
+  - id: avoid_generated_artifacts
+    text: Do not treat generated dependencies, build output, cache folders, or the live SQLite database as source-of-truth code.
+    links:
+      - rel: follows
+        ref: facts.sources.generated_state
+  - id: avoid_unreviewed_role_changes
+    text: Do not change role names or route access assumptions without checking both backend and frontend role surfaces.
+    links:
+      - rel: checks
+        ref: expect.checks.role_policy_review
+  - id: avoid_acts_duplication
+    text: Do not turn acts.yaml into a second project summary; keep it as run history and handoff.
+    links:
+      - rel: follows
+        ref: expect.done_when.fit_package_complete
+ask_first:
+  - id: before_deploy_or_secret_change
+    trigger: A task would deploy the app, edit Render-facing configuration, or touch secret env values.
+    question: Confirm deployment target and secret-handling scope before applying the change.
+    links:
+      - rel: points_to
+        ref: map.paths.postgres_runbook
+  - id: before_mutating_local_db
+    trigger: A task would directly edit Backend/app/_db/pharmax.db or other fixture state files.
+    question: Confirm whether mutable fixture state should change or only source, migrations, and scripts.
+    links:
+      - rel: points_to
+        ref: map.managed_paths.local_sqlite_db
+hints:
+  - id: invoice_tasks
+    trigger: The task mentions invoices, cashier, reconciliation, receipt printing, or after-hours access.
+    hint: Start from Backend/app/api/routes/invoices_route.py and Backend/app/services/invoice_workflow_service.py, then follow linked frontend views.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.invoice_api
+  - id: auth_or_team_tasks
+    trigger: The task mentions login, user approval, roles, tasks, or team access.
+    hint: Inspect auth_route.py, users_route.py, user_service.py, and Frontend/src/router/index.js together.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.auth_api
+      - rel: points_to
+        ref: map.entrypoints.users_api
+  - id: stock_tasks
+    trigger: The task mentions stock, products, low-stock, or import flows.
+    hint: Inspect products_route.py, product_service.py, product_unit_service.py, and the stock or products views before editing.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.products_api
+  - id: docs_vs_code_tasks
+    trigger: The task relies on deployment or stack claims from docs.
+    hint: Cross-check the docs against Backend/app/core/config.py and the actual fixture listing before trusting them.
+    links:
+      - rel: explains
+        ref: facts.quirks.brief_stack_drift
+      - rel: explains
+        ref: facts.quirks.render_yaml_missing
+evidence:
+  - id: ev_rules_sources
+    source: README.md:69-136; Backend/README.md:43-157; Frontend/package.json:1-27; PROGRESS.md:41-45; Backend/tests/test_role_policy_matrix.py:1-149
+    why: Commands and rules were grounded in runtime docs, package metadata, progress evidence, and smoke scripts.
+    refs:
+      - rules.commands.backend_dev_server
+      - rules.commands.frontend_build
+      - rules.commands.backend_role_matrix_smoke
+    checked_at: "2026-06-02T08:27:51Z"
+    confidence: high

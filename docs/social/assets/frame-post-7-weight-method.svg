@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img">
+  <defs>
+    <pattern id="paperGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9d6cc" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      .label { font-family: Inter, Arial, sans-serif; }
+      .mono { font-family: Consolas, monospace; }
+    </style>
+  </defs>
+  <rect width="1400" height="1400" fill="#f8f4ea"/>
+  <rect width="1400" height="1400" fill="url(#paperGrid)" opacity="0.8"/>
+  <text x="86" y="112" font-size="47" font-weight="800" fill="#0f172a" class="label">Weight is how pressure earns a change.</text>
+  <text x="88" y="170" font-size="25" font-weight="450" fill="#475569" class="label">FRAME should improve without turning into a field monster.</text>
+  <rect x="115" y="315" width="1170" height="760" rx="48" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<rect x="160" y="420" width="300" height="145" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="194" y="478" class="label" font-size="38" font-weight="760" fill="#334155">one weird repo</text>
+<text x="194" y="524" class="label" font-size="26" fill="#64748b">light pressure</text><rect x="550" y="420" width="300" height="145" rx="28" fill="#fff7ed" stroke="#d97706" stroke-width="4"/>
+<text x="584" y="478" class="label" font-size="38" font-weight="760" fill="#334155">repeats</text>
+<text x="584" y="524" class="label" font-size="26" fill="#64748b">gets heavier</text><rect x="940" y="420" width="300" height="145" rx="28" fill="#fff1f2" stroke="#e11d48" stroke-width="4"/>
+<text x="974" y="478" class="label" font-size="38" font-weight="760" fill="#334155">changes behavior</text>
+<text x="974" y="524" class="label" font-size="26" fill="#64748b">real weight</text><path d="M465 492 L540 492" stroke="#64748b" stroke-width="5" marker-end="url(#arrow)"/>
+<path d="M855 492 L930 492" stroke="#64748b" stroke-width="5" marker-end="url(#arrow)"/>
+<rect x="270" y="715" width="860" height="150" rx="34" fill="#f8fafc" stroke="#0f172a" stroke-width="4"/>
+<text x="345" y="780" class="label" font-size="34" font-weight="780" fill="#0f172a">adjust from repeated pressure</text>
+<text x="345" y="830" class="label" font-size="25" fill="#64748b">not from vibes, not from one awkward repo</text>
+  <text x="88" y="1288" font-size="38" font-weight="800" fill="#0f172a" class="label">The current shape gets tested before the architecture</text>
+<text x="88" y="1335" font-size="38" font-weight="800" fill="#0f172a" class="label">grows.</text>
+</svg>

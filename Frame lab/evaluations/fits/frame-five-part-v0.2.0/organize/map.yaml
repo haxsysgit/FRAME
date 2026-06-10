@@ -1,0 +1,150 @@
+frame:
+  file: map
+  schema_version: "0.2.0"
+  role: repo_context_map
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: "Fit the organize fixture against frame-five-part-v0.2.0."
+roots:
+  fixture_root:
+    path: "/home/hax/FRAME/Frame lab/fixtures/organize/project"
+    summary: "Standalone fixture repo for the organize Python CLI utility."
+    links:
+      - rel: supports
+        ref: facts.profile
+    evidence:
+      - id: ev_fixture_root
+        source: "search_files over /home/hax/FRAME/Frame lab/fixtures/organize/project"
+        why: "Confirmed the root contains organize.py, README.md, and LICENSE."
+        refs: [map.roots.fixture_root]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+paths:
+  organize_py:
+    summary: "Only runtime source file; defines argparse flags, helper functions, and top-level command dispatch."
+    links:
+      - rel: supports
+        ref: facts.profile
+      - rel: points_to
+        ref: map.entrypoints.cli
+    evidence:
+      - id: ev_map_organize_py
+        source: "Frame lab/fixtures/organize/project/organize.py:1-74,92-192,196-288,293-488"
+        why: "Direct inspection shows all implementation logic lives in organize.py."
+        refs: [map.paths.organize_py]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  readme_md:
+    summary: "User-facing documentation for purpose, arguments, and examples; useful but includes stale command names."
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+    evidence:
+      - id: ev_map_readme
+        source: "Frame lab/fixtures/organize/project/README.md:17-109"
+        why: "The README describes flags and shows usage examples."
+        refs: [map.paths.readme_md]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  license:
+    summary: "MIT license text for the fixture repo."
+    evidence:
+      - id: ev_map_license
+        source: "Frame lab/fixtures/organize/project/LICENSE:1-21"
+        why: "The LICENSE file contains the MIT license text."
+        refs: [map.paths.license]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+groups:
+  source:
+    summary: "Runtime code and public CLI surface."
+    boundary_type: source
+    interface_role: "public CLI entrypoint plus internal implementation"
+    paths:
+      - organize.py
+    links:
+      - rel: points_to
+        ref: map.entrypoints.cli
+  docs:
+    summary: "Human-readable project purpose, flag descriptions, and usage examples."
+    boundary_type: docs
+    interface_role: "supporting documentation with known command-name drift"
+    paths:
+      - README.md
+  legal:
+    summary: "License metadata."
+    boundary_type: package_metadata
+    interface_role: licensing
+    paths:
+      - LICENSE
+  generated_outputs:
+    summary: "Folders created under user-supplied targets during organize/delete workflows."
+    boundary_type: generated
+    interface_role: "runtime side-effect surface"
+    paths:
+      - "<target>/<ext>files"
+      - "<target>/<common-prefix>"
+    links:
+      - rel: supports
+        ref: facts.persistence
+entrypoints:
+  cli:
+    path: "organize.py"
+    summary: "Primary executable surface; run with python3 organize.py and flags."
+    links:
+      - rel: uses
+        ref: rules.commands.help
+      - rel: checks
+        ref: expect.checks.cli_help
+    evidence:
+      - id: ev_entry_cli
+        source: "python3 organize.py --help"
+        why: "The live help command succeeded and printed the argparse interface."
+        refs: [map.entrypoints.cli]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  usage_docs:
+    path: "README.md"
+    summary: "Supporting usage surface for humans; compare against code before copying examples."
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+managed_paths:
+  extension_dirs:
+    path: "<target>/<ext>files"
+    reason: "create_ext_dir creates and populates extension folders, and delete_ext_dir moves files back and removes them."
+    links:
+      - rel: uses
+        ref: rules.commands.create_extension_dirs
+      - rel: uses
+        ref: rules.commands.delete_extension_dirs
+    evidence:
+      - id: ev_managed_extension_dirs
+        source: "Frame lab/fixtures/organize/project/organize.py:92-192,196-288"
+        why: "The create/delete helpers create ext folders, move files, and remove the folders."
+        refs: [map.managed_paths.extension_dirs]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  relation_dirs:
+    path: "<target>/<common-prefix>"
+    reason: "organize_by_relation creates folders named after a shared filename prefix and moves grouped files into them."
+    links:
+      - rel: uses
+        ref: rules.commands.organize_by_relation
+    evidence:
+      - id: ev_managed_relation_dirs
+        source: "Frame lab/fixtures/organize/project/organize.py:357-411"
+        why: "organize_by_relation creates folders and moves grouped files into them."
+        refs: [map.managed_paths.relation_dirs]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+unmapped_paths: []
+evidence:
+  - id: ev_repo_compact_shape
+    source: "search_files over /home/hax/FRAME/Frame lab/fixtures/organize/project"
+    why: "The compact repo shape makes a lean map sufficient."
+    refs: [map.roots.fixture_root, map.groups.source, map.groups.docs]
+    checked_at: "2026-06-02T08:27:32Z"
+    confidence: high

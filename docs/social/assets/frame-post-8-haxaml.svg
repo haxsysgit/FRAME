@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img">
+  <defs>
+    <pattern id="paperGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9d6cc" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      .label { font-family: Inter, Arial, sans-serif; }
+      .mono { font-family: Consolas, monospace; }
+    </style>
+  </defs>
+  <rect width="1400" height="1400" fill="#f8f4ea"/>
+  <rect width="1400" height="1400" fill="url(#paperGrid)" opacity="0.8"/>
+  <text x="86" y="112" font-size="47" font-weight="800" fill="#0f172a" class="label">Where Haxaml fits.</text>
+  <text x="88" y="170" font-size="25" font-weight="450" fill="#475569" class="label">FRAME is the representation. Haxaml is where it becomes useful in agent work.</text>
+  <rect x="115" y="345" width="520" height="470" rx="48" fill="#fffaf1" stroke="#0f172a" stroke-width="5"/>
+<text x="270" y="450" class="label" font-size="54" font-weight="850" fill="#0f172a">FRAME</text>
+<text x="190" y="510" class="label" font-size="25" fill="#64748b">project representation</text>
+<rect x="185" y="590" width="360" height="100" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="219" y="648" class="label" font-size="38" font-weight="760" fill="#334155">Facts / Rules</text>
+<text x="219" y="682" class="label" font-size="26" fill="#64748b">what the project knows</text><rect x="185" y="710" width="360" height="100" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="219" y="768" class="label" font-size="38" font-weight="760" fill="#334155">Expect / Acts</text>
+<text x="219" y="798" class="label" font-size="26" fill="#64748b">proof + run history</text><rect x="765" y="345" width="520" height="470" rx="48" fill="#fffaf1" stroke="#0f172a" stroke-width="5"/>
+<text x="920" y="450" class="label" font-size="54" font-weight="850" fill="#0f172a">Haxaml</text>
+<text x="830" y="510" class="label" font-size="25" fill="#64748b">runtime/tooling direction</text>
+<rect x="835" y="590" width="360" height="100" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="869" y="648" class="label" font-size="38" font-weight="760" fill="#334155">agent session</text>
+<text x="869" y="682" class="label" font-size="26" fill="#64748b">uses project shape</text><rect x="835" y="710" width="360" height="100" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="869" y="768" class="label" font-size="38" font-weight="760" fill="#334155">record + verify</text>
+<text x="869" y="798" class="label" font-size="26" fill="#64748b">keeps continuity</text><path d="M645 575 C695 545, 715 545, 755 575" stroke="#64748b" stroke-width="6" fill="none" marker-end="url(#arrow)"/>
+<path d="M755 690 C705 725, 685 725, 645 690" stroke="#64748b" stroke-width="6" fill="none" marker-end="url(#arrow)"/>
+<text x="345" y="990" class="label" font-size="34" font-weight="760" fill="#0f172a">FRAME says what the project knows.</text>
+<text x="345" y="1045" class="label" font-size="34" font-weight="760" fill="#0f172a">Haxaml helps agents work against it.</text>
+  <text x="88" y="1288" font-size="38" font-weight="800" fill="#0f172a" class="label">Faster generation is not enough. We need continuity</text>
+<text x="88" y="1335" font-size="38" font-weight="800" fill="#0f172a" class="label">and validation.</text>
+</svg>

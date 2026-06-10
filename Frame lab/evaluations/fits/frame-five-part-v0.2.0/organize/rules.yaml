@@ -1,0 +1,153 @@
+frame:
+  file: rules
+  schema_version: "0.2.0"
+  role: project_instruction_blueprint
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: "Fit the organize fixture against frame-five-part-v0.2.0."
+rules:
+  - id: safe_temp_paths
+    text: "Treat create, organize, and delete commands as filesystem-mutating operations; run them only against an explicit disposable path unless the user confirms a real target."
+    links:
+      - rel: supports
+        ref: facts.policies.mutate_only_target_path
+      - rel: checks
+        ref: expect.must_hold.safe_mutation_scope
+    evidence:
+      - id: ev_rule_safe_temp_paths
+        source: "Frame lab/fixtures/organize/project/organize.py:92-192,196-288,415-479"
+        why: "The main operations create folders, move files, and delete generated directories."
+        refs: [rules.rules.safe_temp_paths]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: code_beats_readme
+    text: "When docs and runtime differ, trust organize.py over README command examples."
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+      - rel: uses
+        ref: facts.sources.runtime_code
+    evidence:
+      - id: ev_rule_code_beats_readme
+        source: "Frame lab/fixtures/organize/project/README.md:57-107; Frame lab/fixtures/organize/project/organize.py:1"
+        why: "The README still uses file_manager.py while the executable file is organize.py."
+        refs: [rules.rules.code_beats_readme]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+commands:
+  help:
+    run: "python3 organize.py --help"
+    kind: inspect
+    purpose: "Show the live argparse surface without mutating any files."
+    when_to_use: "Use first after CLI or README changes."
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+  match_files:
+    run: "python3 organize.py -m <path>"
+    kind: inspect
+    purpose: "Print similar filename groups for a target directory."
+    when_to_use: "Use on a disposable directory to review relation grouping."
+    links:
+      - rel: checks
+        ref: expect.checks.match_groups
+  create_extension_dirs:
+    run: "python3 organize.py -c -p <path>"
+    kind: run
+    purpose: "Create extension-named folders and move matching files into them."
+    when_to_use: "Use only with an explicit safe target path."
+    links:
+      - rel: follows
+        ref: rules.rules.safe_temp_paths
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+  create_one_extension_dir:
+    run: "python3 organize.py -ce <extension> -p <path>"
+    kind: run
+    purpose: "Create one extension folder and move files of that extension."
+    when_to_use: "Use only with an explicit safe target path."
+  organize_by_relation:
+    run: "python3 organize.py -obr -p <path>"
+    kind: run
+    purpose: "Create prefix-named folders and move grouped files into them."
+    when_to_use: "Use only with an explicit safe target path."
+    links:
+      - rel: checks
+        ref: expect.checks.relation_organize
+  organize_by_extension:
+    run: "python3 organize.py -obe -p <path>"
+    kind: run
+    purpose: "Create extension folders and then organize related files within those folders."
+    when_to_use: "Use only with an explicit safe target path."
+  delete_extension_dirs:
+    run: "python3 organize.py -d -p <path>"
+    kind: maintenance
+    purpose: "Move files back from generated extension folders and delete those folders."
+    when_to_use: "Use only with an explicit safe target path that already contains generated extension folders."
+    links:
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+  delete_one_extension_dir:
+    run: "python3 organize.py -de <extension> -p <path>"
+    kind: maintenance
+    purpose: "Move files back from and delete one generated extension folder."
+    when_to_use: "Use only with an explicit safe target path that contains the named generated folder."
+code_style:
+  - id: keep_cli_surface_simple
+    text: "Preserve the simple stdlib-only CLI shape unless the interface is intentionally being redesigned."
+    links:
+      - rel: supports
+        ref: facts.profile
+  - id: preserve_function_boundaries
+    text: "Keep grouping, extension creation, cleanup, and relation organizing as separate obvious functions."
+    links:
+      - rel: points_to
+        ref: map.paths.organize_py
+git:
+  - id: fixture_local_repo
+    text: "Treat /home/hax/FRAME/Frame lab/fixtures/organize/project as the fixture root when inspecting or verifying this utility."
+    links:
+      - rel: points_to
+        ref: map.roots.fixture_root
+donts:
+  - id: dont_mutate_fixture_root
+    text: "Do not run create/delete/organize commands against the fixture root during evaluation."
+    links:
+      - rel: follows
+        ref: rules.rules.safe_temp_paths
+  - id: dont_copy_stale_examples
+    text: "Do not copy README examples that call file_manager.py without reconciling them with organize.py."
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+ask_first:
+  - id: confirm_real_target
+    trigger: "A task requests organizing or deleting files in a non-disposable directory."
+    question: "What exact target directory should be used, and is mutation of that real path explicitly approved?"
+    links:
+      - rel: follows
+        ref: rules.rules.safe_temp_paths
+hints:
+  - id: use_temp_fixture
+    trigger: "You need to verify a mutating command safely."
+    hint: "Create a temporary directory with sample files, run the command there, and record the before/after tree."
+    links:
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+      - rel: checks
+        ref: expect.checks.relation_organize
+evidence:
+  - id: ev_live_help
+    source: "python3 organize.py --help"
+    why: "Confirmed the live CLI flags and that the command exits successfully."
+    refs: [rules.commands.help, expect.checks.cli_help]
+    checked_at: "2026-06-02T08:27:32Z"
+    confidence: high
+  - id: ev_tempdir_smoke
+    source: "Temporary-directory smoke run for -m, -c -p, and -d -p"
+    why: "Confirmed safe non-fixture-root verification of grouping, extension creation, and cleanup flows."
+    refs: [rules.commands.match_files, rules.commands.create_extension_dirs, rules.commands.delete_extension_dirs]
+    checked_at: "2026-06-02T08:27:32Z"
+    confidence: high

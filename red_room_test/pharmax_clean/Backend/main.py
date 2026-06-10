@@ -1,0 +1,1 @@
+from example_projects.pharmax.Backend.app.main import app

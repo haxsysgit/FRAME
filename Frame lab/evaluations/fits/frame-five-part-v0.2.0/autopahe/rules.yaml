@@ -1,0 +1,338 @@
+frame:
+  file: rules
+  schema_version: "0.2.0"
+  role: project_instruction_blueprint
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: Hermes Agent
+  update_reason: Fit autopahe repo instructions to the simplified FRAME v0.2.0 Rules shape.
+
+rules:
+  - id: preserve_cli_contract
+    text: Preserve the console-script boundary and legacy CLI normalization behavior unless a task explicitly changes the public command contract.
+    links:
+      - rel: supports
+        ref: facts.policies.cli_contract
+      - rel: points_to
+        ref: map.entrypoints.console_script
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45; Frame lab/fixtures/autopahe/project/cli.py:47-93
+        why: Public command wiring and compatibility logic are explicit.
+        confidence: high
+  - id: require_browser_setup
+    text: Treat Playwright browser installation as part of real setup for browser-dependent flows, not optional polish.
+    links:
+      - rel: supports
+        ref: facts.policies.setup_requires_browser
+      - rel: checks
+        ref: expect.checks.browser_engine_install
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:16-31; Frame lab/fixtures/autopahe/project/ap_core/browser.py:72-80,191-197
+        why: Docs and runtime error guidance both require browser setup.
+        confidence: high
+  - id: use_path_helpers
+    text: Use ap_core/platform_paths.py, ap_core/config.py, and root config.py for config, cache, data, log, and download paths instead of hardcoded local paths.
+    links:
+      - rel: supports
+        ref: facts.policies.state_paths_policy
+      - rel: checks
+        ref: expect.outcomes.state_paths_are_preserved
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-217; Frame lab/fixtures/autopahe/project/config.py:19-45
+        why: Path and persistence behavior is centralized there.
+        confidence: high
+  - id: ignore_generated_state
+    text: Treat checked-in data, backups, release notes, and other generated or user-state artifacts as secondary context unless the task is specifically about them.
+    links:
+      - rel: explains
+        ref: facts.quirks.generated_state_noise
+      - rel: points_to
+        ref: map.groups.generated_state
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/.gitignore:18-23
+        why: Ignore rules mark data paths as non-source outputs.
+        confidence: high
+  - id: keep_fixture_imports_consistent
+    text: Keep the fixture's example_projects.autopahe import convention consistent unless the task intentionally normalizes runtime, tests, and packaging paths together.
+    links:
+      - rel: explains
+        ref: facts.quirks.fixture_import_prefix
+      - rel: points_to
+        ref: map.paths.tests
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1
+        why: The prefix appears in both runtime and tests.
+        confidence: high
+  - id: isolate_stateful_imports
+    text: Be careful when importing root config.py in tools or tests because import-time directory creation and migration can mutate filesystem state.
+    links:
+      - rel: explains
+        ref: facts.quirks.config_import_side_effects
+      - rel: checks
+        ref: expect.must_hold.setup_preserves_existing_config
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:123-130
+        why: Import triggers setup and migration logic.
+        confidence: high
+
+commands:
+  source_install:
+    run: uv sync
+    kind: setup
+    purpose: Install project dependencies for a source checkout using uv.
+    when_to_use: Before source-checkout CLI runs, tests, or packaging checks.
+    links:
+      - rel: uses
+        ref: map.paths.pyproject
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README source install instructions start with uv sync.
+        confidence: high
+  browser_install:
+    run: uv run playwright install chromium
+    kind: setup
+    purpose: Install the Chromium browser engine in the same uv environment used by source runs.
+    when_to_use: After uv sync and before browser-assisted flows.
+    links:
+      - rel: follows
+        ref: rules.rules.require_browser_setup
+      - rel: checks
+        ref: expect.checks.browser_engine_install
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README source setup requires Playwright Chromium install.
+        confidence: high
+  cli_help:
+    run: uv run autopahe --help
+    kind: run
+    purpose: Smoke the source-checkout CLI help path.
+    when_to_use: After source_install and browser_install or when checking command wiring.
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+      - rel: points_to
+        ref: map.entrypoints.typer_app
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:24-31
+        why: README uses this as the first source-run command.
+        confidence: high
+  tool_setup:
+    run: autopahe --setup
+    kind: setup
+    purpose: Write the default config when missing and install the app browser support in the active environment.
+    when_to_use: First run after installing the package as a tool.
+    links:
+      - rel: checks
+        ref: expect.checks.installed_setup
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:16-23; Frame lab/fixtures/autopahe/project/tests/test_setup.py:6-14
+        why: Setup command is documented and config preservation is tested.
+        confidence: high
+  config_show:
+    run: autopahe config show
+    kind: inspect
+    purpose: Print the active or sample configuration.
+    when_to_use: Inspect config state without editing it.
+    links:
+      - rel: checks
+        ref: expect.checks.config_show
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:182-190; Frame lab/fixtures/autopahe/project/cli.py:158-167
+        why: Documented and implemented config show path.
+        confidence: high
+  config_validate:
+    run: autopahe config validate
+    kind: inspect
+    purpose: Validate config normalization and warnings.
+    when_to_use: After editing config or changing path-related code.
+    links:
+      - rel: checks
+        ref: expect.checks.config_validate
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:188-191; Frame lab/fixtures/autopahe/project/cli.py:168-178
+        why: Documented and implemented config validation path.
+        confidence: high
+  verify_browser:
+    run: autopahe --verify-browser https://kwik.cx
+    kind: run
+    purpose: Open AutoPahe's persistent browser profile for manual verification sessions.
+    when_to_use: When site verification blocks later browser-assisted work.
+    links:
+      - rel: checks
+        ref: expect.checks.browser_verify_manual
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:124-132; Frame lab/fixtures/autopahe/project/cli.py:285-288
+        why: The workflow is documented and wired into the CLI.
+        confidence: high
+  pytest_all:
+    run: pytest
+    kind: test
+    purpose: Run the checked-in regression suite.
+    when_to_use: After changes touching CLI normalization, config/setup, kwikdown helpers, or updater behavior.
+    links:
+      - rel: checks
+        ref: expect.checks.pytest_suite
+      - rel: points_to
+        ref: map.paths.tests
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_config.py:1-17; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14; Frame lab/fixtures/autopahe/project/tests/test_updater.py:1-10
+        why: The suite covers those areas directly.
+        confidence: high
+  source_update:
+    run: git pull --ff-only && uv sync && uv run playwright install chromium
+    kind: maintenance
+    purpose: Fast-forward a clean source checkout and refresh dependencies plus browser engine.
+    when_to_use: For maintained source checkouts instead of tool upgrades.
+    links:
+      - rel: checks
+        ref: expect.checks.source_update_flow
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:38-45
+        why: README documents this exact source update flow.
+        confidence: high
+  docker_build:
+    run: docker build -t autopahe:latest .
+    kind: build
+    purpose: Build the documented Playwright-based container image.
+    when_to_use: Before containerized CLI verification or Docker support changes.
+    links:
+      - rel: checks
+        ref: expect.checks.docker_build
+      - rel: points_to
+        ref: map.groups.infra
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57; Frame lab/fixtures/autopahe/project/Dockerfile:1-29
+        why: README and Dockerfile define the container build path.
+        confidence: high
+  docker_help:
+    run: docker run -it --rm -v $(pwd)/data:/app/data -v $(pwd)/json_data:/app/json_data -v $(pwd)/collection:/app/collection autopahe:latest --help
+    kind: run
+    purpose: Smoke CLI help inside the built Docker image.
+    when_to_use: After docker_build or when validating Docker docs.
+    links:
+      - rel: checks
+        ref: expect.checks.docker_help
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57
+        why: README gives this container help example.
+        confidence: high
+
+code_style:
+  - id: targeted_compatibility
+    text: Prefer targeted compatibility-preserving changes around CLI normalization, setup, browser helpers, and path logic over broad rewrites.
+    links:
+      - rel: explains
+        ref: facts.profile
+  - id: actionable_setup_errors
+    text: Keep missing-browser and setup errors explicit and actionable because Playwright environment friction is part of normal operation.
+    links:
+      - rel: explains
+        ref: facts.quirks.browser_handoff_flow
+  - id: state_isolation
+    text: Isolate filesystem side effects with tmp paths or monkeypatching when testing config and migration behavior.
+    links:
+      - rel: explains
+        ref: facts.quirks.config_import_side_effects
+
+git:
+  - id: updater_requires_clean_repo
+    text: The updater expects a clean git working tree before source updates; do not bypass that guard casually.
+    links:
+      - rel: checks
+        ref: expect.checks.source_update_flow
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:45
+        why: README says source checkouts safely run a fast-forward update.
+        confidence: medium
+
+donts:
+  - id: dont_overfit_noise
+    text: Do not treat dist artifacts, runtime json, backups, or user data as the main baseline source unless the task explicitly targets them.
+    links:
+      - rel: explains
+        ref: facts.quirks.generated_state_noise
+  - id: dont_hardcode_linux_paths
+    text: Do not replace path helpers with Linux-only assumptions like ~/.config or ~/Downloads except as documented fallback behavior.
+    links:
+      - rel: supports
+        ref: facts.policies.state_paths_policy
+  - id: dont_assume_silent_downloads
+    text: Do not assume the CLI owns the full file download path; browser handoff and local file confirmation are part of current behavior.
+    links:
+      - rel: explains
+        ref: facts.quirks.browser_handoff_flow
+
+ask_first:
+  - id: storage_redesign
+    trigger: A change would move config, data, cache, log, collection, backup, or browser-profile paths.
+    question: Should the task preserve the current cross-platform and migration-aware storage contract, or intentionally redesign it?
+    links:
+      - rel: points_to
+        ref: map.groups.persistence
+      - rel: uses
+        ref: facts.policies.state_paths_policy
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-217; Frame lab/fixtures/autopahe/project/config.py:19-130
+        why: Storage behavior is centralized and stateful.
+        confidence: high
+  - id: import_normalization
+    trigger: A change would rewrite imports across runtime modules, tests, or packaging paths.
+    question: Should the fixture-specific example_projects.autopahe convention remain, or is the task intentionally normalizing imports across the fixture?
+    links:
+      - rel: explains
+        ref: facts.quirks.fixture_import_prefix
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-3
+        why: Import convention affects runtime and tests together.
+        confidence: high
+  - id: docker_path_cleanup
+    trigger: A change would alter Docker download or volume paths.
+    question: Should the task reconcile /app/data/downloads and /app/downloads into one intended container download target?
+    links:
+      - rel: explains
+        ref: facts.open_questions.docker_download_target
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:21-28; Frame lab/fixtures/autopahe/project/docker-compose.yml:14-18
+        why: Docker assets currently suggest two different download paths.
+        confidence: medium
+
+hints:
+  - id: trace_cli_behavior
+    trigger: Need to trace a user-facing flag or command path.
+    hint: Start in cli.py for Typer options and normalization, then follow delegation into auto_pahe.py.
+    links:
+      - rel: points_to
+        ref: map.entrypoints.typer_app
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:47-93,184-230
+        why: CLI option inventory and wrapper behavior live there.
+        confidence: high
+  - id: debug_browser_setup
+    trigger: Need to debug browser install, launch, or verification behavior.
+    hint: Read ap_core/browser.py and the README browser verification section before editing kwikdown or command flows.
+    links:
+      - rel: points_to
+        ref: map.paths.ap_core_browser
+      - rel: points_to
+        ref: map.paths.readme
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:72-80,191-197,205-234; Frame lab/fixtures/autopahe/project/README.md:124-132
+        why: Setup and persistent browser behavior are concentrated there.
+        confidence: high
+  - id: debug_state_paths
+    trigger: Need to alter records, collection, cache, config, or migration behavior.
+    hint: Read ap_core/platform_paths.py, ap_core/config.py, and root config.py first because they own path selection and import-time state effects.
+    links:
+      - rel: points_to
+        ref: map.groups.persistence
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-217; Frame lab/fixtures/autopahe/project/ap_core/config.py:84-163; Frame lab/fixtures/autopahe/project/config.py:123-130
+        why: Those files define active persistence behavior.
+        confidence: high
+
+evidence:
+  - id: rules_fit_grounding
+    source: Manual inspection on 2026-06-02 of README.md, pyproject.toml, cli.py, auto_pahe.py, ap_core/config.py, ap_core/platform_paths.py, config.py, tests/, requirements.txt, Dockerfile, and docker-compose.yml.
+    why: Rules and commands were grounded in actual repo surfaces.
+    confidence: high

@@ -1,9 +1,0 @@
-[project]
-name = "frame-python"
-version = "0.0.0"
-description = "Fresh Python implementation track for FRAME after the reset"
-requires-python = ">=3.11"
-
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"

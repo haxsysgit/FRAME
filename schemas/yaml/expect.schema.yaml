@@ -1,0 +1,121 @@
+# FRAME Expect Schema — v0.3.0
+# What must pass — outcomes, invariants, checks, proof requirements.
+# Machine contract: schemas/json/expect.schema.json
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://frame.dev/schemas/0.3.0/expect.schema.yaml"
+title: "FRAME Expect"
+description: "What must pass — outcomes, invariants, verification checks, proof requirements, and handoff."
+type: object
+additionalProperties: false
+required: [frame]
+properties:
+  frame:
+    allOf:
+      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - type: object
+        properties:
+          file:
+            const: expect
+          role:
+            const: project_correctness_contract
+
+  # --- OUTCOMES ---
+  # Named expected results of work.
+  outcomes:
+    type: object
+    additionalProperties:
+      type: object
+      additionalProperties: false
+      required: [summary]
+      properties:
+        summary:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- MUST HOLD ---
+  # Invariants that must stay true. Each has an id for cross-referencing.
+  must_hold:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, statement]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        statement:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- CHECKS ---
+  # Named verification checks. These feed the mechanical validator.
+  # Keys are check names used by command_ref.
+  # pass_condition is machine-parseable: exit_code, stdout contains, stdout matches, file_exists.
+  checks:
+    type: object
+    additionalProperties:
+      type: object
+      additionalProperties: false
+      required: [name, what]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        what:
+          type: string
+          maxLength: 300
+          description: "What is being checked."
+        how:
+          type: string
+          maxLength: 200
+          description: "How to check: test, build, lint, grep, manual."
+        command_ref:
+          type: string
+          maxLength: 200
+          description: "Ref to rules.commands.<name> for executable verification."
+        pass_condition:
+          type: string
+          maxLength: 200
+          description: "Machine-parseable: 'exit_code == 0', 'stdout contains BUILD SUCCESS', 'stdout matches ^[a-f0-9]{12}_', 'file_exists dist/index.html'."
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- DONE WHEN ---
+  done_when:
+    type: object
+    additionalProperties: true
+    description: "Completion conditions."
+
+  # --- PROOF ---
+  # Required evidence types.
+  proof:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, type, description]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        type:
+          type: string
+          enum: [review, smoke_test, static_check, unavailable]
+        description:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  handoff:
+    type: object
+    additionalProperties: true
+
+  evidence:
+    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+  links:
+    $ref: "./frame.schema.yaml#/$defs/links"

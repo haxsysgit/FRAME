@@ -1,0 +1,131 @@
+# FRAME Acts Schema — v0.3.0
+# Run history — what went in, what came out, what changed, what checks ran.
+# Size cap: 50KB. Exceeded → oldest runs auto-rotated to acts_archive/.
+# Machine contract: schemas/json/acts.schema.json
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://frame.dev/schemas/0.3.0/acts.schema.yaml"
+title: "FRAME Acts"
+description: "Run history — what went in, what came out, what was touched, what changed, what checks ran."
+type: object
+additionalProperties: false
+required: [frame]
+properties:
+  frame:
+    allOf:
+      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - type: object
+        properties:
+          file:
+            const: acts
+          role:
+            const: checked_activity_record
+
+  # --- SUMMARY ---
+  summary:
+    type: string
+    maxLength: 500
+    description: "Quick overview of recent activity."
+
+  # --- RUNS ---
+  # Per-session run records. Each has an id for cross-referencing.
+  # checks array is collapsed from checks_seen/checks_ran — status: ran or skipped.
+  runs:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, actor, goal, status]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        actor:
+          type: string
+          maxLength: 100
+        goal:
+          type: string
+          maxLength: 300
+        work_kind:
+          type: array
+          items:
+            type: string
+            enum: [code, test, review, docs, deploy]
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+        input_summary:
+          type: string
+          maxLength: 300
+        output_summary:
+          type: string
+          maxLength: 300
+        status:
+          type: string
+          enum: [pass, pass_with_risks, fail, needs_clarification]
+        touched:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+        changed_facts:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+        rules_followed:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+        checks:
+          type: array
+          description: "Checks considered or executed this run. Collapsed from checks_seen/checks_ran."
+          items:
+            type: object
+            additionalProperties: false
+            required: [id, status]
+            properties:
+              id:
+                $ref: "./frame.schema.yaml#/$defs/ref"
+                description: "Ref to expect.checks.<name>."
+              status:
+                type: string
+                enum: [ran, skipped]
+              result:
+                type: string
+                enum: [pass, fail]
+                description: "Only when status=ran."
+              reason:
+                type: string
+                maxLength: 200
+                description: "Why skipped (only when status=skipped)."
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- BLOCKERS ---
+  blockers:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, description]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        description:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  handoff:
+    type: object
+    additionalProperties: true
+    description: "What the next agent needs to know."
+
+  evidence:
+    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+  links:
+    $ref: "./frame.schema.yaml#/$defs/links"

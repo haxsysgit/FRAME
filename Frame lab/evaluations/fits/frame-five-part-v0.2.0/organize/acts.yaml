@@ -1,0 +1,136 @@
+frame:
+  file: acts
+  schema_version: "0.2.0"
+  role: run_history
+  scope: execution_record
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: "Record the organize fixture fit, smoke checks, and schema validation for frame-five-part-v0.2.0."
+summary: "Run history for fitting organize to frame-five-part-v0.2.0, including direct fixture inspection, safe tempdir smoke checks, and schema validation of the produced five-file fit."
+runs:
+  - id: inspect_fixture
+    actor: hermes-agent
+    goal: "Inspect the real organize fixture and derive a compact five-part fit."
+    work_kind:
+      - review
+      - docs
+    keywords:
+      - organize
+      - cli
+      - fit
+      - readme-drift
+    input_summary: "Read the candidate spec, FRAME schemas, organize.py, README.md, and LICENSE; listed fixture files."
+    output_summary: "Confirmed a tiny single-script Python CLI with README/code drift, a hardcoded Linux path string, top-level argparse dispatch, and no automated tests."
+    status: complete
+    touched:
+      - map.roots.fixture_root
+      - map.paths.organize_py
+      - map.paths.readme_md
+      - map.paths.license
+    changed_facts:
+      - facts.profile
+      - facts.sources.runtime_code
+      - facts.quirks.readme_name_drift
+      - facts.quirks.linux_default_path
+    rules_followed:
+      - rules.rules.code_beats_readme
+    checks_seen:
+      - expect.checks.cli_help
+    checks_ran:
+      - expect.checks.cli_help
+    links:
+      - rel: changes
+        ref: facts.profile
+      - rel: touches
+        ref: map.paths.organize_py
+      - rel: follows
+        ref: rules.rules.code_beats_readme
+    evidence:
+      - id: ev_run_inspect_fixture
+        source: "Direct reads of organize.py, README.md, LICENSE, candidate doc, and schemas"
+        why: "Grounded the fit in real fixture anchors before writing the v0.2.0 files."
+        refs: [acts.runs.inspect_fixture]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: smoke_check_tempdir
+    actor: hermes-agent
+    goal: "Verify the live CLI and core safe behaviors without mutating the fixture root."
+    work_kind:
+      - test
+      - review
+    keywords:
+      - organize
+      - smoke-test
+      - tempdir
+      - cli
+    input_summary: "Ran python3 organize.py --help in the fixture root and ran -m, -c -p, and -d -p against a disposable temp directory with sample files."
+    output_summary: "Help exited 0 with a SyntaxWarning on stderr; matching grouped alpha-one.txt and alpha-two.txt; create/delete runs created extension folders, moved files, then restored the original file set after cleanup."
+    status: complete
+    touched:
+      - map.entrypoints.cli
+      - map.managed_paths.extension_dirs
+      - map.managed_paths.relation_dirs
+    changed_facts:
+      - facts.quirks.help_warns
+    rules_followed:
+      - rules.rules.safe_temp_paths
+    checks_seen:
+      - expect.checks.cli_help
+      - expect.checks.match_groups
+      - expect.checks.extension_create_delete
+    checks_ran:
+      - expect.checks.cli_help
+      - expect.checks.match_groups
+      - expect.checks.extension_create_delete
+    links:
+      - rel: follows
+        ref: rules.rules.safe_temp_paths
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+      - rel: checks
+        ref: expect.checks.match_groups
+    evidence:
+      - id: ev_run_smoke_check_tempdir
+        source: "Temporary-directory subprocess run for organize.py"
+        why: "Recorded before/after snapshots and command outputs for safe smoke validation."
+        refs: [acts.runs.smoke_check_tempdir]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  - id: validate_fit_yaml
+    actor: hermes-agent
+    goal: "Validate the produced v0.2.0 YAML files against the current FRAME schemas."
+    work_kind:
+      - review
+      - config
+    keywords:
+      - organize
+      - schema-validation
+      - frame-fit
+    input_summary: "Loaded facts.yaml, rules.yaml, acts.yaml, map.yaml, and expect.yaml with Python yaml and jsonschema Draft202012Validator."
+    output_summary: "Schema checks passed for all five files after writing the compact fit."
+    status: complete
+    touched:
+      - map.roots.fixture_root
+    changed_facts:
+      - facts.profile
+    rules_followed:
+      - rules.rules.code_beats_readme
+    checks_seen:
+      - expect.checks.cli_help
+    checks_ran:
+      - expect.checks.cli_help
+    links:
+      - rel: supports
+        ref: expect.proof.help_output_capture
+    evidence:
+      - id: ev_run_validate_fit_yaml
+        source: "python3 validation script using yaml + jsonschema"
+        why: "Validated the five produced YAML files against their schemas."
+        refs: [acts.runs.validate_fit_yaml]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+blockers: []
+handoff:
+  next_safe_check: "If organize_by_relation or organize_by_extension changes, repeat the tempdir smoke test and capture the resulting folder tree."
+  reminder: "Keep Acts as run history only; stable repo truth should stay in facts, rules, map, and expect."

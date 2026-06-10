@@ -1,0 +1,173 @@
+# FRAME Facts Schema — v0.3.0
+# Stable project truth: what the project is, how it's built, its quirks.
+# Machine contract: schemas/json/facts.schema.json
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://frame.dev/schemas/0.3.0/facts.schema.yaml"
+title: "FRAME Facts"
+description: "Stable project truth — what the project is, how it's built, its quirks, and what nobody has decided yet."
+type: object
+additionalProperties: false
+required: [frame]
+properties:
+  frame:
+    allOf:
+      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - type: object
+        properties:
+          file:
+            const: facts
+          role:
+            const: current_project_truth
+
+  # --- PROFILE ---
+  # Project identity. Required: name, summary.
+  profile:
+    type: object
+    additionalProperties: false
+    required: [name, summary]
+    properties:
+      name:
+        type: string
+        maxLength: 100
+      summary:
+        type: string
+        maxLength: 300
+      repo_shape:
+        type: string
+        maxLength: 50
+        enum: [split-backend-frontend, monorepo, single-package, monolith, microservices]
+      delivery_family:
+        type: string
+        maxLength: 50
+        enum: [cli, web-app, mobile-app, sdk, infra-tooling, data-pipeline, desktop-app, browser-extension, static-site, chatbot, game, devops-automation]
+
+  # --- CLASSIFICATION ---
+  classification:
+    type: object
+    additionalProperties: true
+    properties:
+      kind:
+        type: string
+        maxLength: 100
+      surface_count:
+        type: integer
+      surfaces:
+        type: array
+        items:
+          type: string
+          maxLength: 200
+
+  # --- TECHNOLOGY ---
+  # Structured stack. Required keys: language, framework, database.
+  technology:
+    type: object
+    properties:
+      language:
+        type: string
+        maxLength: 100
+      framework:
+        type: string
+        maxLength: 100
+      database:
+        type: string
+        maxLength: 100
+
+  # --- ARCHITECTURE ---
+  # Required summary text. Optional structured sub-blocks.
+  architecture:
+    type: object
+    additionalProperties: false
+    required: [summary]
+    properties:
+      summary:
+        type: string
+        maxLength: 500
+        description: "Human-readable system layout overview."
+      backend_layers:
+        type: array
+        items:
+          type: string
+          maxLength: 300
+      frontend_layers:
+        type: array
+        items:
+          type: string
+          maxLength: 300
+      data_flow:
+        type: string
+        maxLength: 500
+      deployment_topology:
+        type: string
+        maxLength: 500
+
+  # --- ENVIRONMENTS ---
+  environments:
+    type: object
+    additionalProperties: true
+    description: "Per-environment configuration. Free-form keys (local, production, staging)."
+
+  # --- PERSISTENCE ---
+  persistence:
+    type: object
+    additionalProperties: true
+    description: "Database, ORM, migration, and storage details."
+
+  # --- SOURCES ---
+  # Trusted source-of-truth files. Each has an id for cross-referencing.
+  sources:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, path, purpose]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        path:
+          type: string
+          maxLength: 200
+        purpose:
+          type: string
+          maxLength: 300
+
+  # --- QUIRKS ---
+  # Weird project-specific things agents must understand.
+  quirks:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, description, why]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        description:
+          type: string
+          maxLength: 200
+        why:
+          type: string
+          maxLength: 300
+
+  # --- OPEN QUESTIONS ---
+  # Things nobody has decided yet.
+  open_questions:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, question, context]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        question:
+          type: string
+          maxLength: 300
+        context:
+          type: string
+          maxLength: 300
+
+  evidence:
+    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+  links:
+    $ref: "./frame.schema.yaml#/$defs/links"

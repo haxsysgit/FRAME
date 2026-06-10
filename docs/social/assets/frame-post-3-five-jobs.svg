@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img">
+  <defs>
+    <pattern id="paperGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9d6cc" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      .label { font-family: Inter, Arial, sans-serif; }
+      .mono { font-family: Consolas, monospace; }
+    </style>
+  </defs>
+  <rect width="1400" height="1400" fill="#f8f4ea"/>
+  <rect width="1400" height="1400" fill="url(#paperGrid)" opacity="0.8"/>
+  <text x="86" y="112" font-size="47" font-weight="800" fill="#0f172a" class="label">Not five files. Five different jobs.</text>
+  <text x="88" y="170" font-size="25" font-weight="450" fill="#475569" class="label">Project truth behaves differently, so FRAME separates the jobs.</text>
+  <line x1="700" y1="300" x2="700" y2="1080" stroke="#cbd5e1" stroke-width="4" stroke-dasharray="12 14"/>
+<text x="215" y="310" class="label" font-size="34" font-weight="760" fill="#0f172a">Five files?</text>
+<text x="860" y="310" class="label" font-size="34" font-weight="760" fill="#0f172a">Five jobs.</text>
+<rect x="145" y="390" width="430" height="120" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="179" y="448" class="label" font-size="38" font-weight="760" fill="#334155">mixed notes</text>
+<text x="179" y="494" class="label" font-size="26" fill="#64748b">truth + rules + history</text><rect x="145" y="555" width="430" height="120" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="179" y="613" class="label" font-size="38" font-weight="760" fill="#334155">old prompt</text>
+<text x="179" y="659" class="label" font-size="26" fill="#64748b">checks + assumptions</text><rect x="145" y="720" width="430" height="120" rx="28" fill="#fffaf1" stroke="#cbd5e1" stroke-width="4"/>
+<text x="179" y="778" class="label" font-size="38" font-weight="760" fill="#334155">chat memory</text>
+<text x="179" y="824" class="label" font-size="26" fill="#64748b">useful, then stale</text><rect x="820" y="355" width="390" height="105" rx="28" fill="#ecfeff" stroke="#0891b2" stroke-width="4"/>
+<text x="854" y="413" class="label" font-size="38" font-weight="760" fill="#334155">Facts</text>
+<text x="854" y="448" class="label" font-size="26" fill="#64748b">stable truth</text><rect x="820" y="485" width="390" height="105" rx="28" fill="#f0fdf4" stroke="#16a34a" stroke-width="4"/>
+<text x="854" y="543" class="label" font-size="38" font-weight="760" fill="#334155">Rules</text>
+<text x="854" y="578" class="label" font-size="26" fill="#64748b">constraints</text><rect x="820" y="615" width="390" height="105" rx="28" fill="#f5f3ff" stroke="#7c3aed" stroke-width="4"/>
+<text x="854" y="673" class="label" font-size="38" font-weight="760" fill="#334155">Map</text>
+<text x="854" y="708" class="label" font-size="26" fill="#64748b">anchors</text><rect x="820" y="745" width="390" height="105" rx="28" fill="#fff7ed" stroke="#d97706" stroke-width="4"/>
+<text x="854" y="803" class="label" font-size="38" font-weight="760" fill="#334155">Expect</text>
+<text x="854" y="838" class="label" font-size="26" fill="#64748b">checks</text><rect x="820" y="875" width="390" height="105" rx="28" fill="#fff1f2" stroke="#e11d48" stroke-width="4"/>
+<text x="854" y="933" class="label" font-size="38" font-weight="760" fill="#334155">Acts</text>
+<text x="854" y="968" class="label" font-size="26" fill="#64748b">run history</text>
+  <text x="88" y="1288" font-size="38" font-weight="800" fill="#0f172a" class="label">Stable truth should not be mixed with run history.</text>
+</svg>

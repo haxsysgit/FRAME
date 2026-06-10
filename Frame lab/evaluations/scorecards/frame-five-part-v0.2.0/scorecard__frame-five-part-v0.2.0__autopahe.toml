@@ -1,0 +1,101 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.2.0"
+fixture = "autopahe"
+fixture_family = "python-cli-package"
+fixture_system_role = "media-search-and-browser-assisted-download-tool"
+evaluator = "Hermes Agent"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "interaction_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+typed_design = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+cross_link_quality = 1.5
+governance_usefulness = 1.5
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+name_clarity = 1.5
+
+[scores]
+coverage = 4
+clarity = 5
+stability = 4
+typed_design = 5
+agent_usefulness = 4
+retrieval_usefulness = 4
+cross_link_quality = 5
+governance_usefulness = 3
+adoptability = 4
+bloat_resistance = 5
+token_efficiency = 4
+name_clarity = 5
+
+[phase_notes]
+phase_1 = "The candidate represents autopahe cleanly as a medium Python CLI/package with browser setup, persistence helpers, tests, Docker support, and checked-in state hazards. Simplified names reduce placement ambiguity compared with older labels."
+phase_2 = "The five parts interact well: Facts names the stable truth, Rules defines operating constraints, Map routes to concrete repo surfaces, Expect links command-based proof, and Acts stays focused on run history."
+phase_3 = "The fit stays lean under pressure. The fixture's browser and state complexity did not force new core blocks, and links reduced repetition across files."
+
+[notes]
+summary = "frame-five-part-v0.2.0 fits autopahe strongly. The simplified names improve readability, cross-links are cleaner, and the new Acts shape behaves like useful run history instead of duplicate project summary."
+coverage = "The fit captures package metadata, runtime entrypoints, path/config helpers, import quirks, generated-state noise, tests, Docker assets, and browser handoff behavior without obvious gaps."
+clarity = "profile, sources, quirks, groups, entrypoints, checks, and proof are easier to place at a glance than the older field names."
+stability = "The same five-part shape that fits small tools still works on this richer CLI/package fixture without special-case structural growth."
+typed_design = "Entries have stable ownership, obvious ids, and reusable links. The shape maps cleanly to typed models and JSON Schema."
+agent_usefulness = "An agent reading this fit is less likely to break CLI compatibility, hardcode paths, or mistake user-state noise for source truth."
+retrieval_usefulness = "The Map and source ranking make it easy to jump from a question to pyproject, CLI modules, path helpers, tests, or Docker assets."
+cross_link_quality = "Links connect policies, quirks, paths, checks, and run history cleanly across all five parts with little duplicated prose."
+governance_usefulness = "Acts plus Expect make reviewable proof obligations visible, but this pass mostly modeled checks rather than executing them, so governance value is real but not full proof yet."
+adoptability = "A maintainer could plausibly keep this fit current because the fields are obvious and reuse refs instead of repeating long descriptions."
+bloat_resistance = "The candidate handled browser/setup complexity with ordinary rules, quirks, and checks rather than adding app-specific schema surface."
+token_efficiency = "The fit is still sizable because the fixture is medium and noisy, but links prevent much larger repetition."
+name_clarity = "The v0.2.0 names are consistently obvious on sight and reduce schema-translation overhead for both humans and tools."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/map.yaml"]
+clarity = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/expect.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml"]
+typed_design = ["/home/hax/FRAME/schemas/frame.schema.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/acts.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/rules.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/map.yaml"]
+cross_link_quality = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/expect.yaml"]
+governance_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/expect.yaml"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/rules.yaml"]
+bloat_resistance = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/expect.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/map.yaml"]
+name_clarity = ["/home/hax/FRAME/Frame lab/candidates/frame-five-part-v0.2.0.md", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/facts.yaml"]
+
+[friction]
+forced_fits = []
+missing_semantics = []
+redundant_fields = []
+stale_risk_fields = ["rules.commands.browser_install", "rules.commands.docker_help", "facts.quirks.playwright_version_drift"]
+extension_candidates = []
+name_problems = []
+link_gaps = []
+governance_gaps = ["Live runtime proof for browser and Docker paths is not part of this fit-writing task and would need a later execution pass."]
+
+[acts_review]
+role_fit = "Acts mostly behaves like run history rather than duplicate project truth, but some listed checks should be read as modeled checks, not executed proof."
+input_summary_quality = "Strong: the run states exactly which schemas, rubric files, fixture surfaces, and docs were inspected."
+output_summary_quality = "Strong: the run records the written artifacts and explicit schema-validation result."
+touched_surfaces_quality = "Strong: touched refs route to concrete map paths instead of vague prose."
+changed_facts_quality = "Strong: the run identifies which baseline truths were updated or emphasized by the fit."
+rules_followed_quality = "Strong: run history points back to project rules that constrained the fit."
+expect_links_quality = "Good: the run links to proof-oriented checks, but several should be read as intended checks rather than completed runtime evidence in this pass."
+
+[recommendation]
+keep = ["simplified names", "link-first ownership", "Expect command_ref model", "Acts summary plus runs plus blockers plus handoff"]
+change = ["none required before the next fixture round; the main next step is to test the same shape on more repos"]
+avoid = ["reintroducing old abstract names", "turning Acts back into a duplicate project summary", "adding browser-specific schema blocks"]

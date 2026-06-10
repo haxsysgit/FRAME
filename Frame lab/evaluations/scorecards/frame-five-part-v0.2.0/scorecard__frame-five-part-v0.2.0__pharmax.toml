@@ -1,0 +1,101 @@
+[meta]
+status = "complete"
+candidate = "frame-five-part"
+candidate_version = "0.2.0"
+fixture = "pharmax"
+fixture_family = "full-stack-web-app"
+fixture_system_role = "pharmacy-operations-platform"
+evaluator = "hermes-agent"
+scale_max = 5
+
+[phase_assessment]
+phase_1 = "structural_fit"
+phase_2 = "interaction_usefulness"
+phase_3 = "pressure_cost"
+advance_recommendation = "advance_to_phase_3"
+
+[weights]
+coverage = 1.5
+clarity = 1.5
+stability = 1.5
+typed_design = 1.5
+agent_usefulness = 1.25
+retrieval_usefulness = 1.25
+cross_link_quality = 1.5
+governance_usefulness = 1.5
+adoptability = 1.25
+bloat_resistance = 1.5
+token_efficiency = 1.5
+name_clarity = 1.5
+
+[scores]
+coverage = 5
+clarity = 5
+stability = 4
+typed_design = 4
+agent_usefulness = 5
+retrieval_usefulness = 5
+cross_link_quality = 5
+governance_usefulness = 4
+adoptability = 4
+bloat_resistance = 4
+token_efficiency = 4
+name_clarity = 5
+
+[phase_notes]
+phase_1 = "The simplified v0.2.0 shape cleanly fits Pharmax. Facts captures stable repo truth, Rules captures how to work safely, Map captures the split backend/frontend surface, Expect captures proof obligations, and Acts now reads clearly as run history instead of duplicate project description."
+phase_2 = "The five parts interact well. The fit links policy to checks, checks to commands, commands to repo entrypoints, and run history back to changed facts and followed rules. That is materially useful for agent routing and review."
+phase_3 = "The candidate stays fairly lean under a workflow-heavy full-stack app. Some medium-app pressure remains around workflow and deployment drift, but v0.2.0's simpler names and link-first design reduce the repetition that showed up in the older fit."
+
+[notes]
+summary = "frame-five-part-v0.2.0 fits Pharmax strongly. The simplified names improve readability immediately, the new Acts shape is much better for run history, and link-first ownership keeps the full-stack workflow pressure under control."
+coverage = "The candidate captures the real repo surfaces: backend routes and services, frontend views and router, env-driven persistence, smoke scripts, audit surfaces, and documentation drift."
+clarity = "The simplified names are obvious on sight. Profile, sources, quirks, rules, groups, entrypoints, checks, and proof all reduce placement confusion compared with the older naming."
+stability = "The shape still looks stable across small and medium fixtures, but Pharmax shows that workflow-heavy apps will continue stressing policy and verification links more than tiny repos do."
+typed_design = "The fit stays typed and tool-friendly: small reusable entry shapes, stable ids, dotted refs, and minimal catch-all structure outside intentionally flexible sections like identity or handoff."
+agent_usefulness = "An agent can route quickly to auth, products, invoices, stock, dashboard, or deployment surfaces and can see which checks and rules matter before editing."
+retrieval_usefulness = "Cross-links reduce scavenger hunts. Commands link to checks, checks link to outcomes and policies, and map entrypoints make the backend/frontend split explicit."
+cross_link_quality = "This is one of the strongest parts of the fit. Facts, Rules, Map, Expect, and Acts all point to each other in useful ways rather than sitting as isolated files."
+governance_usefulness = "The new Acts run entry shape improves traceability, but this pass is still more inspection history than executed app-proof, so governance is strong but not perfect yet."
+adoptability = "A real team could maintain this representation. Pharmax is detailed enough to create upkeep pressure, but the simplified names and link-first style keep it plausible."
+bloat_resistance = "The candidate handled Pharmax without adding app-specific core blocks. Workflow pressure was absorbed with policies, checks, and links rather than schema sprawl."
+token_efficiency = "The fit is still substantial because the fixture is a real full-stack app, but v0.2.0 trims repetition better than the prior version."
+name_clarity = "Name clarity is excellent. The new labels are easier for normal developers and typed tooling to understand immediately."
+
+[evidence]
+coverage = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/map.yaml", "README.md:1-65", "Backend/app/api/routes/invoices_route.py:1-325", "Frontend/src/router/index.js:1-220"]
+clarity = ["Frame lab/candidates/frame-five-part-v0.2.0.md:40-103", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/rules.yaml"]
+stability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml"]
+typed_design = ["schemas/frame.schema.yaml:196-400", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/map.yaml"]
+agent_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml"]
+retrieval_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/map.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml"]
+cross_link_quality = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/rules.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/acts.yaml"]
+governance_usefulness = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml"]
+adoptability = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/rules.yaml"]
+bloat_resistance = ["Frame lab/candidates/frame-five-part-v0.2.0.md:284-304", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml"]
+token_efficiency = ["Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/acts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/map.yaml"]
+name_clarity = ["Frame lab/candidates/frame-five-part-v0.2.0.md:24-108", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/facts.yaml", "Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax/expect.yaml"]
+
+[friction]
+forced_fits = ["Deployment docs mention render.yaml, but the file was not present in the inspected fixture snapshot."]
+missing_semantics = ["No major missing core semantic blocked the fit; policy and check links were enough for Pharmax."]
+redundant_fields = ["Some workflow detail still appears from different angles across facts policies, map entrypoints, and expect checks, but links keep the repetition bounded."]
+stale_risk_fields = ["role names", "deployment assumptions", "smoke command inventory"]
+extension_candidates = ["None required from this fixture round."]
+name_problems = []
+link_gaps = ["A future combined score or provenance index could make scorecard-to-fit navigation even tighter."]
+governance_gaps = ["Runtime smoke execution was not attempted here because the task only required fit artifact validation, not app boot verification."]
+
+[acts_review]
+role_fit = "Acts behaves correctly as run history rather than duplicate project truth, but most of this run is inspection and fit validation, not executed workflow proof."
+input_summary_quality = "Strong. The run records exactly which candidate, schemas, rubric, prior fit, and fixture surfaces were read."
+output_summary_quality = "Strong. It states the written artifacts and the validation result without restating the whole repo model."
+touched_surfaces_quality = "Strong. Touched refs point to the real backend, frontend, docs, and config anchors that informed the fit."
+changed_facts_quality = "Strong. The run points back to the main facts and policies that were materially established by the fit."
+rules_followed_quality = "Strong. The run links back to the working rules that constrained the fitting process."
+expect_links_quality = "Good. Schema validation and review checks are referenced directly from the run, but runtime workflow proof was not executed in this pass."
+
+[recommendation]
+keep = ["simplified names", "link-first ownership", "Acts as summary plus runs plus blockers plus handoff", "command_ref-based checks"]
+change = ["Keep testing the same shape on more workflow-heavy fixtures to confirm policy/check links remain sufficient without adding new core blocks."]
+avoid = ["reintroducing abstract names", "turning Acts back into project summary prose", "adding app-specific schema blocks for every workflow detail"]

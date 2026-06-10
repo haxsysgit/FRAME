@@ -1,0 +1,345 @@
+frame:
+  file: facts
+  schema_version: "0.2.0"
+  role: current_project_truth
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: Fit the pharmax fixture to the simplified FRAME five-part v0.2.0 shape.
+profile:
+  summary: Pharmax is a medium-sized full-stack pharmacy operations app with a FastAPI backend and Vue 3 frontend for inventory, invoices, cashier work, reporting, team access, and audit trails.
+  family: web-app
+  system_role: role-based pharmacy operations platform
+  complexity: medium
+  scale_guidance: Model the repo as a split frontend/backend app with workflow, policy, and verification links kept compact.
+  links:
+    - rel: points_to
+      ref: map.roots.backend_root
+    - rel: points_to
+      ref: map.roots.frontend_root
+  evidence:
+    - id: ev_profile_readme
+      source: README.md:1-65
+      why: The root README defines the product purpose, capabilities, stack, and repo layout.
+      refs:
+        - map.paths.root_readme
+      checked_at: "2026-06-02T08:27:51Z"
+      confidence: high
+identity:
+  name: Pharmax
+  product_domain: pharmacy operations
+  repo_kind: full-stack web application
+  primary_roles:
+    - ADMIN
+    - CASHIER
+    - STAFF
+  primary_workflows:
+    - registration approval and login
+    - product catalog and unit pricing
+    - stock adjustment and audit trail
+    - invoice create finalize dispense cancel return
+    - dashboard analytics reports and team access
+classification:
+  app_shape: split frontend SPA plus backend API
+  ownership_model: single pharmacy deployment rather than multi-tenant SaaS
+  fixture_family: full-stack-web-app
+technology:
+  backend:
+    language: Python
+    runtime: ">=3.12"
+    framework: FastAPI
+    orm: SQLAlchemy
+    migrations: Alembic
+    package_manager: uv
+    notable_dependencies:
+      - fastapi[standard]
+      - sqlalchemy
+      - alembic
+      - python-jose[cryptography]
+      - passlib[bcrypt]
+      - psycopg[binary]
+      - sqladmin
+      - reportlab
+      - python-escpos
+  frontend:
+    language: JavaScript
+    framework: Vue 3
+    build_tool: Vite via rolldown-vite
+    state: Pinia
+    router: Vue Router
+    notable_dependencies:
+      - vue
+      - pinia
+      - vue-router
+      - echarts
+      - vue-echarts
+      - vuestic-ui
+architecture:
+  backend:
+    summary: FastAPI app in Backend/app with route modules delegating workflow logic to service modules and persistence to SQLAlchemy models.
+    route_surfaces:
+      - auth
+      - users
+      - products
+      - invoices
+      - dashboard
+      - activity-logs
+    service_surfaces:
+      - user_service
+      - product_service
+      - product_unit_service
+      - invoice_service
+      - invoice_workflow_service
+      - audit_service
+      - printing_service
+  frontend:
+    summary: Vue app in Frontend/src using router-driven views, service modules, Pinia stores, and AppShell-based navigation.
+    view_surfaces:
+      - dashboard
+      - products and units
+      - stock
+      - invoices
+      - cashier
+      - analytics
+      - reports
+      - team access
+      - activity logs
+      - settings
+  workflow_center:
+    summary: Invoice and stock workflows are the core business center, with role enforcement, audit logging, and reconciliation controls spread across routes, services, and UI metadata.
+environments:
+  local_backend:
+    cwd: Backend
+    run: uv run fastapi dev main.py
+    default_url: http://127.0.0.1:8000
+  local_frontend:
+    cwd: Frontend
+    run: npm run dev
+    default_url: http://localhost:5173
+  hosted:
+    frontend_api_url_env: VITE_API_URL
+    frontend_timeout_env: VITE_API_TIMEOUT_MS
+    backend_secret_env: PHARMAX_SECRET_KEY
+    backend_cors_env: PHARMAX_CORS_ORIGINS
+persistence:
+  local_default: SQLite database at Backend/app/_db/pharmax.db
+  production_path: PostgreSQL via PHARMAX_DATABASE_URL or DATABASE_URL normalization in config
+  migration_system: Alembic migrations under Backend/alembic/versions
+  seed_and_import_inputs:
+    - Backend/scripts/seed_dev_data.py
+    - Backend/scripts/seed_products.py
+    - Backend/scripts/seed_users.py
+    - Backend/scripts/import_products.py
+    - data/Product Master List.csv
+sources:
+  - id: runtime_code
+    source: Backend/app plus Frontend/src
+    authority: canonical
+    reason: Runtime source defines actual API routes, UI routes, services, and data flow.
+    links:
+      - rel: points_to
+        ref: map.groups.backend_source
+      - rel: points_to
+        ref: map.groups.frontend_source
+    evidence:
+      - id: ev_runtime_code
+        source: Backend/app/main.py:1-41; Backend/app/api/router.py:1-17; Frontend/src/router/index.js:1-220; Frontend/src/services/api.js:1-92
+        why: These files show the live application entry, routing, and client integration surfaces.
+        refs:
+          - map.entrypoints.backend_app
+          - map.entrypoints.frontend_router
+        checked_at: "2026-06-02T08:27:51Z"
+        confidence: high
+  - id: smoke_and_seed_scripts
+    source: Backend/tests plus Backend/scripts
+    authority: strong
+    reason: Script-style smoke tests and seeds encode expected role and workflow behavior used during development.
+    links:
+      - rel: supports
+        ref: expect.checks.workflow_smoke
+      - rel: points_to
+        ref: map.groups.backend_verification
+  - id: project_docs
+    source: README.md, PROJECT_BRIEF.md, PROGRESS.md, docs, agents/developer-workflows, copilot-instructions.md
+    authority: supporting
+    reason: Docs explain product intent and workflows but drift in a few places from current runtime behavior.
+    links:
+      - rel: supports
+        ref: facts.quirks.brief_stack_drift
+      - rel: supports
+        ref: facts.quirks.render_yaml_missing
+  - id: generated_state
+    source: Frontend/node_modules, Frontend/dist, Backend/.venv, Backend/.pytest_cache, Backend/app/_db
+    authority: generated
+    reason: These paths are install, build, cache, or mutable state artifacts rather than canonical source.
+    links:
+      - rel: supports
+        ref: facts.quirks.generated_noise
+quirks:
+  - id: example_projects_imports
+    summary: Backend entry files import through the example_projects.pharmax package namespace instead of local app-relative imports.
+    hazard: Running the fixture outside the expected package layout may fail unless PYTHONPATH or package structure matches.
+    kind: source_layout_surprise
+    links:
+      - rel: points_to
+        ref: map.entrypoints.backend_app
+    evidence:
+      - id: ev_import_namespace
+        source: Backend/app/main.py:5-8; Backend/app/api/router.py:3-8
+        why: The backend imports use example_projects.pharmax.Backend... paths.
+        refs:
+          - map.paths.backend_app_main
+          - map.paths.backend_router
+        checked_at: "2026-06-02T08:27:51Z"
+        confidence: high
+  - id: role_name_drift
+    summary: The live app uses STAFF, but an older auth smoke script still refers to SALES.
+    hazard: Treating the old script as current truth can produce false RBAC expectations.
+    kind: doc_code_drift
+    links:
+      - rel: supports
+        ref: expect.checks.role_policy_review
+    evidence:
+      - id: ev_role_drift
+        source: README.md:14-19; Backend/tests/test_auth_rbac.py:103-158
+        why: The README names STAFF while the legacy script registers SALES.
+        refs:
+          - map.paths.root_readme
+          - map.paths.backend_test_auth_rbac
+        checked_at: "2026-06-02T08:27:51Z"
+        confidence: high
+  - id: brief_stack_drift
+    summary: The academic brief still lists PostgreSQL and Streamlit analytics while the current runtime stack is Vue plus FastAPI with SQLite default and PostgreSQL production support.
+    hazard: The brief should not be used alone for operational stack decisions.
+    kind: doc_code_drift
+    links:
+      - rel: supports
+        ref: rules.rules.prefer_runtime_truth
+    evidence:
+      - id: ev_brief_drift
+        source: PROJECT_BRIEF.md:60-69; README.md:39-55; Backend/app/core/config.py:14-37
+        why: The brief-era stack table differs from current README and config behavior.
+        refs:
+          - map.paths.project_brief
+          - map.paths.backend_config
+        checked_at: "2026-06-02T08:27:51Z"
+        confidence: high
+  - id: generated_noise
+    summary: The fixture includes generated dependencies, build output, caches, and live SQLite state alongside source.
+    hazard: Searches and edits can easily drift into non-source artifacts unless mapping and rules fence them off.
+    kind: generated_or_cached_noise
+    links:
+      - rel: supports
+        ref: map.groups.generated_and_state
+      - rel: supports
+        ref: rules.donts.avoid_generated_artifacts
+  - id: render_yaml_missing
+    summary: The README and runbook discuss a root render.yaml, but no render.yaml was present in the inspected fixture listing.
+    hazard: Deployment documentation is incomplete or the fixture snapshot is missing a file the docs assume exists.
+    kind: doc_code_drift
+    links:
+      - rel: supports
+        ref: expect.checks.docs_review
+policies:
+  - id: role_access_policy
+    summary: Backend require_role dependencies and frontend route metadata both encode ADMIN, CASHIER, and STAFF access boundaries.
+    kind: role_policy
+    applies_to:
+      - Backend/app/api/routes
+      - Frontend/src/router/index.js
+    source_refs:
+      - facts.sources.runtime_code
+      - map.paths.frontend_router
+    expect_refs:
+      - expect.must_hold.role_policy_alignment
+      - expect.checks.role_policy_review
+    links:
+      - rel: points_to
+        ref: map.entrypoints.frontend_router
+      - rel: checks
+        ref: expect.checks.role_policy_review
+  - id: invoice_lifecycle_policy
+    summary: Invoice handling spans create, add items, finalize, dispense, cancel, return, receipt printing, reconciliation status, and after-hours grant logic.
+    kind: workflow_policy
+    applies_to:
+      - Backend/app/api/routes/invoices_route.py
+      - Backend/app/services/invoice_workflow_service.py
+      - Frontend/src/views/InvoiceCreateView.vue
+      - Frontend/src/views/CashierView.vue
+    source_refs:
+      - facts.sources.runtime_code
+    expect_refs:
+      - expect.outcomes.invoice_workflow_holds
+      - expect.checks.workflow_smoke
+    links:
+      - rel: points_to
+        ref: map.entrypoints.invoice_api
+      - rel: checks
+        ref: expect.checks.workflow_smoke
+  - id: persistence_policy
+    summary: Local development defaults to SQLite while production-like deployment expects PostgreSQL via environment-driven database URLs and Alembic migrations.
+    kind: environment_policy
+    applies_to:
+      - Backend/app/core/config.py
+      - Backend/alembic
+      - docs/POSTGRES_DEPLOYMENT_RUNBOOK.md
+    source_refs:
+      - facts.sources.project_docs
+      - map.paths.backend_config
+    expect_refs:
+      - expect.must_hold.persistence_mode_is_env_driven
+      - expect.checks.migration_review
+  - id: audit_policy
+    summary: Workflow and security-relevant actions should be visible through audit services and activity-log surfaces.
+    kind: data_integrity
+    applies_to:
+      - Backend/app/services/audit_service.py
+      - Backend/app/api/routes/activity_route.py
+      - Frontend/src/views/ActivityLogsView.vue
+    source_refs:
+      - facts.sources.runtime_code
+    expect_refs:
+      - expect.must_hold.auditability_preserved
+evidence:
+  - id: ev_backend_stack
+    source: Backend/pyproject.toml:1-25
+    why: Backend package metadata confirms FastAPI, SQLAlchemy, Alembic, psycopg, sqladmin, and printing dependencies.
+    refs:
+      - facts.profile
+    checked_at: "2026-06-02T08:27:51Z"
+    confidence: high
+  - id: ev_frontend_stack
+    source: Frontend/package.json:1-27
+    why: Frontend package metadata confirms Vue, Pinia, Vue Router, ECharts, Vuestic, and Vite setup.
+    refs:
+      - facts.profile
+    checked_at: "2026-06-02T08:27:51Z"
+    confidence: high
+  - id: ev_progress_validation
+    source: PROGRESS.md:41-45
+    why: Progress tracker records compile/build validation and notes that pytest is unavailable in the backend uv environment.
+    refs:
+      - expect.checks.frontend_build
+      - expect.checks.pytest_gap
+    checked_at: "2026-06-02T08:27:51Z"
+    confidence: high
+open_questions:
+  - id: render_blueprint_absent
+    question: Is render.yaml intentionally omitted from the fixture snapshot, or is the deployment documentation stale?
+    status: open
+    links:
+      - rel: supports
+        ref: facts.quirks.render_yaml_missing
+  - id: import_namespace_intent
+    question: Are example_projects.pharmax imports fixture scaffolding or the intended package namespace for normal local execution?
+    status: open
+    links:
+      - rel: supports
+        ref: facts.quirks.example_projects_imports
+  - id: frontend_test_scope
+    question: Should frontend verification for this repo remain build-only, or is a test/lint surface expected but not committed?
+    status: open
+    links:
+      - rel: supports
+        ref: expect.checks.frontend_build

@@ -1,0 +1,102 @@
+frame:
+  file: acts
+  schema_version: "0.2.0"
+  role: run_history
+  scope: execution_record
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: Hermes Agent
+  update_reason: Record the autopahe v0.2.0 fit execution as run history only.
+
+summary: Fit and scored the autopahe fixture against frame-five-part-v0.2.0, wrote five linked FRAME files, a complete scorecard, and a concise report, then validated the YAML files against the current schemas.
+
+runs:
+  - id: autopahe_fit_v020
+    actor: hermes_agent
+    goal: Produce and score a schema-grounded FRAME v0.2.0 fit for the autopahe fixture.
+    work_kind:
+      - review
+      - docs
+    keywords:
+      - autopahe
+      - cli
+      - browser
+      - docker
+      - imports
+    input_summary: Read the candidate spec, scoring rubric, scorecard template, current schemas, fixture file listing, key runtime modules, tests, docs, requirements, and Docker assets.
+    output_summary: Wrote facts.yaml, rules.yaml, map.yaml, expect.yaml, acts.yaml, a complete scorecard, and a concise report; validated all five YAML artifacts successfully with python3 plus yaml and jsonschema.
+    status: complete
+    touched:
+      - map.paths.pyproject
+      - map.paths.readme
+      - map.paths.auto_pahe_py
+      - map.paths.cli_py
+      - map.paths.ap_core_config
+      - map.paths.ap_core_platform_paths
+      - map.paths.root_config
+      - map.paths.tests
+      - map.paths.docker_assets
+    changed_facts:
+      - facts.profile
+      - facts.sources.runtime_code
+      - facts.quirks.fixture_import_prefix
+      - facts.quirks.generated_state_noise
+      - facts.open_questions.docker_download_target
+    rules_followed:
+      - rules.rules.preserve_cli_contract
+      - rules.rules.use_path_helpers
+      - rules.rules.ignore_generated_state
+      - rules.rules.keep_fixture_imports_consistent
+    checks_seen:
+      - expect.checks.cli_help
+      - expect.checks.config_validate
+      - expect.checks.pytest_suite
+      - expect.checks.docker_build
+    checks_ran: []
+    links:
+      - rel: changes
+        ref: facts.profile
+      - rel: changes
+        ref: facts.quirks.fixture_import_prefix
+      - rel: touches
+        ref: map.paths.auto_pahe_py
+      - rel: touches
+        ref: map.paths.cli_py
+      - rel: touches
+        ref: map.paths.tests
+      - rel: follows
+        ref: rules.rules.ignore_generated_state
+      - rel: follows
+        ref: rules.rules.keep_fixture_imports_consistent
+      - rel: checks
+        ref: expect.checks.pytest_suite
+    evidence:
+      - source: /home/hax/FRAME/Frame lab/candidates/frame-five-part-v0.2.0.md
+        why: Defined the simplified field names and Acts run-history shape used here.
+        confidence: high
+      - source: /home/hax/FRAME/schemas/facts.schema.yaml; /home/hax/FRAME/schemas/rules.schema.yaml; /home/hax/FRAME/schemas/map.schema.yaml; /home/hax/FRAME/schemas/expect.schema.yaml; /home/hax/FRAME/schemas/acts.schema.yaml
+        why: These schemas governed the output file structure.
+        confidence: high
+      - source: /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe/
+        why: Output directory contains the written fit artifacts.
+        confidence: high
+
+blockers:
+  - id: no_live_fixture_execution
+    summary: This task did not require running the autopahe application itself, so live AnimePahe, browser, and Docker checks were represented as expected checks rather than executed fixture proofs.
+    next_step: If a later task needs runtime proof, create a fixture-specific import path or package install context first and then run the relevant commands from rules.commands.
+    links:
+      - rel: blocks
+        ref: expect.checks.browser_verify_manual
+      - rel: blocks
+        ref: expect.checks.docker_help
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:17-18,34; Frame lab/fixtures/autopahe/project/tests/test_cli.py:1
+        why: The fixture uses example_projects.autopahe imports, so execution setup is a separate concern from this fit-writing task.
+        confidence: high
+
+handoff:
+  next_reader_should_know:
+    - The fit uses the v0.2.0 simplified names exactly: profile, sources, quirks, rules, donts, ask_first, groups, entrypoints, checks, proof, and Acts summary plus runs plus blockers plus handoff.
+    - Claims are grounded in the real fixture files, with links favored over repeated prose.
+    - Schema validation passed for facts.yaml, rules.yaml, map.yaml, expect.yaml, and acts.yaml.

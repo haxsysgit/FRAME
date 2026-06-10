@@ -1,0 +1,1 @@
+# Archilles Assessment\n\nThe neutral assessment of FRAME/Haxaml was received as an attachment from Archilles (VPS agent) on 2026-06-08. The document is preserved in the conversation history (session transcript) rather than as a standalone file. Key findings are summarized in research/cv-governance/ (CV governance experiment) and informed the mechanical validator design.\n

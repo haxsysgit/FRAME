@@ -1,0 +1,329 @@
+frame:
+  file: map
+  schema_version: "0.2.0"
+  role: repo_context_map
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: Hermes Agent
+  update_reason: Fit autopahe repo structure to the simplified FRAME v0.2.0 Map shape.
+
+roots:
+  project_root:
+    path: Frame lab/fixtures/autopahe/project
+    summary: Autopahe fixture root containing package metadata, CLI/runtime modules, support packages, tests, docs, Docker assets, and checked-in state artifacts.
+    links:
+      - rel: supports
+        ref: facts.profile
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Confirms package root and install metadata.
+        confidence: high
+  fit_output:
+    path: Frame lab/evaluations/fits/frame-five-part-v0.2.0/autopahe
+    summary: Output directory for this v0.2.0 fit.
+
+paths:
+  pyproject:
+    summary: Package metadata, dependency declarations, console script, build backend, and setuptools module/package inclusion.
+    links:
+      - rel: supports
+        ref: facts.sources.package_metadata
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:1-60
+        why: Primary packaging metadata.
+        confidence: high
+  requirements:
+    summary: Alternative dependency install surface with a stricter Playwright pin than pyproject.toml.
+    links:
+      - rel: explains
+        ref: facts.quirks.playwright_version_drift
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/requirements.txt:1-8
+        why: Separate dependency surface.
+        confidence: high
+  readme:
+    summary: User-facing install, setup, update, browser verification, config, and Docker guidance.
+    links:
+      - rel: supports
+        ref: facts.sources.docs_and_docker
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:14-299
+        why: Main operating guide.
+        confidence: high
+  auto_pahe_py:
+    summary: Main runtime command implementation, browser handoff prompts, feature orchestration, and top-level main().
+    links:
+      - rel: supports
+        ref: facts.sources.runtime_code
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/auto_pahe.py:63-90,163-217,1719-1722
+        why: Main runtime module and entry function.
+        confidence: high
+  cli_py:
+    summary: Typer app wrapper, legacy flag normalization, config subcommand handling, and dispatch into auto_pahe.py.
+    links:
+      - rel: supports
+        ref: facts.sources.runtime_code
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:21-24,47-93,96-181,184-230
+        why: Public CLI parsing boundary.
+        confidence: high
+  ap_core_browser:
+    summary: Browser installation helpers, persistent Playwright context, verification sessions, and browser/HTTP fallback behavior.
+    links:
+      - rel: supports
+        ref: facts.sources.path_and_config_helpers
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:72-80,191-234
+        why: Browser support boundary.
+        confidence: high
+  ap_core_config:
+    summary: App config defaults, validation, search order, and sample config text/writing.
+    links:
+      - rel: supports
+        ref: facts.sources.path_and_config_helpers
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:21-206
+        why: Config behavior is defined here.
+        confidence: high
+  ap_core_platform_paths:
+    summary: Cross-platform config, cache, data, log, and download directory helpers plus legacy config locations.
+    links:
+      - rel: supports
+        ref: facts.policies.state_paths_policy
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/platform_paths.py:22-217
+        why: Path selection contract.
+        confidence: high
+  root_config:
+    summary: Centralized runtime data paths, managed files, and import-time directory creation plus migration logic.
+    links:
+      - rel: supports
+        ref: facts.quirks.config_import_side_effects
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:19-130
+        why: Runtime state and migration behavior.
+        confidence: high
+  state_py:
+    summary: Dataclass container for per-invocation CLI runtime state.
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/state.py:1-18
+        why: Defines the stored runtime fields.
+        confidence: high
+  tests:
+    summary: Pytest regression suite for CLI normalization, config fallback, setup safety, kwikdown helpers, and updater git-root logic.
+    links:
+      - rel: supports
+        ref: facts.sources.tests
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19; Frame lab/fixtures/autopahe/project/tests/test_config.py:1-17; Frame lab/fixtures/autopahe/project/tests/test_setup.py:1-14; Frame lab/fixtures/autopahe/project/tests/test_updater.py:1-10
+        why: Test surface inspected.
+        confidence: high
+  docker_assets:
+    summary: Dockerfile, docker-compose.yml, and docker helper docs/scripts for containerized operation.
+    links:
+      - rel: supports
+        ref: facts.sources.docs_and_docker
+      - rel: explains
+        ref: facts.open_questions.docker_download_target
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:1-29; Frame lab/fixtures/autopahe/project/docker-compose.yml:1-25; Frame lab/fixtures/autopahe/project/docker/README.md:1-48
+        why: Container build and run surfaces.
+        confidence: high
+  generated_state_paths:
+    summary: Checked-in data, backups, runtime json, release notes, and other stateful or generated paths that should be handled carefully.
+    links:
+      - rel: explains
+        ref: facts.quirks.generated_state_noise
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/data/; Frame lab/fixtures/autopahe/project/json_data/; Frame lab/fixtures/autopahe/project/features/json_data/; Frame lab/fixtures/autopahe/project/release-notes/
+        why: Fixture contains these paths directly.
+        confidence: high
+
+groups:
+  package_metadata:
+    summary: Packaging and dependency declaration surfaces.
+    boundary_type: package_metadata
+    interface_role: Source of installable package identity and dependency truth.
+    paths:
+      - pyproject.toml
+      - requirements.txt
+      - uv.lock
+      - .python-version
+    links:
+      - rel: supports
+        ref: facts.sources.package_metadata
+  public_cli:
+    summary: User-facing CLI entry, option parsing, and compatibility layer.
+    boundary_type: entrypoint
+    interface_role: Public command interface.
+    paths:
+      - auto_pahe.py
+      - cli.py
+    links:
+      - rel: supports
+        ref: facts.profile
+  core_support:
+    summary: Internal support modules for browser, cache, config, updater, parser, resume, and notifications.
+    boundary_type: source
+    interface_role: Shared implementation used by many command paths.
+    paths:
+      - ap_core/
+    links:
+      - rel: supports
+        ref: facts.architecture
+  feature_modules:
+    summary: Domain modules for downloads, sorting, records, and collection management.
+    boundary_type: source
+    interface_role: Internal feature implementation behind CLI commands.
+    paths:
+      - kwikdown.py
+      - features/
+      - collection/
+  persistence:
+    summary: Runtime state, config, path helpers, managed files, and migration behavior.
+    boundary_type: config
+    interface_role: Persistence and local-state boundary.
+    paths:
+      - config.py
+      - state.py
+      - ap_core/config.py
+      - ap_core/platform_paths.py
+    links:
+      - rel: supports
+        ref: facts.policies.state_paths_policy
+  tests:
+    summary: Automated verification surface.
+    boundary_type: test
+    interface_role: Regression checks for current behavior.
+    paths:
+      - tests/
+    links:
+      - rel: checks
+        ref: expect.checks.pytest_suite
+  docs:
+    summary: User and maintainer docs, advanced notes, and release notes.
+    boundary_type: docs
+    interface_role: Supporting instructions with lower authority than runtime code.
+    paths:
+      - README.md
+      - ADVANCED.md
+      - Docs/
+      - release-notes/
+      - docker/*.md
+  infra:
+    summary: Container build and run support.
+    boundary_type: infra
+    interface_role: Containerized operation boundary.
+    paths:
+      - Dockerfile
+      - docker-compose.yml
+      - .dockerignore
+      - docker/
+  generated_state:
+    summary: Build outputs, user state, backups, release artifacts, and similar noise paths checked into the fixture.
+    boundary_type: generated
+    interface_role: Secondary context or hazards, not primary source.
+    paths:
+      - data/
+      - json_data/
+      - features/json_data/
+      - release-notes/
+      - .env
+    links:
+      - rel: explains
+        ref: facts.quirks.generated_state_noise
+
+entrypoints:
+  console_script:
+    path: pyproject.toml
+    summary: Package exposes autopahe = auto_pahe:main.
+    links:
+      - rel: supports
+        ref: facts.identity
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/pyproject.toml:44-45
+        why: Console script declaration.
+        confidence: high
+  typer_app:
+    path: cli.py
+    summary: Typer application object and callback define option parsing and orchestration.
+    links:
+      - rel: points_to
+        ref: map.paths.cli_py
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/cli.py:21-24,184-230
+        why: Typer app and callback are defined here.
+        confidence: high
+  docker_entry:
+    path: Dockerfile
+    summary: Container entrypoint runs python -m auto_pahe.
+    links:
+      - rel: points_to
+        ref: map.paths.docker_assets
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/Dockerfile:30-30
+        why: Container entrypoint declaration.
+        confidence: high
+  tests_entry:
+    path: tests/
+    summary: Pytest discovers regression tests from the tests directory.
+    links:
+      - rel: points_to
+        ref: map.paths.tests
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/tests/test_cli.py:1-19
+        why: Representative pytest test file.
+        confidence: high
+
+managed_paths:
+  config_file:
+    path: platform config dir / autopahe / config.ini
+    reason: Created and read by config helpers and config commands; user-owned settings live here.
+    links:
+      - rel: supports
+        ref: facts.persistence
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/config.py:8-19,84-169
+        why: Config search and write behavior.
+        confidence: high
+  data_dir:
+    path: platform data dir or local/portable alternate
+    reason: Records, collection metadata, logs, backups, and migration flags live here.
+    links:
+      - rel: supports
+        ref: facts.persistence
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/config.py:19-45,123-130
+        why: Data constants and import-time setup.
+        confidence: high
+  browser_profile:
+    path: platform cache dir / autopahe / playwright / <browser>
+    reason: Persistent Playwright user data and verification session state are stored there.
+    links:
+      - rel: supports
+        ref: facts.persistence
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/ap_core/browser.py:205-210
+        why: User data dir selection.
+        confidence: high
+  docker_mounts:
+    path: ./data, ./json_data, ./collection, ~/Downloads/autopahe
+    reason: Docker and compose mount persistent state and download-related paths into the container.
+    links:
+      - rel: points_to
+        ref: map.paths.docker_assets
+    evidence:
+      - source: Frame lab/fixtures/autopahe/project/README.md:47-57; Frame lab/fixtures/autopahe/project/docker-compose.yml:14-18
+        why: Documented and configured container mounts.
+        confidence: high
+
+unmapped_paths:
+  - .git/
+
+evidence:
+  - id: map_fit_grounding
+    source: Manual inspection on 2026-06-02 of fixture directories, docs, runtime modules, tests, and Docker assets.
+    why: Map entries were derived from actual repo surfaces.
+    confidence: high

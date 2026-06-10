@@ -1,0 +1,142 @@
+# FRAME Map Schema — v0.3.0
+# Where things live — roots, groups, paths, entrypoints, managed paths.
+# Machine contract: schemas/json/map.schema.json
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://frame.dev/schemas/0.3.0/map.schema.yaml"
+title: "FRAME Map"
+description: "Where things live — roots, groups, paths, entrypoints, and managed paths."
+type: object
+additionalProperties: false
+required: [frame]
+properties:
+  frame:
+    allOf:
+      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - type: object
+        properties:
+          file:
+            const: map
+          role:
+            const: repo_context_map
+
+  # --- STRUCTURE ---
+  # Quick visual overview of repo layout. Top block.
+  structure:
+    type: string
+    maxLength: 800
+    description: "Flat text overview: 'Backend/ → FastAPI, Frontend/ → Vue 3'."
+
+  # --- ROOTS ---
+  roots:
+    type: object
+    additionalProperties: true
+    description: "Top-level directory purposes. Keys are directory names."
+
+  # --- GROUPS ---
+  # Logical groupings. Supports wildcards for flexible coverage as repos scale.
+  groups:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, label, paths]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        label:
+          type: string
+          maxLength: 150
+        paths:
+          type: array
+          items:
+            type: string
+            maxLength: 300
+          description: "Wildcards allowed (e.g. 'Backend/app/**/*.py')."
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- PATHS ---
+  # Critical individual files. Explicit paths only. Optional id for cross-referencing.
+  paths:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [path, purpose]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        path:
+          type: string
+          maxLength: 200
+        purpose:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- ENTRYPOINTS ---
+  # CLI/API/web entry points. Explicit paths only.
+  entrypoints:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [id, path, kind]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        path:
+          type: string
+          maxLength: 200
+        kind:
+          type: string
+          enum: [cli, api, web, script]
+        description:
+          type: string
+          maxLength: 300
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- MANAGED PATHS ---
+  # Paths under special rules. Supports wildcards. Optional id for cross-referencing.
+  managed_paths:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [path, rule]
+      properties:
+        id:
+          $ref: "./frame.schema.yaml#/$defs/stable_id"
+        path:
+          type: string
+          maxLength: 200
+          description: "Wildcards allowed (e.g. 'node_modules/**', '*.pyc')."
+        rule:
+          type: string
+          enum: [generated, config, immutable]
+        links:
+          $ref: "./frame.schema.yaml#/$defs/links"
+
+  # --- UNMAPPED PATHS ---
+  # Paths not yet placed. Honest about gaps.
+  unmapped_paths:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [path, reason]
+      properties:
+        path:
+          type: string
+          maxLength: 200
+        reason:
+          type: string
+          maxLength: 200
+
+  evidence:
+    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+  links:
+    $ref: "./frame.schema.yaml#/$defs/links"

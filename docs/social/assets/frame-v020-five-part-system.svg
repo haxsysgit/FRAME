@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img" aria-labelledby="title desc">
+  <title id="title">FRAME v0.2.0 five-part system</title>
+  <desc id="desc">Five linked FRAME parts with clean ownership and references.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#020617"/><stop offset="0.5" stop-color="#081222"/><stop offset="1" stop-color="#111827"/></linearGradient>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.5"/></pattern>
+    <filter id="soft"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M1,1 L10,5.5 L1,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect width="1400" height="1400" fill="url(#bg)"/>
+  <rect width="1400" height="1400" fill="url(#grid)"/>
+
+  <g stroke="#475569" stroke-width="1.4" fill="none" marker-end="url(#arrow)" opacity="0.82">
+    <path d="M390 410 C525 310 670 315 790 410"/>
+    <path d="M1000 520 C1110 690 1040 855 885 942"/>
+    <path d="M520 995 C350 910 310 720 395 555"/>
+    <path d="M465 520 C600 630 765 620 932 520"/>
+    <path d="M520 940 C625 825 750 820 885 940"/>
+    <path d="M698 440 C680 590 690 725 700 855" stroke="#38bdf8" opacity="0.65"/>
+  </g>
+
+  <g font-family="JetBrains Mono, ui-monospace, monospace">
+    <g filter="url(#soft)">
+      <rect x="500" y="210" width="400" height="150" rx="24" fill="#082f49" stroke="#22d3ee" stroke-width="2"/>
+      <text x="700" y="285" font-size="34" fill="#e0f2fe" text-anchor="middle">Facts</text>
+      <text x="700" y="323" font-size="18" fill="#bae6fd" text-anchor="middle">stable project truth</text>
+
+      <rect x="155" y="455" width="370" height="150" rx="24" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
+      <text x="340" y="530" font-size="34" fill="#d1fae5" text-anchor="middle">Rules</text>
+      <text x="340" y="568" font-size="18" fill="#a7f3d0" text-anchor="middle">how work should happen</text>
+
+      <rect x="875" y="455" width="370" height="150" rx="24" fill="#3b0764" stroke="#c084fc" stroke-width="2"/>
+      <text x="1060" y="530" font-size="34" fill="#f3e8ff" text-anchor="middle">Map</text>
+      <text x="1060" y="568" font-size="18" fill="#e9d5ff" text-anchor="middle">where things live</text>
+
+      <rect x="235" y="890" width="390" height="150" rx="24" fill="#78350f" stroke="#fbbf24" stroke-width="2"/>
+      <text x="430" y="965" font-size="34" fill="#fef3c7" text-anchor="middle">Expect</text>
+      <text x="430" y="1003" font-size="18" fill="#fde68a" text-anchor="middle">checks, proof, done</text>
+
+      <rect x="775" y="890" width="390" height="150" rx="24" fill="#881337" stroke="#fb7185" stroke-width="2"/>
+      <text x="970" y="965" font-size="34" fill="#ffe4e6" text-anchor="middle">Acts</text>
+      <text x="970" y="1003" font-size="18" fill="#fecdd3" text-anchor="middle">what actually happened</text>
+    </g>
+
+    <g opacity="0.22" font-size="22" fill="#94a3b8" transform="rotate(-12 700 700)">
+      <text x="170" y="1210">project_profile</text>
+      <text x="420" y="1246">source_truth</text>
+      <text x="690" y="1218">structural_quirks</text>
+      <text x="950" y="1252">required_evidence</text>
+    </g>
+
+    <text x="90" y="1300" font-size="28" fill="#e2e8f0">FRAME v0.2.0: stronger because the shape got simpler.</text>
+  </g>
+</svg>

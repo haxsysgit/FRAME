@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400" role="img" aria-labelledby="title desc">
+  <title id="title">FRAME context shape diagram</title>
+  <desc id="desc">Scattered project context feeding into FRAME, where Facts, Rules, Map, Expect, and Acts sit inside one project shape.</desc>
+
+  <defs>
+    <pattern id="paperGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#d9d6cc" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+      <path d="M2,2 L12,7 L2,12 Z" fill="#334155"/>
+    </marker>
+    <style>
+      .label { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace; }
+      .soft { fill: #64748b; }
+      .ink { fill: #1e293b; }
+      .boxText { font-size: 28px; font-weight: 700; fill: #1e293b; }
+      .smallText { font-size: 18px; fill: #64748b; }
+      .outsideText { font-size: 25px; font-weight: 650; fill: #334155; }
+      .outsideSub { font-size: 17px; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="1400" fill="#f7f3ea"/>
+  <rect width="1400" height="1400" fill="url(#paperGrid)"/>
+
+  <!-- Title note -->
+  <g class="label">
+    <text x="96" y="110" font-size="34" font-weight="800" fill="#0f172a">Scattered project context keeps confusing agents.</text>
+    <text x="96" y="150" font-size="22" fill="#475569">FRAME gives the project one shaped place to say what is true, what matters, and what changed.</text>
+  </g>
+
+  <!-- Outside context cards -->
+  <g class="label">
+    <g>
+      <rect x="92" y="250" width="300" height="112" rx="20" fill="#fffaf0" stroke="#cbd5e1" stroke-width="2"/>
+      <text class="outsideText" x="122" y="305">chat notes</text>
+      <text class="outsideSub" x="122" y="334">useful, then stale</text>
+    </g>
+
+    <g>
+      <rect x="90" y="610" width="310" height="118" rx="20" fill="#fffaf0" stroke="#cbd5e1" stroke-width="2"/>
+      <text class="outsideText" x="122" y="668">tool rules</text>
+      <text class="outsideSub" x="122" y="699">copied everywhere</text>
+    </g>
+
+    <g>
+      <rect x="112" y="990" width="320" height="116" rx="20" fill="#fffaf0" stroke="#cbd5e1" stroke-width="2"/>
+      <text class="outsideText" x="145" y="1050">repo docs</text>
+      <text class="outsideSub" x="145" y="1081">good, but scattered</text>
+    </g>
+
+    <g>
+      <rect x="1010" y="270" width="310" height="112" rx="20" fill="#fffaf0" stroke="#cbd5e1" stroke-width="2"/>
+      <text class="outsideText" x="1042" y="326">big context</text>
+      <text class="outsideSub" x="1042" y="356">more room, same mess</text>
+    </g>
+
+    <g>
+      <rect x="994" y="990" width="326" height="116" rx="20" fill="#fffaf0" stroke="#cbd5e1" stroke-width="2"/>
+      <text class="outsideText" x="1028" y="1050">agent switch</text>
+      <text class="outsideSub" x="1028" y="1081">explain it again</text>
+    </g>
+  </g>
+
+  <!-- Arrows into FRAME. Drawn before the circle/cards so they stay quiet. -->
+  <g fill="none" stroke="#334155" stroke-width="2.4" opacity="0.55" marker-end="url(#arrow)">
+    <path d="M390 320 C500 370 520 470 585 520"/>
+    <path d="M402 670 C485 670 515 675 570 675"/>
+    <path d="M430 1028 C510 940 520 815 590 782"/>
+    <path d="M1010 335 C900 395 860 470 810 520"/>
+    <path d="M995 1034 C905 940 872 828 815 782"/>
+  </g>
+
+  <!-- FRAME circle -->
+  <g class="label">
+    <circle cx="700" cy="690" r="286" fill="#fffcf5" stroke="#0f172a" stroke-width="3"/>
+    <circle cx="700" cy="690" r="238" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="9 9"/>
+
+    <text x="700" y="450" text-anchor="middle" font-size="30" font-weight="850" fill="#0f172a">FRAME</text>
+    <text x="700" y="480" text-anchor="middle" font-size="17" fill="#64748b">one project shape</text>
+
+    <!-- Five blocks, all inside the circle -->
+    <g>
+      <rect x="590" y="520" width="220" height="76" rx="18" fill="#ecfeff" stroke="#0891b2" stroke-width="2.5"/>
+      <text class="boxText" x="700" y="567" text-anchor="middle">Facts</text>
+      <text class="smallText" x="700" y="589" text-anchor="middle">what is true</text>
+    </g>
+
+    <g>
+      <rect x="468" y="632" width="218" height="76" rx="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+      <text class="boxText" x="577" y="679" text-anchor="middle">Rules</text>
+      <text class="smallText" x="577" y="701" text-anchor="middle">what to obey</text>
+    </g>
+
+    <g>
+      <rect x="714" y="632" width="218" height="76" rx="18" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5"/>
+      <text class="boxText" x="823" y="679" text-anchor="middle">Map</text>
+      <text class="smallText" x="823" y="701" text-anchor="middle">where to look</text>
+    </g>
+
+    <g>
+      <rect x="500" y="748" width="190" height="76" rx="18" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+      <text class="boxText" x="595" y="795" text-anchor="middle">Expect</text>
+      <text class="smallText" x="595" y="817" text-anchor="middle">what passes</text>
+    </g>
+
+    <g>
+      <rect x="710" y="748" width="190" height="76" rx="18" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
+      <text class="boxText" x="805" y="795" text-anchor="middle">Acts</text>
+      <text class="smallText" x="805" y="817" text-anchor="middle">what changed</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <g class="label">
+    <text x="96" y="1264" font-size="31" font-weight="800" fill="#0f172a">Not more context. Better-shaped context.</text>
+    <text x="96" y="1302" font-size="22" fill="#475569">The project should be able to brief the agent instead of being re-explained every run.</text>
+  </g>
+</svg>

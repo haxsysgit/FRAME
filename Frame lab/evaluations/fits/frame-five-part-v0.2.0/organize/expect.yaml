@@ -1,0 +1,144 @@
+frame:
+  file: expect
+  schema_version: "0.2.0"
+  role: project_correctness_contract
+  scope: baseline_project
+  status: draft
+  last_reviewed: "2026-06-02"
+  updated_by: hermes-agent
+  update_reason: "Fit the organize fixture against frame-five-part-v0.2.0."
+outcomes:
+  cli_surface_available:
+    summary: "organize.py exposes a working argparse CLI with the documented flag set."
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+  extension_flow_available:
+    summary: "Given an explicit target path, the utility can create extension folders, move files into them, and clean those folders back up."
+    links:
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+  relation_grouping_available:
+    summary: "Given similarly prefixed filenames, the utility can identify and organize relation groups."
+    links:
+      - rel: checks
+        ref: expect.checks.match_groups
+must_hold:
+  safe_mutation_scope:
+    summary: "Evaluation and future smoke tests must use an explicit disposable target path for mutating commands."
+    links:
+      - rel: follows
+        ref: rules.rules.safe_temp_paths
+      - rel: supports
+        ref: facts.policies.mutate_only_target_path
+  real_entrypoint_is_organize_py:
+    summary: "The runnable script for this fixture is organize.py even though README examples still say file_manager.py."
+    links:
+      - rel: explains
+        ref: facts.quirks.readme_name_drift
+done_when:
+  cli_or_docs_change:
+    summary: "After CLI or README edits, live help and docs agree on the actual script name and current flag surface."
+    links:
+      - rel: checks
+        ref: expect.checks.cli_help
+  move_logic_change:
+    summary: "After changing move or cleanup logic, a disposable-directory smoke test shows the expected before/after file tree."
+    links:
+      - rel: checks
+        ref: expect.checks.extension_create_delete
+  grouping_logic_change:
+    summary: "After changing grouping logic, a disposable-directory run still finds and organizes a known similar-file group."
+    links:
+      - rel: checks
+        ref: expect.checks.match_groups
+checks:
+  cli_help:
+    summary: "Run python3 organize.py --help and confirm exit code 0 with the expected argparse flags; current baseline includes a SyntaxWarning on stderr."
+    command_ref: rules.commands.help
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.cli_surface_available
+    evidence:
+      - id: ev_check_cli_help
+        source: "python3 organize.py --help"
+        why: "The command exited 0 and printed the live flag surface."
+        refs: [expect.checks.cli_help]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  match_groups:
+    summary: "Run python3 organize.py -m <tempdir> on a disposable directory with similarly prefixed files and confirm the output groups them."
+    command_ref: rules.commands.match_files
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.relation_grouping_available
+    evidence:
+      - id: ev_check_match_groups
+        source: "Temporary-directory smoke run for python3 organize.py -m <tempdir>"
+        why: "The run grouped alpha-one.txt and alpha-two.txt under the alpha key without mutating the directory."
+        refs: [expect.checks.match_groups]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  extension_create_delete:
+    summary: "Run create and delete extension-folder commands in a disposable directory and confirm files move into ext folders and then back out cleanly."
+    command_ref: rules.commands.create_extension_dirs
+    proof_type: smoke_test
+    links:
+      - rel: proves
+        ref: expect.outcomes.extension_flow_available
+      - rel: uses
+        ref: rules.commands.delete_extension_dirs
+    evidence:
+      - id: ev_check_extension_create_delete
+        source: "Temporary-directory smoke run for python3 organize.py -c -p <tempdir> and python3 organize.py -d -p <tempdir>"
+        why: "The create run made txtfiles/mp4files/mdfiles and moved files, then the delete run restored the original file set and removed the generated folders."
+        refs: [expect.checks.extension_create_delete]
+        checked_at: "2026-06-02T08:27:32Z"
+        confidence: high
+  relation_organize:
+    summary: "If relation-folder behavior changes, verify it in a disposable directory by running the organize-by-relation command and reviewing the resulting folders."
+    command_ref: rules.commands.organize_by_relation
+    proof_type: manual_check
+    links:
+      - rel: supports
+        ref: expect.outcomes.relation_grouping_available
+  no_tests_present:
+    summary: "No automated test suite was found in the fixture, so smoke checks are the current proof surface."
+    command_ref: null
+    proof_type: unavailable
+proof:
+  - id: help_output_capture
+    expectation: "Capture the stdout/stderr result of python3 organize.py --help after CLI or README changes."
+    refs:
+      - expect.checks.cli_help
+      - rules.commands.help
+    links:
+      - rel: proves
+        ref: expect.outcomes.cli_surface_available
+  - id: tempdir_tree_capture
+    expectation: "For file-moving changes, record the disposable directory contents before create/delete runs and after cleanup."
+    refs:
+      - expect.checks.extension_create_delete
+      - rules.commands.create_extension_dirs
+      - rules.commands.delete_extension_dirs
+    links:
+      - rel: proves
+        ref: expect.outcomes.extension_flow_available
+  - id: grouping_output_capture
+    expectation: "For grouping changes, record the match output or resulting folders for a known sample set such as alpha-one.txt and alpha-two.txt."
+    refs:
+      - expect.checks.match_groups
+      - rules.commands.match_files
+    links:
+      - rel: proves
+        ref: expect.outcomes.relation_grouping_available
+handoff:
+  latest_cli_help:
+    command_ref: rules.commands.help
+    exit_code: 0
+    stderr_note: "SyntaxWarning: invalid escape sequence '\\/' at organize.py:239"
+  latest_tempdir_smoke:
+    result: "match, create-extension, and delete-extension flows all completed successfully in a disposable temp directory"
+  tests_present: false
