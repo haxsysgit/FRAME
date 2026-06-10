@@ -87,7 +87,7 @@ A mature FRAME should help different agents and tools:
 The next phase is:
 1. sharpen the architecture
 2. revisit schema direction
-3. build `frame-python` from the new contract
+3. build `frame-py` from the new contract
 4. test FRAME against real project families
 5. compare it honestly against native agent-doc approaches
 

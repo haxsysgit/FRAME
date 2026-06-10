@@ -1,6 +1,6 @@
 # FRAME Finalized Decisions
 
-**Status:** Living document — updated as we agree on things
+**Status:** Living document  --  updated as we agree on things
 **Started:** 2026-06-09
 **Purpose:** Single source of truth for what FRAME, frame-py, and Haxaml are and what fields exist
 
@@ -55,12 +55,12 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 
 | Field | Type | Required | Max | Decision |
 |---|---|---|---|---|
-| file | string (enum: facts/rules/map/expect/acts) | yes | — | |
-| schema_version | string (const: "0.3.0") | yes | — | |
-| role | string | yes | — | |
-| scope | string (enum: baseline_project/execution_record/handoff/mixed/null) | no | — | |
-| status | string (enum: draft/active/deprecated) | yes | — | |
-| last_reviewed | date | no | — | |
+| file | string (enum: facts/rules/map/expect/acts) | yes |  --  | |
+| schema_version | string (const: "0.3.0") | yes |  --  | |
+| role | string | yes |  --  | |
+| scope | string (enum: baseline_project/execution_record/handoff/mixed/null) | no |  --  | |
+| status | string (enum: draft/active/deprecated) | yes |  --  | |
+| last_reviewed | date | no |  --  | |
 | updated_by | string | no | 100 chars | |
 | update_reason | string | no | 500 chars | |
 
@@ -75,7 +75,7 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 | | repo_shape | string | no | 50 chars | **FIXED ENUM:** split-backend-frontend, monorepo, single-package, monolith, microservices |
 | | delivery_family | string | no | 50 chars | **FIXED ENUM:** cli, web-app, mobile-app, sdk, infra-tooling, data-pipeline, desktop-app, browser-extension, static-site, chatbot, game, devops-automation |
 | **classification** | kind | string | no | 100 chars | |
-| | surface_count | integer | no | — | |
+| | surface_count | integer | no |  --  | |
 | | surfaces | array[string] | no | 200 chars each | |
 | **technology** | (structured object) | object | no | 2000 chars total | **STRUCTURED.** Required keys: language, framework, database. Optional free-form extensions. |
 | **architecture** | summary | string | yes | 500 chars | **STRUCTURED + ANNOTATION.** Required human-readable summary. |
@@ -85,15 +85,15 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 | | deployment_topology | string | no | 500 chars | |
 | **environments** | (free-form per-env object) | object | no | 1000 chars total | |
 | **persistence** | (free-form object) | object | no | 1000 chars total | |
-| **sources** | (array) | array | no | — | |
+| **sources** | (array) | array | no |  --  | |
 | sources[] | id | string | yes | 100 chars | |
 | | path | string | yes | 200 chars | |
 | | purpose | string | yes | 300 chars | |
-| **quirks** | (array) | array | no | — | |
+| **quirks** | (array) | array | no |  --  | |
 | quirks[] | id | string | yes | 100 chars | |
 | | description | string | yes | 200 chars | |
 | | why | string | yes | 300 chars | |
-| **open_questions** | (array) | array | no | — | |
+| **open_questions** | (array) | array | no |  --  | |
 | open_questions[] | id | string | yes | 100 chars | |
 | | question | string | yes | 300 chars | |
 | | context | string | yes | 300 chars | |
@@ -104,30 +104,30 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 
 | Block | Field | Type | Required | Max | Decision |
 |---|---|---|---|---|---|
-| **governance_level** | (top-level field) | string | no | — | **FIXED ENUM:** relaxed, normal, strict. Default: normal. Controls how aggressively Haxaml enforces rules, ask_first, and validation. Does NOT affect mechanical validator (always runs). |
-| **rules** | (array) | array | no | — | Core behavioral constraints |
+| **governance_level** | (top-level field) | string | no |  --  | **FIXED ENUM:** relaxed, normal, strict. Default: normal. Controls how aggressively Haxaml enforces rules, ask_first, and validation. Does NOT affect mechanical validator (always runs). |
+| **rules** | (array) | array | no |  --  | Core behavioral constraints |
 | rules[] | id | string | yes | 100 chars | |
 | | rule | string | yes | 500 chars | |
-| **policies** | (array) | array | no | — | **Moved from Facts.** Policies are behavioral constraints, not current project truth. |
+| **policies** | (array) | array | no |  --  | **Moved from Facts.** Policies are behavioral constraints, not current project truth. |
 | policies[] | id | string | yes | 100 chars | |
 | | name | string | yes | 150 chars | |
 | | rule | string | yes | 500 chars | |
-| **commands** | (object) | object | no | — | Named shell commands |
+| **commands** | (object) | object | no |  --  | Named shell commands |
 | commands.<name> | run | string | yes | 500 chars | Shell command |
-| | kind | string | yes | — | **FIXED ENUM:** setup, verify, run |
+| | kind | string | yes |  --  | **FIXED ENUM:** setup, verify, run |
 | | purpose | string | yes | 300 chars | |
 | **code_style** | (free-form object) | object | no | 1000 chars | |
 | **git** | (free-form object) | object | no | 1000 chars | |
-| **donts** | (array) | array | no | — | Things you must never do |
+| **donts** | (array) | array | no |  --  | Things you must never do |
 | donts[] | id | string | yes | 100 chars | |
 | | rule | string | yes | 300 chars | |
-| | severity | string | no | — | **FIXED ENUM:** critical, warning. Default: critical. |
-| **ask_first** | (array) | array | no | — | **BOTH trigger types.** `trigger_type: file_pattern | task_pattern`. `trigger` holds the pattern. `reason` explains why. Enforcement determined by `governance_level` (relaxed | normal | strict). |
+| | severity | string | no |  --  | **FIXED ENUM:** critical, warning. Default: critical. |
+| **ask_first** | (array) | array | no |  --  | **BOTH trigger types.** `trigger_type: file_pattern | task_pattern`. `trigger` holds the pattern. `reason` explains why. Enforcement determined by `governance_level` (relaxed | normal | strict). |
 | ask_first[] | id | string | yes | 100 chars | |
-| | trigger_type | string | yes | — | **FIXED ENUM:** file_pattern, task_pattern |
+| | trigger_type | string | yes |  --  | **FIXED ENUM:** file_pattern, task_pattern |
 | | trigger | string | yes | 300 chars | |
 | | reason | string | yes | 300 chars | |
-| **hints** | (array) | array | no | — | Skill references, gotchas |
+| **hints** | (array) | array | no |  --  | Skill references, gotchas |
 | hints[] | id | string | yes | 100 chars | |
 | | hint | string | yes | 300 chars | |
 
@@ -138,24 +138,24 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 | Block | Field | Type | Required | Max | Decision |
 |---|---|---|---|---|---|
 | **structure** | (top block) | string | no | 800 chars | **TOP BLOCK.** Quick visual overview of repo layout. Flat text like "Backend/ → FastAPI (routes→services→models), Frontend/ → Vue 3 (views→stores→services)". Connects to roots/groups/paths below. |
-| **roots** | (free-form object) | object | no | — | Top-level directory purposes |
-| **groups** | (array) | array | no | — | Logical groupings. **Supports wildcards** for flexible coverage as repos scale. |
+| **roots** | (free-form object) | object | no |  --  | Top-level directory purposes |
+| **groups** | (array) | array | no |  --  | Logical groupings. **Supports wildcards** for flexible coverage as repos scale. |
 | groups[] | id | string | yes | 100 chars | |
 | | label | string | yes | 150 chars | |
 | | paths | array[string] | yes | 300 chars each | **Wildcards allowed** (e.g., `Backend/app/**/*.py`). |
-| **paths** | (array) | array | no | — | Critical individual files. **Explicit paths only.** |
+| **paths** | (array) | array | no |  --  | Critical individual files. **Explicit paths only.** |
 | paths[] | id | string | no | 100 chars | **Optional id.** Needed when a path is referenced from expect.checks or acts.runs.touched. |
 | | path | string | yes | 200 chars | |
 | | purpose | string | yes | 300 chars | |
-| **entrypoints** | (array) | array | no | — | CLI/API/web entry points. **Explicit paths only.** |
+| **entrypoints** | (array) | array | no |  --  | CLI/API/web entry points. **Explicit paths only.** |
 | entrypoints[] | id | string | yes | 100 chars | |
 | | path | string | yes | 200 chars | |
-| | kind | string | yes | — | **FIXED ENUM:** cli, api, web, script |
-| **managed_paths** | (array) | array | no | — | Paths under special rules. **Supports wildcards.** |
+| | kind | string | yes |  --  | **FIXED ENUM:** cli, api, web, script |
+| **managed_paths** | (array) | array | no |  --  | Paths under special rules. **Supports wildcards.** |
 | managed_paths[] | id | string | no | 100 chars | **Optional id.** Needed when rules reference specific managed paths (e.g., donts link to managed_paths.migrations). |
 | | path | string | yes | 200 chars | **Wildcards allowed** (e.g., `node_modules/**`, `*.pyc`). |
 | | rule | string | yes | 100 chars | **FIXED ENUM:** generated, config, immutable |
-| **unmapped_paths** | (array) | array | no | — | Honest about gaps. Invites improvement. |
+| **unmapped_paths** | (array) | array | no |  --  | Honest about gaps. Invites improvement. |
 | unmapped_paths[] | path | string | yes | 200 chars | |
 | | reason | string | yes | 200 chars | |
 
@@ -163,20 +163,20 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 
 | Block | Field | Type | Required | Max | Decision |
 |---|---|---|---|---|---|
-| **outcomes** | (object) | object | no | — | Named expected results of work |
+| **outcomes** | (object) | object | no |  --  | Named expected results of work |
 | outcomes.<name> | summary | string | yes | 300 chars | |
-| **must_hold** | (array) | array | no | — | Invariants that must stay true |
+| **must_hold** | (array) | array | no |  --  | Invariants that must stay true |
 | must_hold[] | id | string | yes | 100 chars | |
 | | statement | string | yes | 300 chars | |
-| **checks** | (object) | object | no | — | Named verification checks. **These feed the mechanical validator.** |
+| **checks** | (object) | object | no |  --  | Named verification checks. **These feed the mechanical validator.** |
 | checks.<name> | name | string | yes | 100 chars | |
 | | what | string | yes | 300 chars | What is being checked |
 | | command_ref | string | no | 200 chars | Ref to rules.commands.<name> |
 | | pass_condition | string | no | 200 chars | **MACHINE-PARSEABLE.** `exit_code == 0`, `stdout contains "BUILD SUCCESS"`, `stdout matches "^[a-f0-9]{12}_"`, `file_exists "dist/index.html"` |
-| **done_when** | (object) | object | no | — | Completion conditions |
-| **proof** | (array) | array | no | — | Required evidence types |
+| **done_when** | (object) | object | no |  --  | Completion conditions |
+| **proof** | (array) | array | no |  --  | Required evidence types |
 | proof[] | id | string | yes | 100 chars | |
-| | type | string | yes | — | **FIXED ENUM:** review, smoke_test, static_check, unavailable |
+| | type | string | yes |  --  | **FIXED ENUM:** review, smoke_test, static_check, unavailable |
 | | description | string | yes | 300 chars | |
 
 ### Acts blocks (to be populated)
@@ -184,29 +184,29 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 | Block | Field | Type | Required | Max | Decision |
 |---|---|---|---|---|---|
 | **summary** | (top block) | string | no | 500 chars | Quick overview of recent activity |
-| **runs** | (array) | array | no | — | Per-session run records |
+| **runs** | (array) | array | no |  --  | Per-session run records |
 | runs[] | id | string | yes | 100 chars | |
 | | actor | string | yes | 100 chars | |
 | | goal | string | yes | 300 chars | |
-| | work_kind | array[string] | no | — | code, test, review, docs, deploy |
+| | work_kind | array[string] | no |  --  | code, test, review, docs, deploy |
 | | keywords | array[string] | no | 100 chars each | |
 | | input_summary | string | no | 300 chars | |
 | | output_summary | string | no | 300 chars | |
-| | status | string | yes | — | pass, pass_with_risks, fail, needs_clarification |
+| | status | string | yes |  --  | pass, pass_with_risks, fail, needs_clarification |
 | | touched | array[string] | no | 200 chars each | |
 | | changed_facts | array[string] | no | 200 chars each | |
 | | rules_followed | array[string] | no | 100 chars each | |
-| | checks | array[object] | no | — | **Collapsed.** Status per check: `ran` (with result) or `skipped` (with reason). No redundancy. |
+| | checks | array[object] | no |  --  | **Collapsed.** Status per check: `ran` (with result) or `skipped` (with reason). No redundancy. |
 | checks[] | id | string | yes | 100 chars | Ref to expect.checks.<name> |
-| | status | string | yes | — | **FIXED ENUM:** ran, skipped |
-| | result | string | no | — | pass, fail (only when status=ran) |
+| | status | string | yes |  --  | **FIXED ENUM:** ran, skipped |
+| | result | string | no |  --  | pass, fail (only when status=ran) |
 | | reason | string | no | 200 chars | Why skipped (only when status=skipped) |
-| **blockers** | (array) | array | no | — | Things preventing progress |
+| **blockers** | (array) | array | no |  --  | Things preventing progress |
 | blockers[] | id | string | yes | 100 chars | |
 | | description | string | yes | 300 chars | |
 | **handoff** | (free-form object) | object | no | 500 chars | What next agent needs to know |
 | | | | | | |
-| **archival** | — | — | — | Size cap: acts.yaml max 50KB. Exceeded → oldest runs auto-rotated to acts_archive/YYYY-MM-acts.yaml.gz. Hot file stays fast. History preserved. |
+| **archival** |  --  |  --  |  --  | Size cap: acts.yaml max 50KB. Exceeded → oldest runs auto-rotated to acts_archive/YYYY-MM-acts.yaml.gz. Hot file stays fast. History preserved. |
 
 ---
 
@@ -216,7 +216,7 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 **Agreed:** 2026-06-09
 
 No per-project-type FRAME variants. The same 5-part schema applies to all software categories.
-Unused blocks are explicitly left empty/null/`[]` — this is valid and intentional.
+Unused blocks are explicitly left empty/null/`[]`  --  this is valid and intentional.
 
 ### Decision 1: Agents fill FRAME, devs review
 **Agreed:** 2026-06-09
@@ -246,7 +246,7 @@ The free-form `identity` catch-all is removed. `profile.name` and `profile.summa
 ### Decision 6: Character limits enforced by field category
 **Agreed:** 2026-06-09
 
-Every field has a max character count. Core governance fields (ids, names, rules, donts, checks, pass_condition, command references) are **enforced** — frame-py refuses to load if exceeded. Descriptive blocks (code_style, git, architecture sub-blocks, environment descriptions, handoff notes) are **advisory** — Haxaml warns but loads. Characters, not tokens — no tokenizer dependency.
+Every field has a max character count. Core governance fields (ids, names, rules, donts, checks, pass_condition, command references) are **enforced**  --  frame-py refuses to load if exceeded. Descriptive blocks (code_style, git, architecture sub-blocks, environment descriptions, handoff notes) are **advisory**  --  Haxaml warns but loads. Characters, not tokens  --  no tokenizer dependency.
 
 ### Decision 7: id required on linkable array entries only
 **Agreed:** 2026-06-09
@@ -261,15 +261,15 @@ Every field has a max character count. Core governance fields (ids, names, rules
 | must_hold[], proof[] | outcomes (key is name), checks (key is name), done_when |
 | runs[], blockers[] | summary, handoff |
 
-### Decision 8: Link relations — closed set of 9
+### Decision 8: Link relations  --  closed set of 9
 **Agreed:** 2026-06-09
 
-`supports` merged into `explains`. Final set: uses, follows, checks, proves, points_to, changes, touches, explains, blocks. Closed — no custom relations. If a new relation is needed, it becomes a schema update.
+`supports` merged into `explains`. Final set: uses, follows, checks, proves, points_to, changes, touches, explains, blocks. Closed  --  no custom relations. If a new relation is needed, it becomes a schema update.
 
 ### Decision 9: Schema files use JSON, FRAME files use YAML
 **Agreed:** 2026-06-09
 
-JSON Schema files that define FRAME's structure are written in JSON — they're consumed by validators, not read by humans. JSON requires no extra parsing step, is universally parseable, and is the native format of every JSON Schema validator. FRAME files (facts, rules, map, expect, acts) remain YAML for human readability.
+JSON Schema files that define FRAME's structure are written in JSON  --  they're consumed by validators, not read by humans. JSON requires no extra parsing step, is universally parseable, and is the native format of every JSON Schema validator. FRAME files (facts, rules, map, expect, acts) remain YAML for human readability.
 
 | Relation | Meaning | Example |
 |---|---|---|

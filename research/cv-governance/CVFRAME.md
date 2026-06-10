@@ -2,14 +2,14 @@
 
 **Author:** Archilles (Hermes Agent)
 **Date:** 2026-06-08
-**Status:** Active — applies to all future CV generation
+**Status:** Active  --  applies to all future CV generation
 **Trigger:** Palantir CV contained hallucinated university name, unverified AI claims, and linked to private repos
 
 ---
 
-## 1. What Went Wrong — Root Cause Analysis
+## 1. What Went Wrong  --  Root Cause Analysis
 
-On 2026-06-07, a CV was generated for Palantir (Forward Deployed AI Engineer). The output was structurally strong — good wording, good rhythm, good layout — but contained three classes of error that make it unusable:
+On 2026-06-07, a CV was generated for Palantir (Forward Deployed AI Engineer). The output was structurally strong  --  good wording, good rhythm, good layout  --  but contained three classes of error that make it unusable:
 
 ### Error Class A: Hallucinated Immutable Fact
 | What the CV said | What it should say |
@@ -21,12 +21,12 @@ The university name exists in the profile JSON (`arinze_profile.local.json`, lin
 **Root cause:** Free-text generation of a field that should be a typed constant.
 
 ### Error Class B: Unverified AI Claims on Public Repo
-The CV claimed Pharmax has "Integrated AI-powered features for intelligent product queries and inventory insights" and "AI-assisted operational workflows." The public repo (Pharmax-backend) shows products CRUD, invoice lifecycle, stock adjustments, pytest suite — zero AI endpoints. A recruiter checking GitHub sees a standard backend and wonders what else is fabricated.
+The CV claimed Pharmax has "Integrated AI-powered features for intelligent product queries and inventory insights" and "AI-assisted operational workflows." The public repo (Pharmax-backend) shows products CRUD, invoice lifecycle, stock adjustments, pytest suite  --  zero AI endpoints. A recruiter checking GitHub sees a standard backend and wonders what else is fabricated.
 
-**Root cause:** No evidence-gating — project claims were generated without checking what the public README actually documents. The profile says "DO NOT invent AI features not visible in the public README" but this was a soft instruction in a markdown file, not a hard validation rule.
+**Root cause:** No evidence-gating  --  project claims were generated without checking what the public README actually documents. The profile says "DO NOT invent AI features not visible in the public README" but this was a soft instruction in a markdown file, not a hard validation rule.
 
 ### Error Class C: Private Repo Linked Publicly
-Pharmax-backend was linked in the CV despite being a private/proprietary repo. A recruiter clicking the link gets a 404 or permission denied. This alone can tank an application — it looks like you're hiding something or being sloppy.
+Pharmax-backend was linked in the CV despite being a private/proprietary repo. A recruiter clicking the link gets a 404 or permission denied. This alone can tank an application  --  it looks like you're hiding something or being sloppy.
 
 **Root cause:** No repo-visibility check before including URLs. The profile says the full SaaS is proprietary, but the generation pipeline didn't gate on "only include public repos."
 
@@ -39,7 +39,7 @@ Aptech dates rendered as "(2022, 2024)" instead of "Sep 2022 – Aug 2024." Mino
 
 ## 2. Why "Read the profile carefully" Won't Fix This
 
-The fundamental problem is not that the LLM didn't read the profile. It's that the LLM was asked to *generate* text for fields where generation should never happen. University name, dates, repo URLs, project evidence — these are data, not prose. They should be *interpolated* from a typed source of truth, not *synthesized* from memory.
+The fundamental problem is not that the LLM didn't read the profile. It's that the LLM was asked to *generate* text for fields where generation should never happen. University name, dates, repo URLs, project evidence  --  these are data, not prose. They should be *interpolated* from a typed source of truth, not *synthesized* from memory.
 
 Asking an LLM to "remember the university is Middlesex" works until it doesn't. One token of drift and you've got Hertfordshire. The fix is structural, not instructional.
 
@@ -49,9 +49,9 @@ Asking an LLM to "remember the university is Middlesex" works until it doesn't. 
 
 CV-FRAME applies the FRAME model (Facts → Rules → Acts → Map → Expect) to CV generation. The core principle: **immutable data is never generated, only interpolated.**
 
-### F: Facts — The Typed Profile
+### F: Facts  --  The Typed Profile
 
-The existing `arinze_profile.local.json` becomes the single source of truth, but it needs a sibling: `cv_profile.typed.json` — a stricter schema designed specifically for CV interpolation.
+The existing `arinze_profile.local.json` becomes the single source of truth, but it needs a sibling: `cv_profile.typed.json`  --  a stricter schema designed specifically for CV interpolation.
 
 ```jsonc
 {
@@ -212,7 +212,7 @@ The existing `arinze_profile.local.json` becomes the single source of truth, but
         "Cross-platform messaging gateway (Telegram, Discord, WhatsApp)"
       ],
       "forbidden_claims": [
-        "Never write 'Claude Code' — the agent is Archilles"
+        "Never write 'Claude Code'  --  the agent is Archilles"
       ]
     }
   },
@@ -248,7 +248,7 @@ The existing `arinze_profile.local.json` becomes the single source of truth, but
 }
 ```
 
-### R: Rules — Generation Constraints
+### R: Rules  --  Generation Constraints
 
 These are hard constraints that run BEFORE and AFTER generation. They are code, not prompts.
 
@@ -270,7 +270,7 @@ PROJECT_RULES:
     project_registry.<project>.forbidden_claims
 
 LANGUAGE_RULES:
-  - NO em dashes (—)
+  - NO em dashes ( -- )
   - NO forbidden verbs: Spearheaded, Leveraged, Orchestrated, Drove, Championed, Utilized, Harnessed
   - NO "Claude Code" anywhere
   - NO internal notes, safety warnings, or "do not claim" sections in CV
@@ -278,7 +278,7 @@ LANGUAGE_RULES:
   - Core Skills must have at least 4 populated groups
 ```
 
-### A: Acts — The Generation Pipeline
+### A: Acts  --  The Generation Pipeline
 
 The pipeline is locked to these steps. No step can be skipped.
 
@@ -317,10 +317,10 @@ STEP 6: FINAL SCAN
   → Em dash scan (grep for \u2014)
   → Forbidden verb scan
   → University name verification (grep for "Middlesex")
-  → Repo URL verification (grep for github.com — cross-check against project_registry include_url_in_cv)
+  → Repo URL verification (grep for github.com  --  cross-check against project_registry include_url_in_cv)
 ```
 
-### M: Map — The CV Structure Template
+### M: Map  --  The CV Structure Template
 
 The HTML/CSS template is version-controlled and not regenerated each time. Only the content slots are filled.
 
@@ -341,7 +341,7 @@ SLOTS (filled from profile or LLM generation):
                               "ADSE Java, Aptech Computer Education, Lagos (September 2022 – August 2024)"
 ```
 
-### E: Expect — Validation Assertions
+### E: Expect  --  Validation Assertions
 
 These run as `cv_validator.py` after generation and before any PDF export. A single violation = regeneration required.
 
@@ -410,12 +410,12 @@ VALIDATION CHECKS (fail = block PDF export):
 └── cv_generate.py                  ← Pipeline orchestrator (steps 0-6)
 ```
 
-### cv_validator.py — Core Logic
+### cv_validator.py  --  Core Logic
 
 ```python
 #!/usr/bin/env python3
 """
-CV-FRAME Validator — runs all validation assertions before PDF export.
+CV-FRAME Validator  --  runs all validation assertions before PDF export.
 Returns exit code 0 if clean, 1 if violations found.
 Usage: python3 cv_validator.py <cv_markdown_path> <cv_profile_path>
 """
@@ -473,14 +473,14 @@ def check_repo_visibility(cv_text, project_registry):
                 if not proj.get("include_url_in_cv", False):
                     violations.append(
                         f"PRIVATE REPO URL: {proj['display_name']} ({repo_url}) "
-                        f"is not public — remove URL from CV"
+                        f"is not public  --  remove URL from CV"
                     )
     return violations
 
 def check_em_dashes(cv_text):
     count = cv_text.count("\u2014")
     if count > 0:
-        return [f"EM DASHES: {count} found — replace with comma/semicolon/period"]
+        return [f"EM DASHES: {count} found  --  replace with comma/semicolon/period"]
     return []
 
 def check_forbidden_verbs(cv_text):
@@ -496,7 +496,7 @@ def check_forbidden_verbs(cv_text):
 
 def check_claude_code(cv_text):
     if "Claude Code" in cv_text:
-        return ["CLAUDE CODE: 'Claude Code' found — must be 'Archilles' or 'Archilles (Hermes Agent fork)'"]
+        return ["CLAUDE CODE: 'Claude Code' found  --  must be 'Archilles' or 'Archilles (Hermes Agent fork)'"]
     return []
 
 def check_section_completeness(cv_text):
@@ -575,10 +575,10 @@ def main():
             total_violations += len(violations)
 
     if total_violations == 0:
-        print("\n✓ ALL CHECKS PASSED — CV is clean for PDF export")
+        print("\n✓ ALL CHECKS PASSED  --  CV is clean for PDF export")
         sys.exit(0)
     else:
-        print(f"\n✗ {total_violations} TOTAL VIOLATIONS — fix before PDF export")
+        print(f"\n✗ {total_violations} TOTAL VIOLATIONS  --  fix before PDF export")
         sys.exit(1)
 
 if __name__ == "__main__":
@@ -593,24 +593,24 @@ Arinze, this IS FRAME applied to a real problem. The Palantir CV failure is exac
 
 | FRAME Component | CV Governance Mapping |
 |---|---|
-| **Facts** | `locked_constants` — university name, dates, URLs. Immutable. Never generated. |
+| **Facts** | `locked_constants`  --  university name, dates, URLs. Immutable. Never generated. |
 | **Rules** | Validation assertions in `cv_validator.py`. Hard constraints, not soft prompts. |
 | **Acts** | The 7-step pipeline (Profile Load → JD Extract → Generate → Validate → Review → PDF → Scan). No step can be skipped. |
 | **Map** | The HTML template with `{{SLOTS}}`. Structure is fixed; only designated slots are filled. |
 | **Expect** | The 10 validation checks. A single violation blocks PDF export. The system refuses to produce a broken artifact. |
 
-The key insight: **FRAME isn't just for AI coding agents. It's for any process where an LLM generates output that must stay aligned with a source of truth.** CV generation is a perfect use case — the profile is the Facts, the validator is the Rules, and the CV is the output that must pass Expect before it ships.
+The key insight: **FRAME isn't just for AI coding agents. It's for any process where an LLM generates output that must stay aligned with a source of truth.** CV generation is a perfect use case  --  the profile is the Facts, the validator is the Rules, and the CV is the output that must pass Expect before it ships.
 
 ---
 
 ## 6. Immediate Actions
 
-1. **Create `cv_profile.typed.json`** — extract locked constants and project registry from the profile
-2. **Create `cv_validator.py`** — the validation script above
-3. **Update `cv_template.html`** — add `{{SLOTS}}` for locked fields
-4. **Patch the CV generation skills** — add STEP 3 (validation) as a mandatory gate
-5. **Fix the Palantir CV** — regenerate with Hertfordshire→Middlesex, remove Pharmax AI claims, remove private repo link
-6. **Add pre-commit hook** — `cv_validator.py` runs before any PDF export, no exceptions
+1. **Create `cv_profile.typed.json`**  --  extract locked constants and project registry from the profile
+2. **Create `cv_validator.py`**  --  the validation script above
+3. **Update `cv_template.html`**  --  add `{{SLOTS}}` for locked fields
+4. **Patch the CV generation skills**  --  add STEP 3 (validation) as a mandatory gate
+5. **Fix the Palantir CV**  --  regenerate with Hertfordshire→Middlesex, remove Pharmax AI claims, remove private repo link
+6. **Add pre-commit hook**  --  `cv_validator.py` runs before any PDF export, no exceptions
 
 ---
 

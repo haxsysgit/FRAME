@@ -8,8 +8,8 @@ Semantic-version-style tags:
 
 ## What versions mean
 
-- `v0.MINOR.0` — significant milestone: major doc/architecture shift, contract change, new implementation phase
-- `v0.MINOR.PATCH` — smaller improvements within the same milestone: clarified docs, validation improvements, fixture/test expansion
+- `v0.MINOR.0`  --  significant milestone: major doc/architecture shift, contract change, new implementation phase
+- `v0.MINOR.PATCH`  --  smaller improvements within the same milestone: clarified docs, validation improvements, fixture/test expansion
 
 ## Release rhythm
 
@@ -22,14 +22,14 @@ Semantic-version-style tags:
 Tag when:
 - the core FRAME definition materially changes
 - schema direction changes in a meaningful way
-- `frame-python` reaches a meaningful executable milestone
+- `frame-py` reaches a meaningful executable milestone
 - evaluation harness/fixtures become meaningfully stronger
 
 ## Current baseline
 
-Current target: **v0.3.0** — schema finalization, JSON/YAML schemas, frame-python SDK rebuild.
+Current target: **v0.3.0**  --  schema finalization, JSON/YAML schemas, frame-py SDK rebuild.
 
 Previous lines:
-- v0.2.0 — simplified naming, stronger cross-links, Acts as run history
-- v0.1.0 — initial five-part candidate, early Frame Lab rounds
-- v0.0.x — exploration and initial architecture
+- v0.2.0  --  simplified naming, stronger cross-links, Acts as run history
+- v0.1.0  --  initial five-part candidate, early Frame Lab rounds
+- v0.0.x  --  exploration and initial architecture

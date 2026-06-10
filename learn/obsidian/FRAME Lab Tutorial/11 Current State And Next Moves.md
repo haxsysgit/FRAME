@@ -53,7 +53,7 @@ Not final, but clearly stronger.
 
 1. tighten authoring rules for `work_kind`, `keywords`, touched refs, and proof fields
 2. run more fixtures closer to haxjobs and dashboard-style app realities
-3. turn the strongest parts into better typed models in `frame-python`
+3. turn the strongest parts into better typed models in `frame-py`
 4. keep refusing schema growth unless repeated evidence forces it
 
 ## Main lesson

@@ -15,7 +15,7 @@ The 0.2.0 line is centered on:
 - cleaner ownership of truth
 - a retrieval-friendly view of Acts
 - clearer separation between referenced checks and executed checks
-- stronger design pressure from future typed tooling like Haxaml and `frame-python`
+- stronger design pressure from future typed tooling like Haxaml and `frame-py`
 - lower tolerance for schema bloat
 
 ### Main changes from 0.1.0

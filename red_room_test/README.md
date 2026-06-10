@@ -1,4 +1,4 @@
-# Red Room Test — FRAME Mechanical Validator
+# Red Room Test  --  FRAME Mechanical Validator
 
 Tests whether the FRAME mechanical validator actually catches real agent errors
 in a realistic agent-coding scenario. Pattern: CV governance experiment applied to code.
@@ -15,7 +15,7 @@ red_room_test/
 │   └── acts.yaml        ← Run history (starts empty)
 │
 ├── pharmax_clean/        ← Clean copy of Pharmax (agent workspace)
-│   └── (no .haxaml/ — the agent cannot see our truth)
+│   └── (no .haxaml/  --  the agent cannot see our truth)
 │
 └── test_harness.py       ← Runs verification
 ```
@@ -23,7 +23,7 @@ red_room_test/
 ## How it works
 
 1. We deeply traversed Pharmax and created the ground-truth FRAME in `pharmax_frame/`.
-   This is the source of truth — it captures what the project actually is.
+   This is the source of truth  --  it captures what the project actually is.
 
 2. `pharmax_clean/` is a copy of Pharmax WITHOUT FRAME files.
    The agent can only see this directory. It cannot see `pharmax_frame/`.

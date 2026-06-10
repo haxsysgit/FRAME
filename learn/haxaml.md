@@ -35,5 +35,5 @@ The standard needs room to support other tools, runtimes, and implementations.
 
 ## Current stance
 
-Right now, focus the active rebuild on FRAME itself and on `frame-python` as the first fresh implementation track.
+Right now, focus the active rebuild on FRAME itself and on `frame-py` as the first fresh implementation track.
 Use Haxaml mainly as historical pressure, lessons, and future runtime context.

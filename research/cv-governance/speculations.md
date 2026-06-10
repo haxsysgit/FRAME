@@ -1,11 +1,11 @@
-# frameconvo.md — Typed Validation for AI Agent Outputs
+# frameconvo.md  --  Typed Validation for AI Agent Outputs
 
 **Context:** A conversation about why AI agents hallucinate immutable facts,
 and how code-level enforcement prevents it when prompt-level instructions cannot.
 
 ---
 
-## Part 1: The Problem — Why Prompts Can't Solve This
+## Part 1: The Problem  --  Why Prompts Can't Solve This
 
 ### Scenario A: The University Name
 
@@ -15,7 +15,7 @@ You tell an agent:
 
 The agent writes the CV. Halfway through the Professional Summary, it generates the word "Hertfordshire" instead of "Middlesex." Why?
 
-Because the agent isn't *copying* the university name — it's *generating* it from the same probability distribution that produces every other word. "University of [London university]" is a pattern. "Hertfordshire" is a plausible completion. One token of drift and the fact is wrong.
+Because the agent isn't *copying* the university name  --  it's *generating* it from the same probability distribution that produces every other word. "University of [London university]" is a pattern. "Hertfordshire" is a plausible completion. One token of drift and the fact is wrong.
 
 The prompt said "Middlesex." The agent read it. It still wrote Hertfordshire.
 
@@ -31,7 +31,7 @@ The agent writes:
 
 > "Integrated AI-powered features for intelligent product queries and inventory insights on top of the operational backend."
 
-Why? Because the agent's training data links "modern SaaS platform" to "AI features." The instruction "do not invent AI features" is a negation — and LLMs are bad at negations. The word "AI" is in the prompt (in the negation), which makes it *more* likely to appear in the output, not less. This is the "don't think of a white bear" problem — mentioning the forbidden thing increases its probability.
+Why? Because the agent's training data links "modern SaaS platform" to "AI features." The instruction "do not invent AI features" is a negation  --  and LLMs are bad at negations. The word "AI" is in the prompt (in the negation), which makes it *more* likely to appear in the output, not less. This is the "don't think of a white bear" problem  --  mentioning the forbidden thing increases its probability.
 
 **Why prompts fail:** Negations are not gates. Telling an agent what NOT to do primes it to do exactly that.
 
@@ -39,7 +39,7 @@ Why? Because the agent's training data links "modern SaaS platform" to "AI featu
 
 You tell an agent:
 
-> "List my projects. Pharmax-backend is private — don't link to it."
+> "List my projects. Pharmax-backend is private  --  don't link to it."
 
 The agent generates:
 
@@ -47,11 +47,11 @@ The agent generates:
 
 Why? Because the agent's training associates "project" with "GitHub link." The pattern is so strong that the instruction to suppress it gets overridden. The agent sees the repo name in context, the URL is a natural completion, and out it comes.
 
-**Why prompts fail:** Statistical patterns in training data are stronger than instructions in a prompt. The agent's default mode is "include the link" — suppressing it requires the instruction to overcome millions of training examples.
+**Why prompts fail:** Statistical patterns in training data are stronger than instructions in a prompt. The agent's default mode is "include the link"  --  suppressing it requires the instruction to overcome millions of training examples.
 
 ---
 
-## Part 2: The Solution — Code-Level Enforcement
+## Part 2: The Solution  --  Code-Level Enforcement
 
 The pattern is always the same:
 
@@ -64,7 +64,7 @@ The validator is a Python script. It is not a prompt. It is not an LLM. It is de
 
 ### How It Works: Three Validation Strategies
 
-#### Strategy 1: Exact Match — "This must be here"
+#### Strategy 1: Exact Match  --  "This must be here"
 
 **Use when:** A piece of text must appear verbatim in the output.
 
@@ -83,11 +83,11 @@ def check_locked_constants(cv_text, profile):
     return violations
 ```
 
-**What happens:** The validator opens the generated CV, reads every line, and checks if "Middlesex University London" appears anywhere. If it doesn't — or if the agent wrote "University of Hertfordshire" — the check fails. PDF export is blocked.
+**What happens:** The validator opens the generated CV, reads every line, and checks if "Middlesex University London" appears anywhere. If it doesn't  --  or if the agent wrote "University of Hertfordshire"  --  the check fails. PDF export is blocked.
 
 **Why this works:** The agent can write "Hertfordshire" but the validator will grep for "Middlesex University London" and fail if it's missing. The agent can't pass the check with the wrong value. There's no way to "prompt engineer" around a string match.
 
-#### Strategy 2: Absence Check — "This must NOT be here"
+#### Strategy 2: Absence Check  --  "This must NOT be here"
 
 **Use when:** Certain words or phrases must never appear in the output.
 
@@ -118,7 +118,7 @@ def check_forbidden_claims(cv_text, projects):
 
 **Why this works:** The validator doesn't care *why* the agent wrote it. It doesn't negotiate. It just checks: does this string appear? If yes, fail. No ambiguity.
 
-#### Strategy 3: Membership Gate — "Only these are allowed"
+#### Strategy 3: Membership Gate  --  "Only these are allowed"
 
 **Use when:** The output should only reference items from an approved list.
 
@@ -154,11 +154,11 @@ def check_repo_visibility(cv_text, projects):
 
 **What happens:** The validator finds all GitHub URLs in the CV, cross-references them against the project registry, and fails if any URL belongs to a project with `show_url: false`. Even if the agent writes the Pharmax link 10 times, the validator catches it.
 
-**Why this works:** The agent can generate URLs freely. The validator checks them against an allowlist. Anything not on the allowlist is flagged. This is the same pattern as a firewall — allow by default is dangerous, deny by default is safe.
+**Why this works:** The agent can generate URLs freely. The validator checks them against an allowlist. Anything not on the allowlist is flagged. This is the same pattern as a firewall  --  allow by default is dangerous, deny by default is safe.
 
 ---
 
-## Part 3: The Full Picture — A Real Validation Run
+## Part 3: The Full Picture  --  A Real Validation Run
 
 Let's walk through what happens when the validator runs against the broken Palantir CV:
 
@@ -193,7 +193,7 @@ PASSED: CLAUDE CODE (not found)
 PASSED: SECTION COMPLETENESS (summary 72 words, 5 skill groups)
 PASSED: EDUCATION ORDER (Middlesex before Aptech)
 
-✗ 5 TOTAL VIOLATIONS — fix before PDF export
+✗ 5 TOTAL VIOLATIONS  --  fix before PDF export
 ```
 
 The agent produced a CV with 5 violations. The validator caught all 5. The PDF was never exported. Arinze never saw a broken CV.
@@ -215,7 +215,7 @@ PASSED: SECTION COMPLETENESS (summary 68 words, 5 skill groups)
 PASSED: EDUCATION ORDER (Middlesex before Aptech)
 PASSED: DATE FORMAT (all ranges valid)
 
-✓ ALL CHECKS PASSED — CV is clean for PDF export
+✓ ALL CHECKS PASSED  --  CV is clean for PDF export
 ```
 
 Now the PDF is generated. Arinze gets a CV he can actually use.
@@ -236,7 +236,7 @@ Now the PDF is generated. Arinze gets a CV he can actually use.
 
 ### The "Don't Think of a White Bear" Problem
 
-Every forbidden phrase in a prompt becomes *more* likely to appear in the output, not less. This is well-documented in LLM research — negations increase the probability of the negated term.
+Every forbidden phrase in a prompt becomes *more* likely to appear in the output, not less. This is well-documented in LLM research  --  negations increase the probability of the negated term.
 
 Example:
 
@@ -246,7 +246,7 @@ Agent internal state: [Pharmax] [AI-powered] [features] → high activation
 Output: "...built an AI-powered platform with intelligent features..."
 ```
 
-The words "AI-powered" and "features" are right there in the prompt. The agent's attention mechanism lit them up. The instruction to suppress them creates tension, but the words are already activated — and in a long generation, activation wins over instruction.
+The words "AI-powered" and "features" are right there in the prompt. The agent's attention mechanism lit them up. The instruction to suppress them creates tension, but the words are already activated  --  and in a long generation, activation wins over instruction.
 
 Compare with validation:
 
@@ -261,13 +261,13 @@ The agent has no idea the check exists. It cannot "game" it. It cannot be influe
 
 Every token the agent generates carries a small probability of error. Over 500 tokens (a typical CV), the probability that at least one token drifts is significant.
 
-Prompt-based enforcement asks the agent to maintain perfect accuracy across all 500 tokens. Code-based enforcement only asks the agent to generate text — and then checks the ~20 tokens that actually matter (university name, dates, URLs, forbidden phrases).
+Prompt-based enforcement asks the agent to maintain perfect accuracy across all 500 tokens. Code-based enforcement only asks the agent to generate text  --  and then checks the ~20 tokens that actually matter (university name, dates, URLs, forbidden phrases).
 
 This is the difference between "please be perfect" and "do your best, I'll check the important parts."
 
 ---
 
-## Part 5: Beyond CVs — Where This Pattern Applies
+## Part 5: Beyond CVs  --  Where This Pattern Applies
 
 ### Email Generation
 

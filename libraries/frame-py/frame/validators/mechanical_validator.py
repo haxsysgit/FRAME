@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-FRAME Mechanical Validator — v0.1.0
+FRAME Mechanical Validator  --  v0.1.0
 
 Reads expect.yaml checks and rules.yaml commands, executes declared checks,
 and returns a deterministic pass/fail verdict.
@@ -98,7 +98,7 @@ def run_check(check, command, project_dir):
     if kind in ('run', 'serve', 'dev'):
         print(f"\n  [{check['name']}]")
         print(f"    command:     {run_str}")
-        print(f"    result:      SKIP (kind={kind} — server/interactive)")
+        print(f"    result:      SKIP (kind={kind}  --  server/interactive)")
         return {
             'check_id': check['id'],
             'name': check['name'],
@@ -184,7 +184,7 @@ def main():
         print("No checks with command_ref found in expect.yaml.")
         sys.exit(0)
 
-    print(f"FRAME Validator — {len(checks)} check(s)\n")
+    print(f"FRAME Validator  --  {len(checks)} check(s)\n")
 
     results = []
     for check in checks:

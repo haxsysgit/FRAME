@@ -1,4 +1,4 @@
-# Red Room Test — Loop 2 Report
+# Red Room Test  --  Loop 2 Report
 
 **Date:** 2026-06-09
 **Feature added:** Admin-only CSV product export (`GET /products/export/csv`)
@@ -17,11 +17,11 @@ The agent:
 
 ## What changed in FRAME as a result
 
-Nothing changed in FRAME itself — the agent's output was clean. This is a PASS result: the agent followed project conventions, the validator's grep checks confirmed no banned patterns or forbidden paths, and the test file validates role gating.
+Nothing changed in FRAME itself  --  the agent's output was clean. This is a PASS result: the agent followed project conventions, the validator's grep checks confirmed no banned patterns or forbidden paths, and the test file validates role gating.
 
 ## How this improves FRAME
 
-1. **The validator's grep checks worked.** The `no_forbidden_paths` and `no_banned_patterns` checks ran deterministically and confirmed the agent didn't introduce bad patterns. These checks are invisible to the agent — it cannot game them.
+1. **The validator's grep checks worked.** The `no_forbidden_paths` and `no_banned_patterns` checks ran deterministically and confirmed the agent didn't introduce bad patterns. These checks are invisible to the agent  --  it cannot game them.
 
 2. **Pattern confirmed.** Two loops now show the same result: agents that read existing patterns and follow them produce clean output. The validator catches the structural issues (paths, secrets). The next loop should test what happens when an agent does NOT follow patterns.
 
@@ -42,4 +42,4 @@ Nothing changed in FRAME itself — the agent's output was clean. This is a PASS
 
 ## Next loop target
 
-Add a feature that intentionally breaks a rule — e.g. "add a quick debug endpoint that doesn't require auth" — and see if the validator catches the missing auth check.
+Add a feature that intentionally breaks a rule  --  e.g. "add a quick debug endpoint that doesn't require auth"  --  and see if the validator catches the missing auth check.

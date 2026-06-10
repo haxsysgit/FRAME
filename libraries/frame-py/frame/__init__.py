@@ -1,14 +1,14 @@
-"""FRAME Python SDK — v0.1.0
+"""FRAME Python SDK  --  v0.1.0
 
 Load, validate, translate, and mechanically verify FRAME project context files.
 
 Package layout:
-    frame.models        — Dataclass models for FRAME documents and parts
-    frame.loaders       — YAML/JSON file loading into typed models
-    frame.validators    — Schema validation + mechanical command verification
-    frame.translators   — Format conversion (YAML ↔ JSON ↔ typed models)
-    frame.computations  — Graph building, cross-referencing, consistency reports
-    frame.helpers       — Shared utilities
+    frame.models         --  Dataclass models for FRAME documents and parts
+    frame.loaders        --  YAML/JSON file loading into typed models
+    frame.validators     --  Schema validation + mechanical command verification
+    frame.translators    --  Format conversion (YAML ↔ JSON ↔ typed models)
+    frame.computations   --  Graph building, cross-referencing, consistency reports
+    frame.helpers        --  Shared utilities
 """
 
 from frame.models.model import FrameDocument, FrameEntry, FramePart

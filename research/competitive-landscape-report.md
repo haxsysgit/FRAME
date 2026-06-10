@@ -37,23 +37,23 @@ Every major coding agent uses unstructured Markdown for project context:
 
 | Project | Format | Schema | Overlap with FRAME |
 |---|---|---|---|
-| **ktext** | CONTEXT.yaml (8 sections) | JSON Schema 2020-12 | ~60% — typed project context, CI validation, but no governance/runtime |
-| **agent-memory** | Structured Markdown with @id anchors | Loose per-category | ~40% — structured project memory, MCP, review gates, but no typed schema or mechanical validation |
+| **ktext** | CONTEXT.yaml (8 sections) | JSON Schema 2020-12 | ~60%  --  typed project context, CI validation, but no governance/runtime |
+| **agent-memory** | Structured Markdown with @id anchors | Loose per-category | ~40%  --  structured project memory, MCP, review gates, but no typed schema or mechanical validation |
 
 **ktext** (github.com/arithmetike/ktext) is the most direct threat on project context. It generates a typed CONTEXT.yaml with 8 sections (identity, constraints, decisions, conventions, risks, dependencies, working, ownership), validates against JSON Schema, and gates via `ktext validate -threshold 80` in CI. It integrates with Claude Code SessionStart hooks.
 
-**agent-memory** (github.com/xChuCx/agent-memory) is the most relevant for project memory. It provides structured Markdown with sections, MCP tools (fetch_context, propose_update, status), human review gates, secret scanning, and FTS5 search. It proves people want structured project memory — but it's a team wiki model, not a project truth model.
+**agent-memory** (github.com/xChuCx/agent-memory) is the most relevant for project memory. It provides structured Markdown with sections, MCP tools (fetch_context, propose_update, status), human review gates, secret scanning, and FTS5 search. It proves people want structured project memory  --  but it's a team wiki model, not a project truth model.
 
 ### Agent Governance + Policy Engines
 
 | Project | Mechanism | Scope | Overlap with Haxaml |
 |---|---|---|---|
-| **Vectimus** | Cedar policy engine, 11 policy packs, sub-10ms eval | All major coding agents | ~50% — deterministic policy enforcement, but no typed project context |
-| **AgenticContract** | `.acon` binary policy, 38 MCP tools, sub-ms eval | Multi-agent | ~45% — policy engine with MCP, but no project context schema |
-| **Centinela** | Hook system, gate checks, claim verification | Claude Code + OpenCode | ~55% — governance + validation + workflow, closest overall but free-form context |
-| **ControlKeel** | Typed memory, policy checks, proof bundles, scanner validation | OpenCode, Codex, Claude, Copilot | ~50% — deterministic validation in ~52ms, caught 12/12 risky scenarios vs 0/12 ungoverned |
+| **Vectimus** | Cedar policy engine, 11 policy packs, sub-10ms eval | All major coding agents | ~50%  --  deterministic policy enforcement, but no typed project context |
+| **AgenticContract** | `.acon` binary policy, 38 MCP tools, sub-ms eval | Multi-agent | ~45%  --  policy engine with MCP, but no project context schema |
+| **Centinela** | Hook system, gate checks, claim verification | Claude Code + OpenCode | ~55%  --  governance + validation + workflow, closest overall but free-form context |
+| **ControlKeel** | Typed memory, policy checks, proof bundles, scanner validation | OpenCode, Codex, Claude, Copilot | ~50%  --  deterministic validation in ~52ms, caught 12/12 risky scenarios vs 0/12 ungoverned |
 
-**Centinela** (github.com/samuelnp/centinela) is the strongest overall competitor. It enforces plan→code→tests→validate→docs workflow, has hook-based gate checks (file size, layer boundaries, build cross-compile), claim verification that independently re-derives ground truth, and architecture archetypes. But it uses free-form CLAUDE.md for context — no typed schema.
+**Centinela** (github.com/samuelnp/centinela) is the strongest overall competitor. It enforces plan→code→tests→validate→docs workflow, has hook-based gate checks (file size, layer boundaries, build cross-compile), claim verification that independently re-derives ground truth, and architecture archetypes. But it uses free-form CLAUDE.md for context  --  no typed schema.
 
 **ControlKeel** (github.com/aryaminus/controlkeel) has the most mature governance engine. Capture intent rules → validate agent output → gate when needed → persist evidence → improve with evals. Benchmarked at catching 12/12 risky scenarios. Supports multiple agents. Has "typed memory" concept but not a full typed schema for project truth categorization.
 
@@ -70,7 +70,7 @@ These prove the multi-agent portability problem is real and growing. But they sy
 
 ### MCP (Model Context Protocol)
 
-MCP is a JSON-RPC transport protocol, NOT a project context format. It defines Resources, Tools, Roots, and Elicitation — but has zero concept of project truth, project memory, or project representation. MCP is complementary to FRAME, not competitive. Haxaml already uses MCP as its transport layer.
+MCP is a JSON-RPC transport protocol, NOT a project context format. It defines Resources, Tools, Roots, and Elicitation  --  but has zero concept of project truth, project memory, or project representation. MCP is complementary to FRAME, not competitive. Haxaml already uses MCP as its transport layer.
 
 ---
 
@@ -78,13 +78,13 @@ MCP is a JSON-RPC transport protocol, NOT a project context format. It defines R
 
 | Capability | Anyone else have it? | Closest competitor |
 |---|---|---|
-| Typed project context schema (5 parts, YAML, JSON Schema) | No — all use free-form Markdown | ktext (CONTEXT.yaml, 8 sections but no 5-part split) |
+| Typed project context schema (5 parts, YAML, JSON Schema) | No  --  all use free-form Markdown | ktext (CONTEXT.yaml, 8 sections but no 5-part split) |
 | Cross-reference graph with 9 typed relations | No | agent-memory (@id anchors, looser) |
-| Mechanical validation (deterministic, agent-invisible) | Yes — Centinela, ControlKeel, Vectimus | Centinela (gate checks, claim verification) |
+| Mechanical validation (deterministic, agent-invisible) | Yes  --  Centinela, ControlKeel, Vectimus | Centinela (gate checks, claim verification) |
 | Cross-agent run history (Acts) | No | ControlKeel (persists findings, not runs) |
-| Lifecycle state machine (prebuild→verify→record) | Partial — Centinela (plan→code→tests, but not lifecycle) | Centinela |
+| Lifecycle state machine (prebuild→verify→record) | Partial  --  Centinela (plan→code→tests, but not lifecycle) | Centinela |
 | Governance level (relaxed/normal/strict) | No | Vectimus (Cedar policies, not tiered) |
-| Agent-invisible grep/tests/pytest validation | Yes — ControlKeel (scanner) | ControlKeel |
+| Agent-invisible grep/tests/pytest validation | Yes  --  ControlKeel (scanner) | ControlKeel |
 
 ---
 
@@ -110,10 +110,10 @@ If ktext (typed CONTEXT.yaml) added mechanical validation + lifecycle governance
 
 ### How FRAME is genuinely unique:
 
-1. **5-part split (Facts/Rules/Map/Expect/Acts)** — No other tool separates project truth into these categories with typed cross-references
-2. **Expect → Rules.commands → Mechanical Validator pipeline** — The connection from declarative expectations to executable verification is unique
-3. **Acts as cross-agent run history with checks_seen/checks_ran honesty** — No tool tracks what checks were considered vs actually executed across different agents
-4. **Governance level dial (relaxed/normal/strict)** — No tool lets the developer control enforcement strictness at the project level
+1. **5-part split (Facts/Rules/Map/Expect/Acts)**  --  No other tool separates project truth into these categories with typed cross-references
+2. **Expect → Rules.commands → Mechanical Validator pipeline**  --  The connection from declarative expectations to executable verification is unique
+3. **Acts as cross-agent run history with checks_seen/checks_ran honesty**  --  No tool tracks what checks were considered vs actually executed across different agents
+4. **Governance level dial (relaxed/normal/strict)**  --  No tool lets the developer control enforcement strictness at the project level
 
 ---
 
@@ -123,6 +123,6 @@ If ktext (typed CONTEXT.yaml) added mechanical validation + lifecycle governance
 
 2. **Make onboarding trivial.** The AGENTS.md benchmark means FRAME's first experience must be fast. An agent-assisted `frame init` that scans the repo and generates initial FRAME files. Not a manual 5-file ceremony.
 
-3. **Interoperate with existing conventions.** Read CLAUDE.md and AGENTS.md as input sources for initial FRAME generation. Don't fight the standard — ingest it.
+3. **Interoperate with existing conventions.** Read CLAUDE.md and AGENTS.md as input sources for initial FRAME generation. Don't fight the standard  --  ingest it.
 
 4. **Watch ktext and Centinela closely.** They're one feature away from overlapping significantly.

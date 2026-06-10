@@ -10,12 +10,12 @@ The job here is simple:
 
 ## What this folder is for
 
-- `families/` — notes about recurring pressure from repo families
-- `fixtures/` — real repos used as test fixtures
-- `evaluations/task-prompts/` — repeatable prompts/instructions for fit passes
-- `evaluations/scoring/` — rubric, templates, and score aggregation helpers
-- `evaluations/reports/` — saved comparison results and scoring summaries
-- `fitting-notes/` — cross-fixture lessons that survive repeated passes
+- `families/`  --  notes about recurring pressure from repo families
+- `fixtures/`  --  real repos used as test fixtures
+- `evaluations/task-prompts/`  --  repeatable prompts/instructions for fit passes
+- `evaluations/scoring/`  --  rubric, templates, and score aggregation helpers
+- `evaluations/reports/`  --  saved comparison results and scoring summaries
+- `fitting-notes/`  --  cross-fixture lessons that survive repeated passes
 
 ## Default loop
 

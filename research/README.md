@@ -8,8 +8,8 @@ This directory holds:
 
 ## Current sub-areas
 
-- `obsidian/` — raw research notes and working knowledge base
-- `archived/` — historical reports and older implementation-specific material
+- `obsidian/`  --  raw research notes and working knowledge base
+- `archived/`  --  historical reports and older implementation-specific material
 
 ## Important note
 

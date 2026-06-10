@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Red Room Test Harness — v0.1.0
+Red Room Test Harness  --  v0.1.0
 
 Tests FRAME mechanical validator against real agent code generation.
 Pattern: CV governance experiment applied to code.
@@ -12,7 +12,7 @@ Setup:
     └── test_harness.py       ← This file
 
 Loop:
-    1. Agent modifies pharmax_clean/ (restricted vision — can only see that dir)
+    1. Agent modifies pharmax_clean/ (restricted vision  --  can only see that dir)
     2. Harness runs mechanical validator against pharmax_clean/
     3. Validator checks agent output against ground-truth expect/checks
     4. Violations → test fails → improve validator → repeat
@@ -48,7 +48,7 @@ def validate_yaml(path):
 
 def run_mechanical_validator(project_dir):
     """Run the FRAME mechanical validator against a project directory."""
-    validator_path = HERE.parent / "frame-python" / "frame" / "validators" / "mechanical_validator.py"
+    validator_path = HERE.parent / "frame-py" / "frame" / "validators" / "mechanical_validator.py"
     if not validator_path.exists():
         return {
             "passed": None,
@@ -81,7 +81,7 @@ def run_basic_checks(project_dir):
     project = Path(project_dir)
     results = []
 
-    # Check 1: No stale development paths (exclude .haxaml/ — it contains the check command itself)
+    # Check 1: No stale development paths (exclude .haxaml/  --  it contains the check command itself)
     stale_paths = ["/home/hermes/job-pipeline"]
     for sp in stale_paths:
         try:
@@ -200,7 +200,7 @@ def run_checks_only():
 
     for r in results:
         status = "PASS" if r["passed"] else "FAIL"
-        print(f"  [{status}] {r['name']} — {r.get('detail', '')}")
+        print(f"  [{status}] {r['name']}  --  {r.get('detail', '')}")
 
     print(f"\n  {passed}/{total} checks passed")
     return passed == total
@@ -219,9 +219,9 @@ def run_full_validation():
     if result.get("error"):
         print(f"  Validator error: {result['error']}")
     elif result["passed"] is True:
-        print("  ALL CHECKS PASSED — project is clean")
+        print("  ALL CHECKS PASSED  --  project is clean")
     elif result["passed"] is False:
-        print(f"  VALIDATION FAILED — exit code {result['exit_code']}")
+        print(f"  VALIDATION FAILED  --  exit code {result['exit_code']}")
         if result.get("stderr"):
             print(f"  {result['stderr'][:300]}")
     else:
