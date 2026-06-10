@@ -103,7 +103,7 @@ research/           Background research, competitive analysis
 learn/              Tutorials and educational material
 ```
 
-If you're curious about the exact field definitions, design decisions, or research that informed this, start with `finalized-decisions.md`.
+If you're curious about the exact field definitions, design decisions, or research that informed this, start with `canon.md`.
 
 If you want to understand why prompts alone can't solve agent governance, `research/cv-governance/speculations.md` walks through a real CV hallucination experiment.
 

@@ -8,7 +8,7 @@ This is the schema finalization and SDK rebuild line.
 
 - **12 finalized schema files** — 6 JSON (machine contract) + 6 YAML (human-readable) covering all 5 FRAME parts
 - **frame-py SDK rebuilt** — proper library with modular architecture: models, loaders, validators, translators
-- **9 locked architecture decisions** — documented in `finalized-decisions.md`
+- **9 locked architecture decisions** — documented in `canon.md`
 - **Cross-file link system** — 9 typed relations (uses, follows, checks, proves, points_to, changes, touches, explains, blocks)
 - **Character limits per field** — core governance fields enforced, descriptive fields advisory
 - **Governance level** — relaxed/normal/strict controlling Haxaml enforcement
