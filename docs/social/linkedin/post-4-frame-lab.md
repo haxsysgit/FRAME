@@ -1,4 +1,4 @@
-# Post 4 — Frame Lab
+# Post 4 -- Frame Lab
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

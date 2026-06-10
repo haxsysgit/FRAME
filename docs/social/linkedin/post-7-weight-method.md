@@ -1,4 +1,4 @@
-# Post 7 — weight and pressure
+# Post 7 -- weight and pressure
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

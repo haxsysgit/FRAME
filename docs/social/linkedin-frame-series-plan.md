@@ -25,7 +25,7 @@ The reader should feel this progression:
 
 ## Series outline
 
-### Post 1 — The problem: agents are strong, project context is weak
+### Post 1 -- The problem: agents are strong, project context is weak
 
 Job:
 - introduce the pain
@@ -51,7 +51,7 @@ Do not include yet:
 - schema adjustment mechanics
 - Haxaml architecture
 
-### Post 2 — The simple FRAME idea: better-shaped context, not more context
+### Post 2 -- The simple FRAME idea: better-shaped context, not more context
 
 Job:
 - define FRAME simply
@@ -70,7 +70,7 @@ Explain lightly:
 Basically I am saying:
 A project should not have to reintroduce itself from scratch every time a new agent enters.
 
-### Post 3 — Why five parts: not five files, five jobs
+### Post 3 -- Why five parts: not five files, five jobs
 
 Job:
 - explain why the parts exist
@@ -83,7 +83,7 @@ Possible mini-illustration:
 - If a backend role changed from SALES to STAFF, where should that truth live?
 - If an agent only inspected tests but did not run them, where should that be recorded?
 
-### Post 4 — Frame Lab: how I stop FRAME from becoming theory
+### Post 4 -- Frame Lab: how I stop FRAME from becoming theory
 
 Job:
 - introduce Frame Lab as the testing workshop
@@ -103,7 +103,7 @@ Simple loop:
 Basically I am saying:
 The schema does not get to grow just because one repo made it uncomfortable.
 
-### Post 5 — The fixtures: why organize, autopahe, and Pharmax matter
+### Post 5 -- The fixtures: why organize, autopahe, and Pharmax matter
 
 Job:
 - introduce the current test set
@@ -120,7 +120,7 @@ Fixtures:
 Basically I am saying:
 If FRAME only works on the easy repo, it has not earned trust.
 
-### Post 6 — Current test progress: what v0.2.0 taught me
+### Post 6 -- Current test progress: what v0.2.0 taught me
 
 Job:
 - share scores and findings
@@ -139,7 +139,7 @@ Findings:
 - no new core blocks were needed under this pressure
 - proof discipline still needs tightening
 
-### Post 7 — The adjustment method: weights, pressure, and resisting bloat
+### Post 7 -- The adjustment method: weights, pressure, and resisting bloat
 
 Job:
 - explain your “weight” idea simply
@@ -159,7 +159,7 @@ Possible weight factors:
 Basically I am saying:
 FRAME should adjust from repeated pressure, not from vibes.
 
-### Post 8 — Where Haxaml fits
+### Post 8 -- Where Haxaml fits
 
 Job:
 - connect FRAME to implementation/tooling

@@ -1,4 +1,4 @@
-# LinkedIn plan — FRAME v0.2.0 and Haxaml progress
+# LinkedIn plan -- FRAME v0.2.0 and Haxaml progress
 
 Status: superseded by the longer FRAME series plan.
 

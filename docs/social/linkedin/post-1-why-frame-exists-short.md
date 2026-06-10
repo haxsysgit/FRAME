@@ -1,4 +1,4 @@
-# Post 1 — why FRAME exists, short LinkedIn version
+# Post 1 -- why FRAME exists, short LinkedIn version
 
 Target: LinkedIn
 Status: paste-ready shorter version

@@ -1,4 +1,4 @@
-# Post 5 — the fixtures
+# Post 5 -- the fixtures
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

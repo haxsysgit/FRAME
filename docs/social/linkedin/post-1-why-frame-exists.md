@@ -1,4 +1,4 @@
-# Post 1 — why FRAME exists
+# Post 1 -- why FRAME exists
 
 Target: LinkedIn
 Status: paste-ready LinkedIn intro post, no Markdown formatting

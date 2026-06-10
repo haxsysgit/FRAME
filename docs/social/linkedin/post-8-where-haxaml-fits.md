@@ -1,4 +1,4 @@
-# Post 8 — where Haxaml fits
+# Post 8 -- where Haxaml fits
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

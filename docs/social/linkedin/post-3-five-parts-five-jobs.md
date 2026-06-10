@@ -1,4 +1,4 @@
-# Post 3 — five parts, five jobs
+# Post 3 -- five parts, five jobs
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

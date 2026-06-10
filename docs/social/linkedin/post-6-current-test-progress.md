@@ -1,4 +1,4 @@
-# Post 6 — current test progress
+# Post 6 -- current test progress
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

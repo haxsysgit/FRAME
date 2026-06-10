@@ -1,4 +1,4 @@
-# Post 2 — introducing FRAME
+# Post 2 -- introducing FRAME
 
 Target: LinkedIn
 Status: paste-ready draft, no Markdown formatting in body

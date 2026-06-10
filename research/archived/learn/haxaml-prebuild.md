@@ -1,4 +1,4 @@
-# haxaml_prebuild — Task Classification & Semantic Validation
+# haxaml_prebuild -- Task Classification & Semantic Validation
 
 `haxaml_prebuild` is the recommended high-level lifecycle phase that runs after `haxaml_guidance`. It classifies the task, runs semantic validation against FRAME, opens the governed session internally, and produces a readiness report.
 
@@ -12,7 +12,7 @@ Call `haxaml_prebuild` for:
 - Any task where FRAME quality directly affects agent accuracy
 - Any task the agent needs to classify before choosing context strategy
 
-Skip for simple utility tasks (fix a typo, run a command). Utility mode detection is automatic — `haxaml_prebuild` will short-circuit with `utility_mode` status.
+Skip for simple utility tasks (fix a typo, run a command). Utility mode detection is automatic -- `haxaml_prebuild` will short-circuit with `utility_mode` status.
 
 ## Lifecycle Position
 
@@ -119,17 +119,17 @@ Expected response pattern:
 - `data.readiness_status` == `"ready_to_build"` or `"ready_to_build_with_warnings"`
 - `data.task_type` matches the classified template, for example `"authentication"` or `"api_endpoint"`
 - `data.guidance_type` maps to the abstract workflow profile
-- `data.session_id` — use this in subsequent `haxaml_context_pack` / verify / record calls
-- `data.required_questions` — answer before coding if present
-- `data.context_policy` — suggested context scope and pack policy
+- `data.session_id` -- use this in subsequent `haxaml_context_pack` / verify / record calls
+- `data.required_questions` -- answer before coding if present
+- `data.context_policy` -- suggested context scope and pack policy
 
 ## Integration with haxaml_validate and haxaml_doctor
 
 The same `semantic_validate` function is called by:
 
-- `haxaml_validate` — blocking semantic errors cause validation failure
-- `haxaml_doctor` — blocking and advisory issues are reported as recommendations
-- `haxaml_prebuild` — blocking issues prevent readiness; advisory issues are forwarded as warnings
+- `haxaml_validate` -- blocking semantic errors cause validation failure
+- `haxaml_doctor` -- blocking and advisory issues are reported as recommendations
+- `haxaml_prebuild` -- blocking issues prevent readiness; advisory issues are forwarded as warnings
 
 This means semantic quality gaps surface at all three checkpoints in the lifecycle:
 pre-build (classification), build-gate (validate), and completeness-check (doctor).
