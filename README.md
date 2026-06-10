@@ -82,7 +82,26 @@ The competitive landscape confirmed that no existing tool combines typed project
 
 ## What's next
 
-The schema is locked at v0.3.0. Both JSON and YAML schemas exist  --  JSON for machines, YAML for humans. The Python SDK is being rebuilt on this foundation. Haxaml will follow.
+The schema is locked at v0.3.0. Haxaml is the next build target.
+
+## Repo structure
+
+This is the umbrella repo for the FRAME standard. Language SDKs live in their own repos:
+
+- **[frame-py](https://github.com/haxsysgit/frame-py)** — Python SDK (pip install frame-py)
+- `frame-js` — future JavaScript SDK
+- `frame-cpp` — future C++ SDK
+
+This repo contains:
+
+```
+schemas/json/       JSON Schema (machine contract)
+schemas/yaml/       YAML Schema (human-readable)
+docs/               Design decisions, versioning, social
+Frame lab/          Fixtures, evaluations, scoring
+research/           Background research, competitive analysis
+learn/              Tutorials and educational material
+```
 
 If you're curious about the exact field definitions, design decisions, or research that informed this, start with `finalized-decisions.md`.
 

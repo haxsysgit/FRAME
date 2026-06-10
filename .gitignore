@@ -36,12 +36,14 @@ node_modules/
 # Frame Lab fixture corpora / heavyweight scratch clones
 Frame lab/fixtures/real/
 Frame lab/fixtures/public/
+red_room_test/
 
 # Known generated fixture state/build output
 Frame lab/fixtures/**/app/_db/
 Frame lab/fixtures/**/data/backups/
 Frame lab/fixtures/**/data/records/*.backup.*
 Frame lab/fixtures/**/features/json_data/execution_data.json
+
 
 # OS/editor noise
 .DS_Store

@@ -1,6 +1,35 @@
 # Changelog
 
-All notable changes to the active FRAME line should be tracked here.
+## FRAME 0.3.0
+
+This is the schema finalization and SDK rebuild line.
+
+### What 0.3.0 adds
+
+- **12 finalized schema files** — 6 JSON (machine contract) + 6 YAML (human-readable) covering all 5 FRAME parts
+- **frame-py SDK rebuilt** — proper library with modular architecture: models, loaders, validators, translators
+- **9 locked architecture decisions** — documented in `finalized-decisions.md`
+- **Cross-file link system** — 9 typed relations (uses, follows, checks, proves, points_to, changes, touches, explains, blocks)
+- **Character limits per field** — core governance fields enforced, descriptive fields advisory
+- **Governance level** — relaxed/normal/strict controlling Haxaml enforcement
+- **All 5 files required** — strict single-directory discovery (D3)
+- **Competitive landscape research** — confirmed no existing tool combines typed project context + governance + cross-agent history
+- **Red room test** — mechanical validator tested against poisoned agent output
+
+### What changed from 0.2.0
+
+- **Policies moved from Facts to Rules** — they're behavioral constraints, not project truth
+- **`checks_seen`/`checks_ran` collapsed** into a single `checks` array with status (ran/skipped)
+- **`identity` block removed** — merged into `profile`
+- **`supports` relation merged** into `explains` — 10 relations became 9
+- **Schema files split** into `schemas/json/` and `schemas/yaml/`
+- **frame-python renamed to frame-py** — consistent with future `frame-js`, `frame-cpp`
+
+### What 0.3.0 proves
+
+The frame-py SDK successfully loads, translates, validates, and assembles all 5 FRAME files end-to-end. 82 tests cover models, YAML normalization, schema enforcement, character limits, and cross-file consistency. The mechanical validator was tested in a red room experiment against poisoned agent output.
+
+---
 
 ## FRAME 0.2.0
 

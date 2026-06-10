@@ -8,7 +8,7 @@ title: "FRAME Facts"
 description: "Stable project truth — what the project is, how it's built, its quirks, and what nobody has decided yet."
 type: object
 additionalProperties: false
-required: [frame]
+required: [frame, profile, architecture]
 properties:
   frame:
     allOf:
