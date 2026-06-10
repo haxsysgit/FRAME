@@ -1,4 +1,4 @@
-# Round 1 synthesis — frame-five-part-v0
+# Round 1 synthesis -- frame-five-part-v0
 
 Scope:
 - fixtures: `organize`, `autopahe`

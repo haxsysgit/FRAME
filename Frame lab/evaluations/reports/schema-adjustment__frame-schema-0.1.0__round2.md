@@ -29,7 +29,7 @@ The refit/score round showed the first adjustment helped:
 
 But two repeated pressures stayed visible.
 
-## Adjustment 1 — add `frame.representation_scope`
+## Adjustment 1 -- add `frame.representation_scope`
 
 Added optional `representation_scope` to the shared FRAME header.
 
@@ -54,7 +54,7 @@ Expected Haxaml use:
 Anti-overfit note:
 This is not an Acts-specific hack. Any FRAME file can declare scope if a future representation is mixed or handoff-shaped.
 
-## Adjustment 2 — add shared `policy_entry`
+## Adjustment 2 -- add shared `policy_entry`
 
 Added `$defs.policy_entry` to `schemas/frame.schema.yaml`.
 
@@ -93,7 +93,7 @@ Anti-overfit note:
 This does not add pharmacy fields, invoice fields, browser fields, or full domain modeling.
 It adds a general small policy shape that also works for CLIs, web apps, SDKs, infra repos, and AI systems.
 
-## Adjustment 3 — add `facts.policies`
+## Adjustment 3 -- add `facts.policies`
 
 Added optional `facts.policies` array referencing `$defs.policy_entry`.
 

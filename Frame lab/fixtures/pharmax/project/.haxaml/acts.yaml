@@ -1,86 +1,23 @@
 frame:
   file: acts
-  schema_version: "0.2.0"
-  role: run_history
+  schema_version: "0.3.0"
+  role: checked_activity_record
   scope: execution_record
   status: active
-  last_reviewed: "2026-06-02"
-  updated_by: hermes-agent
-  update_reason: Record the pharmax FRAME v0.2.0 fitting and scoring run.
-summary: Fit and scored the pharmax fixture against frame-five-part-v0.2.0, wrote the five fit artifacts, wrote the scorecard and report, and validated the YAML files against the current schemas.
-runs:
-  - id: fit_pharmax_v020
-    actor: hermes-agent
-    goal: Produce a complete FRAME v0.2.0 fit for the pharmax fixture and score the candidate against the rubric.
-    work_kind:
-      - review
-      - docs
-    keywords:
-      - pharmax
-      - full-stack
-      - roles
-      - invoices
-      - deployment
-    input_summary: Read the candidate spec, current schemas, rubric, scorecard template, prior v0.1.0 pharmax fit, and key fixture files across README, brief, progress, backend routes/services/config, frontend router/API client, tests, and deployment docs.
-    output_summary: Wrote facts.yaml, rules.yaml, acts.yaml, map.yaml, expect.yaml, the complete scorecard, and the concise fit report, then validated all five YAML fit files with yaml plus jsonschema Draft202012Validator.
-    status: complete
-    touched:
-      - map.paths.root_readme
-      - map.paths.project_brief
-      - map.paths.progress_tracker
-      - map.paths.backend_app_main
-      - map.paths.backend_router
-      - map.paths.backend_config
-      - map.paths.backend_products_route
-      - map.paths.backend_invoices_route
-      - map.paths.backend_users_route
-      - map.paths.frontend_router
-      - map.paths.frontend_api_service
-      - map.paths.postgres_runbook
-    changed_facts:
-      - facts.profile
-      - facts.sources.runtime_code
-      - facts.quirks.example_projects_imports
-      - facts.quirks.role_name_drift
-      - facts.policies.invoice_lifecycle_policy
-    rules_followed:
-      - rules.rules.prefer_runtime_truth
-      - rules.rules.preserve_role_policy
-      - rules.rules.preserve_invoice_workflow
-      - rules.rules.verify_import_namespace_before_run
-      - rules.donts.avoid_acts_duplication
-    checks_seen:
-      - expect.checks.role_policy_review
-      - expect.checks.docs_review
-      - expect.checks.schema_validation
-    checks_ran:
-      - expect.checks.schema_validation
-    links:
-      - rel: changes
-        ref: facts.profile
-      - rel: changes
-        ref: facts.policies.invoice_lifecycle_policy
-      - rel: follows
-        ref: rules.rules.prefer_runtime_truth
-      - rel: follows
-        ref: rules.rules.preserve_role_policy
-      - rel: checks
-        ref: expect.checks.schema_validation
-    evidence:
-      - id: ev_fit_run
-        source: candidate doc, schemas, fixture sources, and validation command run on 2026-06-02
-        why: The run produced the requested fit artifacts, scorecard, report, and validation result.
-        refs:
-          - expect.done_when.fit_package_complete
-        checked_at: "2026-06-02T08:27:51Z"
-        confidence: high
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+  update_reason: "Initial acts file for red room test — starts with ground-truth baseline, no runs yet"
+
+summary: 'Red room test baseline. Runs will be added as agents modify the pharmax_clean project.'
+
+runs: []
+
 blockers: []
+
 handoff:
-  next_reader_should_know:
-    - Runtime code was treated as stronger truth than docs where they drifted.
-    - The main recurring fixture hazards are example_projects import-path assumptions, stale SALES references in an old smoke script, and missing render.yaml despite docs mentioning it.
-    - Validation passed for all five fit YAML files.
-  outputs:
-    fit_dir: /home/hax/FRAME/Frame lab/evaluations/fits/frame-five-part-v0.2.0/pharmax
-    scorecard: /home/hax/FRAME/Frame lab/evaluations/scorecards/frame-five-part-v0.2.0/scorecard__frame-five-part-v0.2.0__pharmax.toml
-    report: /home/hax/FRAME/Frame lab/evaluations/reports/fit__frame-five-part-v0.2.0__pharmax.md
+  note: "Baseline established. Agent runs pending."
+
+evidence:
+  - id: acts_baseline
+    source: "Red room test initialization"
+    confidence: high

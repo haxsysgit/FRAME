@@ -1,192 +1,143 @@
 frame:
   file: expect
-  schema_version: "0.2.0"
+  schema_version: "0.3.0"
   role: project_correctness_contract
   scope: baseline_project
   status: active
-  last_reviewed: "2026-06-02"
-  updated_by: hermes-agent
-  update_reason: Define expected outcomes and checks for the pharmax fixture using FRAME v0.2.0 names.
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+
 outcomes:
   backend_starts:
-    summary: The backend should start as a FastAPI app with middleware, startup initialization, and all domain routers wired in.
+    summary: "Backend starts as FastAPI app with middleware, startup init, and all domain routers wired"
     links:
       - rel: checks
         ref: expect.checks.backend_startup_review
-      - rel: points_to
-        ref: map.entrypoints.backend_app
   frontend_builds:
-    summary: The frontend should build successfully and keep its shared API client behavior for auth headers, error parsing, loading, and timeout handling.
+    summary: "Frontend builds successfully with no compile errors"
     links:
       - rel: checks
         ref: expect.checks.frontend_build
-      - rel: points_to
-        ref: map.entrypoints.frontend_api_client
   invoice_workflow_holds:
-    summary: Core invoice behavior should support create, add items, finalize, dispense, cancel, return, receipt printing, and reconciliation-related flows.
+    summary: "Invoice lifecycle works: create, add items, finalize (stock deducted), dispense, cancel (stock reversed)"
     links:
       - rel: follows
         ref: facts.policies.invoice_lifecycle_policy
       - rel: checks
         ref: expect.checks.workflow_smoke
   role_policy_holds:
-    summary: ADMIN, CASHIER, and STAFF permissions should stay coherent across backend authorization and frontend route metadata.
+    summary: "ADMIN, CASHIER, STAFF permissions enforced across backend routes and frontend views"
     links:
       - rel: follows
         ref: facts.policies.role_access_policy
       - rel: checks
         ref: expect.checks.role_policy_review
-  inventory_surfaces_hold:
-    summary: Product, units, stock adjustment, and inventory-reporting surfaces should stay connected across backend APIs and frontend views.
-    links:
-      - rel: checks
-        ref: expect.checks.seed_and_inventory_review
+
 must_hold:
-  role_policy_alignment:
-    summary: Backend require_role usage and frontend route meta roles remain aligned for the same user-facing surfaces.
+  - id: role_policy_alignment
+    statement: "Backend require_role and frontend route meta roles stay aligned"
     links:
       - rel: follows
         ref: facts.policies.role_access_policy
-  auditability_preserved:
-    summary: Audit and activity-log surfaces remain part of workflow visibility for important actions.
+  - id: auditability_preserved
+    statement: "Audit and activity-log surfaces remain functional"
     links:
       - rel: follows
         ref: facts.policies.audit_policy
-  persistence_mode_is_env_driven:
-    summary: SQLite remains the local default while PostgreSQL remains the production-style path through env-driven configuration and migrations.
-    links:
-      - rel: follows
-        ref: facts.policies.persistence_policy
-  generated_state_is_not_source:
-    summary: Generated dependencies, build output, caches, and live DB state are excluded from canonical project truth.
-    links:
-      - rel: follows
-        ref: facts.quirks.generated_noise
-  docs_need_runtime_cross_check:
-    summary: Deployment and stack claims in docs should be checked against runtime code because some docs have drift.
-    links:
-      - rel: follows
-        ref: facts.quirks.brief_stack_drift
-      - rel: follows
-        ref: facts.quirks.render_yaml_missing
-done_when:
-  fit_package_complete:
-    summary: All five fit files, the scorecard, and the report exist in the requested v0.2.0 evaluation locations and validate against the current schemas.
+  - id: no_hardcoded_secrets
+    statement: "No API keys, tokens, or passwords hardcoded in source files"
     links:
       - rel: checks
-        ref: expect.checks.schema_validation
-  backend_change_done:
-    summary: Backend changes are paired with the relevant smoke, review, or documented blocker for workflow and role-sensitive surfaces.
+        ref: expect.checks.no_banned_patterns
+  - id: no_stale_paths
+    statement: "No old development paths (like /home/hermes/job-pipeline) exist in source"
     links:
       - rel: checks
-        ref: expect.checks.workflow_smoke
-      - rel: checks
-        ref: expect.checks.role_policy_review
-  frontend_change_done:
-    summary: Frontend changes preserve the shared API client contract and pass at least the production build check when source changed.
+        ref: expect.checks.no_forbidden_paths
+  - id: no_env_exposure
+    statement: "No raw os.environ or dict(os.environ) exposure in backend source"
     links:
       - rel: checks
-        ref: expect.checks.frontend_build
+        ref: expect.checks.no_env_exposure
+  - id: no_open_debug_endpoints
+    statement: "No debug endpoints without authentication in production code"
+    links:
+      - rel: checks
+        ref: expect.checks.no_open_debug_endpoints
+
 checks:
   backend_startup_review:
-    summary: Review Backend/app/main.py and router wiring to confirm the backend app surface, middleware, and startup hooks exist.
+    name: "Backend Startup"
+    what: "Backend should start as FastAPI app"
+    how: "Start dev server and check it responds"
     command_ref: rules.commands.backend_dev_server
-    proof_type: review
-    links:
-      - rel: proves
-        ref: expect.outcomes.backend_starts
   workflow_smoke:
-    summary: Use the no-server backend workflow smoke as the main executable proof for invoice workflow behavior.
+    name: "Invoice Workflow Smoke Test"
+    what: "Invoice lifecycle operations work correctly"
+    how: "Run smoke_test_workflows.py"
     command_ref: rules.commands.backend_workflow_smoke
-    proof_type: smoke_test
-    links:
-      - rel: proves
-        ref: expect.outcomes.invoice_workflow_holds
-  server_invoice_smoke:
-    summary: Use the server-backed invoice smoke when HTTP route wiring and serialization need verification.
-    command_ref: rules.commands.backend_server_invoice_smoke
-    proof_type: smoke_test
-    links:
-      - rel: supports
-        ref: expect.outcomes.invoice_workflow_holds
+  backend_tests:
+    name: "Backend Test Suite"
+    what: "All pytest tests pass"
+    how: "Run pytest on the test directory"
+    command_ref: rules.commands.backend_tests
   role_policy_review:
-    summary: Review backend require_role usage, route-level smoke coverage, and Frontend/src/router/index.js role metadata together.
-    command_ref: rules.commands.backend_role_matrix_smoke
-    proof_type: review
-    links:
-      - rel: proves
-        ref: expect.outcomes.role_policy_holds
-      - rel: explains
-        ref: facts.quirks.role_name_drift
+    name: "Role Policy Matrix"
+    what: "Role-based access control works as defined"
+    how: "Run test_role_policy_matrix.py"
+    command_ref: rules.commands.backend_role_matrix_test
+  invoice_flow_test:
+    name: "Invoice Flow Tests"
+    what: "Invoice lifecycle tests pass"
+    how: "Run test_invoices_flow.py"
+    command_ref: rules.commands.backend_invoice_flow_test
   frontend_build:
-    summary: Use the frontend production build as the main committed frontend verification surface.
+    name: "Frontend Build"
+    what: "Frontend compiles without errors"
+    how: "npm run build"
     command_ref: rules.commands.frontend_build
-    proof_type: static_check
-    links:
-      - rel: proves
-        ref: expect.outcomes.frontend_builds
-  seed_and_inventory_review:
-    summary: Review seed, import, products, and stock surfaces together to confirm local workflow setup remains available.
-    command_ref: rules.commands.backend_seed_dev_data
-    proof_type: review
-    links:
-      - rel: proves
-        ref: expect.outcomes.inventory_surfaces_hold
-  migration_review:
-    summary: Review migration and runbook surfaces to confirm PostgreSQL deployment still depends on Alembic upgrade head.
-    command_ref: rules.commands.backend_migrate
-    proof_type: review
-    links:
-      - rel: proves
-        ref: expect.must_hold.persistence_mode_is_env_driven
-  docs_review:
-    summary: Cross-check README, brief, progress, and deployment docs against code and the real fixture listing before trusting setup or deployment claims.
-    command_ref: null
-    proof_type: review
-    links:
-      - rel: proves
-        ref: expect.must_hold.docs_need_runtime_cross_check
-  schema_validation:
-    summary: Validate facts, rules, acts, map, and expect YAML files against the current schema set using yaml plus jsonschema Draft202012Validator logic.
-    command_ref: null
-    proof_type: automated_test
-    links:
-      - rel: proves
-        ref: expect.done_when.fit_package_complete
-  pytest_gap:
-    summary: Note that pytest is not installed in the backend uv environment, so current repo validation relies on smoke scripts and build/compile checks instead.
-    command_ref: null
-    proof_type: unavailable
-    links:
-      - rel: explains
-        ref: expect.outcomes.backend_starts
+  no_forbidden_paths:
+    name: "No Forbidden Paths"
+    what: "No stale development paths in source files"
+    how: "grep for banned paths"
+    command_ref: rules.commands.grep_forbidden_paths
+  no_banned_patterns:
+    name: "No Banned Patterns"
+    what: "No hardcoded secrets in source"
+    how: "grep for API_KEY and hardcoded SECRET_KEY values"
+    command_ref: rules.commands.grep_banned_patterns
+  no_env_exposure:
+    name: "No Environment Variable Exposure"
+    what: "No raw os.environ or dict(os.environ) in backend source"
+    how: "grep for os.environ patterns in source"
+    command_ref: rules.commands.grep_env_exposure
+  no_open_debug_endpoints:
+    name: "No Open Debug Endpoints"
+    what: "No @app.get or @router.get endpoints without require_role or Depends auth"
+    how: "grep for unauthenticated endpoint patterns"
+    command_ref: rules.commands.grep_open_endpoints
+
+done_when:
+  backend_change_done:
+    summary: "Backend changes paired with relevant smoke test or documented as review-only"
+  frontend_change_done:
+    summary: "Frontend builds and API client behavior stays consistent"
+
 proof:
-  - id: fit_files_present
-    expectation: The v0.2.0 fit directory contains facts.yaml, rules.yaml, acts.yaml, map.yaml, and expect.yaml.
-    refs:
-      - expect.done_when.fit_package_complete
-    links:
-      - rel: points_to
-        ref: map.roots.fixture_root
-  - id: schema_validation_proof
-    expectation: Schema validation output exists and reports all five fit files as valid.
-    refs:
-      - expect.checks.schema_validation
-  - id: workflow_proof
-    expectation: Workflow-sensitive repo changes should use backend_workflow_smoke or a documented blocker.
-    refs:
-      - expect.checks.workflow_smoke
-  - id: frontend_build_proof
-    expectation: Frontend-sensitive repo changes should use frontend_build or a documented blocker.
-    refs:
-      - expect.checks.frontend_build
+  - id: test_proof
+    type: smoke_test
+    description: "Tests running under pytest provide machine-verifiable proof"
+  - id: build_proof
+    type: static_check
+    description: "Frontend build provides compile-time verification"
+  - id: review_proof
+    type: review
+    description: "Some checks require human review of structure and design"
+
 handoff:
-  strongest_checks:
-    - workflow_smoke
-    - role_policy_review
-    - frontend_build
-    - schema_validation
-  known_validation_limits:
-    - The repo relies on smoke scripts rather than pytest.
-    - Some execution paths may depend on the example_projects.pharmax namespace being resolvable.
-    - Deployment docs mention render.yaml, but the file was not present in the inspected fixture snapshot.
+  note: "All checks with command_ref are mechanically verifiable. Checks without command_ref require human review."
+
+evidence:
+  - id: expect_source
+    source: "Derived from project requirements, test suite, and codebase structure"
+    confidence: high

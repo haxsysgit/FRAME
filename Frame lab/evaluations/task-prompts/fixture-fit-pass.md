@@ -54,7 +54,7 @@ If it stores it awkwardly, that should hurt the score.
 
 ### 4. Score the fit by phase
 
-#### Phase 1 — Structural fit
+#### Phase 1 -- Structural fit
 Score these first and take them most seriously:
 - coverage
 - clarity
@@ -68,7 +68,7 @@ If two or more Phase 1 dimensions are 1 or 2:
 - still record later-phase impressions if useful
 - but do not let strong later scores override weak structural fit
 
-#### Phase 2 — Operational usefulness
+#### Phase 2 -- Operational usefulness
 Only after Phase 1 is understood, score:
 - agent_usefulness
 - retrieval_usefulness
@@ -77,7 +77,7 @@ Only after Phase 1 is understood, score:
 Main question:
 If this structure fits, would it actually help work happen more reliably inside the repo?
 
-#### Phase 3 — Pressure / cost
+#### Phase 3 -- Pressure / cost
 Then score:
 - bloat_resistance
 - token_efficiency

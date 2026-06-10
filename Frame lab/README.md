@@ -10,12 +10,12 @@ The job here is simple:
 
 ## What this folder is for
 
-- `families/`  --  notes about recurring pressure from repo families
-- `fixtures/`  --  real repos used as test fixtures
-- `evaluations/task-prompts/`  --  repeatable prompts/instructions for fit passes
-- `evaluations/scoring/`  --  rubric, templates, and score aggregation helpers
-- `evaluations/reports/`  --  saved comparison results and scoring summaries
-- `fitting-notes/`  --  cross-fixture lessons that survive repeated passes
+- `fixtures/` -- real repos used as test fixtures. Each fixture keeps source code under `project/` so notes and outputs can live beside it.
+- `candidates/` -- candidate FRAME shapes being compared.
+- `evaluations/task-prompts/` -- repeatable prompts/instructions for fit passes.
+- `evaluations/fits/` -- generated FRAME fits for candidate/fixture combinations.
+- `evaluations/scorecards/` and `evaluations/scoring/` -- scorecards, rubric, templates, and aggregation helpers.
+- `evaluations/reports/` -- saved comparison results and scoring summaries.
 
 ## Default loop
 
@@ -28,8 +28,12 @@ The job here is simple:
 
 ## Working rule
 
-Start with the compact core fixture set in `core-fixture-set.md`.
-Only pull in reserve fixtures when the current candidate survives the core loop and needs harder pressure.
+Start compact. Use the active fixture set first:
+- `organize` -- small CLI/script fixture
+- `autopahe` -- Python automation/tooling fixture
+- `pharmax` -- full-stack pharmacy web app fixture
+
+Only add more fixtures when the current candidate survives the core loop and needs harder pressure.
 
 ## What we are optimizing for
 
@@ -42,4 +46,4 @@ We want the sweet spot where FRAME is:
 - broadly adoptable across real repos
 - lean enough not to become a schema museum
 
-(Basically: enough structure to help, not enough to become homework.)
+Basically: enough structure to help, not enough to become homework.

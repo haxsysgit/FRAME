@@ -162,9 +162,9 @@ Next loop should score whether baseline project packs should treat Acts as optio
 ## Next fit pass recommendation
 
 Run a new fit using FRAME schema 0.1.0 against:
-1. `organize` — tests scale-down and doc/code drift.
-2. `autopahe` — tests medium CLI/package boundaries, setup/runtime caveats, and command/verification separation.
-3. `pharmax` — tests full-stack app pressure: frontend/backend split, database models, API surfaces, seed/smoke scripts, and business workflow correctness.
+1. `organize` -- tests scale-down and doc/code drift.
+2. `autopahe` -- tests medium CLI/package boundaries, setup/runtime caveats, and command/verification separation.
+3. `pharmax` -- tests full-stack app pressure: frontend/backend split, database models, API surfaces, seed/smoke scripts, and business workflow correctness.
 
 Promotion criteria:
 - lower repetition between Facts/Rules/Map/Expect

@@ -4,9 +4,9 @@ This folder holds the phased scoring setup for comparing candidate FRAME structu
 
 ## Files
 
-- `rubric.md` — what each score dimension means, organized by phase
-- `scorecard-template.toml` — one evaluation file per fixture/candidate pair
-- `README.md` — quick usage
+- `rubric.md` -- what each score dimension means, organized by phase
+- `scorecard-template.toml` -- one evaluation file per fixture/candidate pair
+- `README.md` -- quick usage
 
 ## Recommended file naming
 

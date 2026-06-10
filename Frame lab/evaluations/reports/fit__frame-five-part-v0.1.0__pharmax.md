@@ -9,11 +9,11 @@ Checked: `2026-06-01T21:53:45Z`
 
 Wrote the adjusted FRAME five-file representation:
 
-- `facts.yaml` — current project truth, project profile, source-truth ranking, architecture, workflow facts, and structural quirks.
-- `rules.yaml` — project instruction blueprint and command inventory only.
-- `acts.yaml` — checked fitting activity/handoff only; not baseline project representation.
-- `map.yaml` — repository context map for frontend/backend/docs/data/generated boundaries.
-- `expect.yaml` — correctness contract with `verify` entries using `command_ref` into `rules.commands`.
+- `facts.yaml` -- current project truth, project profile, source-truth ranking, architecture, workflow facts, and structural quirks.
+- `rules.yaml` -- project instruction blueprint and command inventory only.
+- `acts.yaml` -- checked fitting activity/handoff only; not baseline project representation.
+- `map.yaml` -- repository context map for frontend/backend/docs/data/generated boundaries.
+- `expect.yaml` -- correctness contract with `verify` entries using `command_ref` into `rules.commands`.
 
 ## Project shape found
 

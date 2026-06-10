@@ -69,7 +69,7 @@ That reduced repeated command strings and made verification meaning clearer.
 
 ## Repeated pressure points
 
-### Pressure 1 — Acts is still not baseline project representation
+### Pressure 1 -- Acts is still not baseline project representation
 
 This repeated across every fixture.
 
@@ -82,7 +82,7 @@ FRAME should not require Acts in every baseline project pack.
 
 Acts should remain in FRAME, but as checked work history / execution provenance / handoff state.
 
-### Pressure 2 — workflow and policy truth can repeat across files
+### Pressure 2 -- workflow and policy truth can repeat across files
 
 Most visible in `pharmax`.
 
@@ -99,7 +99,7 @@ But without a lightweight reference pattern, a workflow-heavy repo can become ve
 Conclusion:
 Add a small shared policy/workflow reference shape before adding domain-specific fields.
 
-### Pressure 3 — open dict buckets are still tolerated, not solved
+### Pressure 3 -- open dict buckets are still tolerated, not solved
 
 The adjusted schema still permits broad buckets such as:
 - `facts.identity`

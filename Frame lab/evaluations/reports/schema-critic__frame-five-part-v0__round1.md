@@ -241,7 +241,7 @@ Why this looks misaligned:
 
 Why the mismatch is especially clear on the current fixtures:
 - `organize` has almost no natural project content for `reflect_loop`, `actions`, or `blockers` unless we start logging evaluator work rather than repo truth.
-- `autopahe` has more operational complexity, but even there the repeated signals are about package shape, browser/runtime setup, tests, Docker path, config locations, and import quirks — not about historical action logs.
+- `autopahe` has more operational complexity, but even there the repeated signals are about package shape, browser/runtime setup, tests, Docker path, config locations, and import quirks -- not about historical action logs.
 
 Specific schema-shape problem:
 - both `action_overview` and `archive` are `additionalProperties: true`, so if `acts` feels empty the path of least resistance is to stuff project description back into them.
@@ -249,7 +249,7 @@ Specific schema-shape problem:
 
 Bottom line on `acts`:
 - as a five-part project-representation candidate, `acts` is the weakest part and the strongest overfit risk.
-- as a wider FRAME-system file for execution history, it may still be fine — but that is a different job than the required-signal sheet is testing.
+- as a wider FRAME-system file for execution history, it may still be fine -- but that is a different job than the required-signal sheet is testing.
 
 ## 4) Where missing semantics are likely to show up in `organize` and `autopahe`
 

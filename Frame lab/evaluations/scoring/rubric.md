@@ -19,7 +19,7 @@ The phase breakdown matters more than one tidy average.
 
 ---
 
-## Phase 1 — Structural fit
+## Phase 1 -- Structural fit
 
 Phase 1 asks:
 Can this candidate structure represent the project cleanly enough to earn further attention?
@@ -37,7 +37,7 @@ What to look for:
 - major operating expectations
 - source-of-truth locations that would matter to an agent
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 - A strong candidate should have a clean way to represent that Pharmax is not just a generic CRUD app.
 - It is a pharmacy operations platform with role-based workflows: ADMIN, CASHIER, STAFF.
 - It has two major delivery surfaces: `Backend/` and `Frontend/`.
@@ -57,7 +57,7 @@ What to look for:
 - low boundary confusion
 - low temptation to store the same thing in multiple places
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 If the evaluator keeps asking:
 - should invoice lifecycle rules go in rules or facts?
 - should role-based permissions live in facts, rules, or map?
@@ -99,7 +99,7 @@ Practical rule:
 
 ---
 
-## Phase 2 — Operational usefulness
+## Phase 2 -- Operational usefulness
 
 Phase 2 asks:
 If the structure fits, would it actually help agents and humans work inside the repo?
@@ -115,7 +115,7 @@ What to look for:
 - better routing to the right code or docs
 - better behavior around project-specific rules
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 A strong candidate should help an agent avoid dumb mistakes like:
 - editing cashier behavior without noticing role separation
 - changing invoice logic without realizing lifecycle constraints matter
@@ -138,7 +138,7 @@ What to look for:
 - can a human or agent locate the right truth faster?
 - does the structure reduce scavenger hunts across READMEs, code, env notes, and deployment files?
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 Right now, key truth is split across:
 - root `README.md`
 - `Backend/README.md`
@@ -166,7 +166,7 @@ What to look for:
 - low stale-risk for core fields
 - not too much ceremony
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 If capturing Pharmax well requires constant manual updates for:
 - role definitions
 - invoice state changes
@@ -183,7 +183,7 @@ Low score:
 
 ---
 
-## Phase 3 — Pressure / cost
+## Phase 3 -- Pressure / cost
 
 Phase 3 asks:
 Even if this candidate fits and helps, is it worth the context cost?
@@ -198,7 +198,7 @@ What to look for:
 - healthy use of extensions for niche truths
 - refusal to turn every repo detail into core FRAME
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 Pharmax tempts over-modeling.
 You could easily try to add core fields for:
 - every role
@@ -224,7 +224,7 @@ What to look for:
 - concise representation of stable truth
 - low repetition across parts
 
-Concrete example — `pharmax`:
+Concrete example -- `pharmax`:
 If representing Pharmax requires repeating the same truths across facts, rules, map, and expect just to make the document feel complete, token efficiency is weak.
 
 A strong candidate should let you express things like:
