@@ -22,12 +22,12 @@ Semantic-version-style tags:
 Tag when:
 - the core FRAME definition materially changes
 - schema direction changes in a meaningful way
-- `frame-py` reaches a meaningful executable milestone
+- `FrameSDK` reaches a meaningful executable milestone
 - evaluation harness/fixtures become meaningfully stronger
 
 ## Current baseline
 
-Current target: **v0.3.0**  --  schema finalization, JSON/YAML schemas, frame-py SDK rebuild.
+Current target: **v0.3.0**  --  schema finalization, JSON/YAML schemas, FrameSDK Python SDK rebuild.
 
 Previous lines:
 - v0.2.0  --  simplified naming, stronger cross-links, Acts as run history

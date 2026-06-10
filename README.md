@@ -52,7 +52,7 @@ FRAME addresses each of these. It gives the project a typed shape that agents an
 
 FRAME is not an agent. It doesn't run your build or write your code. It's a convention  --  a spec for how a project describes itself.
 
-`frame-py` is a Python SDK that loads FRAME files, validates them against the schema, and returns a consistent typed representation. Future SDKs will do the same in other languages.
+`FrameSDK` is a Python SDK that loads FRAME files, validates them against the schema, and returns a consistent typed representation. Future SDKs will do the same in other languages.
 
 `Haxaml` is a governance runtime that agents interact with. It reads FRAME, enforces rules, runs mechanical validation against Expect checks, and records run history in Acts. The agent can't fake the results  --  verification is deterministic.
 
@@ -88,9 +88,9 @@ The schema is locked at v0.3.0. Haxaml is the next build target.
 
 This is the umbrella repo for the FRAME standard. Language SDKs live in their own repos:
 
-- **[frame-py](https://github.com/haxsysgit/FrameSDK)** — Python SDK (pip install framesdkpy)
-- `frame-js` — future JavaScript SDK
-- `frame-cpp` — future C++ SDK
+- **[FrameSDK](https://github.com/haxsysgit/FrameSDK)** -- Python SDK (pip install framesdkpy)
+- `FrameSDK JS package` -- future JavaScript SDK
+- `FrameSDK C++ package` -- future C++ SDK
 
 This repo contains:
 

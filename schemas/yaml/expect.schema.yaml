@@ -1,18 +1,18 @@
-# FRAME Expect Schema — v0.3.0
-# What must pass — outcomes, invariants, checks, proof requirements.
+# FRAME Expect Schema -- v0.3.0
+# What must pass -- outcomes, invariants, checks, proof requirements.
 # Machine contract: schemas/json/expect.schema.json
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/expect.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/expect.schema.json"
 title: "FRAME Expect"
-description: "What must pass — outcomes, invariants, verification checks, proof requirements, and handoff."
+description: "What must pass -- outcomes, invariants, verification checks, proof requirements, and handoff."
 type: object
 additionalProperties: false
 required: [frame]
 properties:
   frame:
     allOf:
-      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - $ref: "./frame.schema.json#/$defs/frame_header"
       - type: object
         properties:
           file:
@@ -33,7 +33,7 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- MUST HOLD ---
   # Invariants that must stay true. Each has an id for cross-referencing.
@@ -45,12 +45,12 @@ properties:
       required: [id, statement]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         statement:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- CHECKS ---
   # Named verification checks. These feed the mechanical validator.
@@ -83,7 +83,7 @@ properties:
           maxLength: 200
           description: "Machine-parseable: 'exit_code == 0', 'stdout contains BUILD SUCCESS', 'stdout matches ^[a-f0-9]{12}_', 'file_exists dist/index.html'."
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- DONE WHEN ---
   done_when:
@@ -101,7 +101,7 @@ properties:
       required: [id, type, description]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         type:
           type: string
           enum: [review, smoke_test, static_check, unavailable]
@@ -109,13 +109,13 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   handoff:
     type: object
     additionalProperties: true
 
   evidence:
-    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+    $ref: "./frame.schema.json#/$defs/evidence_list"
   links:
-    $ref: "./frame.schema.yaml#/$defs/links"
+    $ref: "./frame.schema.json#/$defs/links"

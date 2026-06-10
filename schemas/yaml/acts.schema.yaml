@@ -1,19 +1,19 @@
-# FRAME Acts Schema — v0.3.0
-# Run history — what went in, what came out, what changed, what checks ran.
+# FRAME Acts Schema -- v0.3.0
+# Run history -- what went in, what came out, what changed, what checks ran.
 # Size cap: 50KB. Exceeded → oldest runs auto-rotated to acts_archive/.
 # Machine contract: schemas/json/acts.schema.json
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/acts.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/acts.schema.json"
 title: "FRAME Acts"
-description: "Run history — what went in, what came out, what was touched, what changed, what checks ran."
+description: "Run history -- what went in, what came out, what was touched, what changed, what checks ran."
 type: object
 additionalProperties: false
 required: [frame]
 properties:
   frame:
     allOf:
-      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - $ref: "./frame.schema.json#/$defs/frame_header"
       - type: object
         properties:
           file:
@@ -29,7 +29,7 @@ properties:
 
   # --- RUNS ---
   # Per-session run records. Each has an id for cross-referencing.
-  # checks array is collapsed from checks_seen/checks_ran — status: ran or skipped.
+  # checks array is collapsed from checks_seen/checks_ran -- status: ran or skipped.
   runs:
     type: array
     items:
@@ -38,7 +38,7 @@ properties:
       required: [id, actor, goal, status]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         actor:
           type: string
           maxLength: 100
@@ -88,7 +88,7 @@ properties:
             required: [id, status]
             properties:
               id:
-                $ref: "./frame.schema.yaml#/$defs/ref"
+                $ref: "./frame.schema.json#/$defs/ref"
                 description: "Ref to expect.checks.<name>."
               status:
                 type: string
@@ -102,7 +102,7 @@ properties:
                 maxLength: 200
                 description: "Why skipped (only when status=skipped)."
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- BLOCKERS ---
   blockers:
@@ -113,12 +113,12 @@ properties:
       required: [id, description]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         description:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   handoff:
     type: object
@@ -126,6 +126,6 @@ properties:
     description: "What the next agent needs to know."
 
   evidence:
-    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+    $ref: "./frame.schema.json#/$defs/evidence_list"
   links:
-    $ref: "./frame.schema.yaml#/$defs/links"
+    $ref: "./frame.schema.json#/$defs/links"

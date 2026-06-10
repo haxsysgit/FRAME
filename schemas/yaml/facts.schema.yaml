@@ -1,18 +1,18 @@
-# FRAME Facts Schema — v0.3.0
+# FRAME Facts Schema -- v0.3.0
 # Stable project truth: what the project is, how it's built, its quirks.
 # Machine contract: schemas/json/facts.schema.json
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/facts.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/facts.schema.json"
 title: "FRAME Facts"
-description: "Stable project truth — what the project is, how it's built, its quirks, and what nobody has decided yet."
+description: "Stable project truth -- what the project is, how it's built, its quirks, and what nobody has decided yet."
 type: object
 additionalProperties: false
 required: [frame, profile, architecture]
 properties:
   frame:
     allOf:
-      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - $ref: "./frame.schema.json#/$defs/frame_header"
       - type: object
         properties:
           file:
@@ -62,6 +62,8 @@ properties:
   # Structured stack. Required keys: language, framework, database.
   technology:
     type: object
+    additionalProperties: false
+    required: [language, framework, database]
     properties:
       language:
         type: string
@@ -72,6 +74,10 @@ properties:
       database:
         type: string
         maxLength: 100
+      extensions:
+        type: object
+        additionalProperties: true
+        description: "Optional free-form extensions for stack details not covered by the core keys."
 
   # --- ARCHITECTURE ---
   # Required summary text. Optional structured sub-blocks.
@@ -123,7 +129,7 @@ properties:
       required: [id, path, purpose]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         path:
           type: string
           maxLength: 200
@@ -141,7 +147,7 @@ properties:
       required: [id, description, why]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         description:
           type: string
           maxLength: 200
@@ -159,7 +165,7 @@ properties:
       required: [id, question, context]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         question:
           type: string
           maxLength: 300
@@ -168,6 +174,6 @@ properties:
           maxLength: 300
 
   evidence:
-    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+    $ref: "./frame.schema.json#/$defs/evidence_list"
   links:
-    $ref: "./frame.schema.yaml#/$defs/links"
+    $ref: "./frame.schema.json#/$defs/links"

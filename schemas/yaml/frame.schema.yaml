@@ -1,10 +1,10 @@
-# FRAME Shared Definitions — v0.3.0
+# FRAME Shared Definitions -- v0.3.0
 # This is the YAML representation of the FRAME schema, optimized for human readability.
 # The canonical machine contract is at schemas/json/frame.schema.json.
-# Both files define the same schema — use YAML for reading, JSON for validation.
+# Both files define the same schema -- use YAML for reading, JSON for validation.
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/frame.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/frame.schema.json"
 title: "FRAME Shared Definitions"
 description: >
   Shared schema pieces used by all FRAME files.
@@ -93,6 +93,7 @@ $defs:
   # A short reason to trust a FRAME claim. Points to a source.
   evidence_entry:
     type: object
+    description: "A short reason to trust a FRAME claim."
     additionalProperties: false
     properties:
       id:

@@ -1,18 +1,18 @@
-# FRAME Map Schema — v0.3.0
-# Where things live — roots, groups, paths, entrypoints, managed paths.
+# FRAME Map Schema -- v0.3.0
+# Where things live -- roots, groups, paths, entrypoints, managed paths.
 # Machine contract: schemas/json/map.schema.json
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/map.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/map.schema.json"
 title: "FRAME Map"
-description: "Where things live — roots, groups, paths, entrypoints, and managed paths."
+description: "Where things live -- roots, groups, paths, entrypoints, and managed paths."
 type: object
 additionalProperties: false
 required: [frame]
 properties:
   frame:
     allOf:
-      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - $ref: "./frame.schema.json#/$defs/frame_header"
       - type: object
         properties:
           file:
@@ -43,7 +43,7 @@ properties:
       required: [id, label, paths]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         label:
           type: string
           maxLength: 150
@@ -54,7 +54,7 @@ properties:
             maxLength: 300
           description: "Wildcards allowed (e.g. 'Backend/app/**/*.py')."
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- PATHS ---
   # Critical individual files. Explicit paths only. Optional id for cross-referencing.
@@ -66,7 +66,7 @@ properties:
       required: [path, purpose]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         path:
           type: string
           maxLength: 200
@@ -74,7 +74,7 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- ENTRYPOINTS ---
   # CLI/API/web entry points. Explicit paths only.
@@ -86,7 +86,7 @@ properties:
       required: [id, path, kind]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         path:
           type: string
           maxLength: 200
@@ -97,7 +97,7 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- MANAGED PATHS ---
   # Paths under special rules. Supports wildcards. Optional id for cross-referencing.
@@ -109,7 +109,7 @@ properties:
       required: [path, rule]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         path:
           type: string
           maxLength: 200
@@ -118,7 +118,7 @@ properties:
           type: string
           enum: [generated, config, immutable]
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- UNMAPPED PATHS ---
   # Paths not yet placed. Honest about gaps.
@@ -137,6 +137,6 @@ properties:
           maxLength: 200
 
   evidence:
-    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+    $ref: "./frame.schema.json#/$defs/evidence_list"
   links:
-    $ref: "./frame.schema.yaml#/$defs/links"
+    $ref: "./frame.schema.json#/$defs/links"

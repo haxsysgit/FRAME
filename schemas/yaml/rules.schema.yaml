@@ -1,9 +1,9 @@
-# FRAME Rules Schema — v0.3.0
+# FRAME Rules Schema -- v0.3.0
 # How to work safely in this repo. Commands, constraints, policies.
 # Machine contract: schemas/json/rules.schema.json
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
-$id: "https://frame.dev/schemas/0.3.0/rules.schema.yaml"
+$id: "https://frame.dev/schemas/0.3.0/rules.schema.json"
 title: "FRAME Rules"
 description: "How to work safely in this repo. Commands, constraints, policies, and triggers that need human approval."
 type: object
@@ -12,7 +12,7 @@ required: [frame]
 properties:
   frame:
     allOf:
-      - $ref: "./frame.schema.yaml#/$defs/frame_header"
+      - $ref: "./frame.schema.json#/$defs/frame_header"
       - type: object
         properties:
           file:
@@ -37,12 +37,12 @@ properties:
       required: [id, rule]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         rule:
           type: string
           maxLength: 500
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- POLICIES ---
   # Durable project policies (role access, lifecycle, audit, auth). Moved from Facts.
@@ -54,7 +54,7 @@ properties:
       required: [id, name, rule]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         name:
           type: string
           maxLength: 150
@@ -62,7 +62,7 @@ properties:
           type: string
           maxLength: 500
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- COMMANDS ---
   # Named shell commands. Keys are names used by command_ref in expect.checks.
@@ -85,7 +85,7 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- CODE STYLE ---
   code_style:
@@ -109,7 +109,7 @@ properties:
       required: [id, rule]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         rule:
           type: string
           maxLength: 300
@@ -118,7 +118,7 @@ properties:
           enum: [critical, warning]
           default: critical
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- ASK FIRST ---
   # Triggers that need human approval. trigger_type: file_pattern or task_pattern.
@@ -130,7 +130,7 @@ properties:
       required: [id, trigger_type, trigger, reason]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         trigger_type:
           type: string
           enum: [file_pattern, task_pattern]
@@ -141,7 +141,7 @@ properties:
           type: string
           maxLength: 300
         links:
-          $ref: "./frame.schema.yaml#/$defs/links"
+          $ref: "./frame.schema.json#/$defs/links"
 
   # --- HINTS ---
   # Skill references, known gotchas, task-specific guidance.
@@ -153,12 +153,12 @@ properties:
       required: [id, hint]
       properties:
         id:
-          $ref: "./frame.schema.yaml#/$defs/stable_id"
+          $ref: "./frame.schema.json#/$defs/stable_id"
         hint:
           type: string
           maxLength: 300
 
   evidence:
-    $ref: "./frame.schema.yaml#/$defs/evidence_list"
+    $ref: "./frame.schema.json#/$defs/evidence_list"
   links:
-    $ref: "./frame.schema.yaml#/$defs/links"
+    $ref: "./frame.schema.json#/$defs/links"

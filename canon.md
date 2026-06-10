@@ -2,7 +2,7 @@
 
 **Status:** Living document  --  updated as we agree on things
 **Started:** 2026-06-09
-**Purpose:** Single source of truth for what FRAME, frame-py, and Haxaml are and what fields exist
+**Purpose:** Single source of truth for what FRAME, FrameSDK, and Haxaml are and what fields exist
 
 ---
 
@@ -13,17 +13,17 @@ The convention. Language-agnostic typed project-context architecture.
 Defines what Facts, Rules, Map, Expect, Acts mean, what fields exist, and what shape each field takes.
 FRAME is a schema/standard, not code.
 
-### frame-py (frame SDK)
+### FrameSDK (frame SDK)
 The uniform interface library for Python.
 Loads FRAME YAML/JSON files, validates against schema, converts to typed Python models, builds cross-reference graphs, and returns a consistent output shape.
 No governance. No agent interaction. Pure library.
-Equivalent SDKs in other languages: frame-js, frame-rs, etc.
+Equivalent SDKs in other languages: FrameSDK JS package, FrameSDK Rust package, etc.
 
 ### Haxaml
 The governance runtime. Tools that interact with agents through MCP, skills, CLI.
-Uses frame-py to load and understand FRAME data.
+Uses FrameSDK to load and understand FRAME data.
 Enforces lifecycle, runs mechanical validation, gates agent actions, records run history.
-Haxaml is the tool. frame-py is its library dependency.
+Haxaml is the tool. FrameSDK is its library dependency.
 
 ---
 
@@ -40,7 +40,7 @@ Shared: every file has a `frame` header block with file, schema_version, role, s
 ## 3. Design principles
 
 1. **Proportionality.** Small projects fill less. Large projects fill more. Same schema, different depth.
-2. **Token/character caps per field.** Each field has a max length. Enforced by frame-py on load.
+2. **Token/character caps per field.** Each field has a max length. Enforced by FrameSDK on load.
 3. **Links before duplication.** Reference another block's ID instead of repeating the same truth.
 4. **Tool-facing, not just human-facing.** Fields must be structured enough that Haxaml can query them programmatically.
 5. **Readable to a developer reading the YAML file directly.** The files are the interface.
@@ -246,7 +246,7 @@ The free-form `identity` catch-all is removed. `profile.name` and `profile.summa
 ### Decision 6: Character limits enforced by field category
 **Agreed:** 2026-06-09
 
-Every field has a max character count. Core governance fields (ids, names, rules, donts, checks, pass_condition, command references) are **enforced**  --  frame-py refuses to load if exceeded. Descriptive blocks (code_style, git, architecture sub-blocks, environment descriptions, handoff notes) are **advisory**  --  Haxaml warns but loads. Characters, not tokens  --  no tokenizer dependency.
+Every field has a max character count. Core governance fields (ids, names, rules, donts, checks, pass_condition, command references) are **enforced**  --  FrameSDK refuses to load if exceeded. Descriptive blocks (code_style, git, architecture sub-blocks, environment descriptions, handoff notes) are **advisory**  --  Haxaml warns but loads. Characters, not tokens  --  no tokenizer dependency.
 
 ### Decision 7: id required on linkable array entries only
 **Agreed:** 2026-06-09
