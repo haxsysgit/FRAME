@@ -88,7 +88,7 @@ The schema is locked at v0.3.0. Haxaml is the next build target.
 
 This is the umbrella repo for the FRAME standard. Language SDKs live in their own repos:
 
-- **[frame-py](https://github.com/haxsysgit/frame-py)** — Python SDK (pip install frame-py)
+- **[frame-py](https://github.com/haxsysgit/FrameSDK)** — Python SDK (pip install framesdkpy)
 - `frame-js` — future JavaScript SDK
 - `frame-cpp` — future C++ SDK
 
